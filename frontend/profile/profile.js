@@ -217,9 +217,7 @@ function openHelp() {
 }
 
 function editProfile() {
-  console.log("Editing profile...");
-  alert("Opening Profile Editor! Update your information and preferences.");
-  // Here you can add logic to open profile edit page
+  window.location.href = "../profile/editprofile.html"; 
 }
 
 function logout() {
