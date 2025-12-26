@@ -77,7 +77,7 @@
 <div class="feature_card">
     <h1>Go even futher with webify</h1>
     <div class="feature_cards_container">
-        <div class="feature_card_item">
+        <div class="feature_card_item" onclick="load_learnmore(1)">
             <h2>Use Webify on your all devices</h2>
             <p>Learn More ></p>
             <div class="feature_icon feature_icon1"></div>
@@ -139,4 +139,10 @@
     
 </body>
 <script src="js/typinganimation.js"></script>
+<script>
+    function load_learnmore(Number) {
+        const link="learnmore"+Number+".html";
+        window.location.href = "learnmore/"+link;
+    }
+</script>
 </html>
