@@ -126,6 +126,8 @@ button {
     padding: 24px 0;
     z-index: 100;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
 }
 
 .sidebar-logo {
