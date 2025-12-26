@@ -211,9 +211,7 @@ function openCommunity() {
 }
 
 function openHelp() {
-  console.log("Opening help...");
-  alert("Opening Help Center! Get assistance and learn how to use WEBIFY.");
-  // Here you can add logic to open help documentation
+  window.location.href = "../help/help.html";
 }
 
 function editProfile() {

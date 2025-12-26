@@ -50,9 +50,3 @@
                 toast.className = 'notification-toast';
             }, 3000);
         }
-
-        // Placeholder functions
-        function openCommunity() { showToast('Community opened'); }
-        function openHelp() { showToast('Help opened'); }
-        function editProfile() { /* Already on edit page */ }
-        function logout() { window.location.href = 'login.html'; }
