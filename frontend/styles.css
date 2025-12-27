@@ -301,7 +301,7 @@ body{
 .vr_girl{
     background-image: url(images/vr_girl.png);
     background-size: cover;
-    background-position: center;
+    background-position: top;
     width: 38vw;
     height: 50vw;
     z-index: -11;
