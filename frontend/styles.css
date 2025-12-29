@@ -5,6 +5,11 @@
     --foreground-color: #414040;
     --font-family: 'Times New Roman', Times, serif;
 }
+
+html {
+    scroll-behavior: smooth;
+    font-size: clamp(10px, 3vw, 20px);
+}
 body{
     margin: 0;
     padding: 0;
@@ -133,7 +138,7 @@ body{
     z-index: 1;
 }
 .welcome-text h1{
-    font-size: 190px;
+    font-size: 10rem;
     margin: 0;
     background: linear-gradient(114deg, var(--background-color) 10%, var(--primary-color) 90%);
     -webkit-background-clip: text;
@@ -188,7 +193,7 @@ body{
 }
 
 .begineer h1{
-    font-size: 68px;
+    font-size: 3.5rem;
     margin: 0;
     background: linear-gradient(114deg, var(--background-color) 10%, #DA56FF 90%);;
     -webkit-background-clip: text;
@@ -198,7 +203,7 @@ body{
 }
 
 .begineer p{
-    font-size: 28px;
+    font-size: 1.5rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
@@ -272,7 +277,7 @@ body{
     100% { transform: translateY(50vh); }
 }
 .coder h1{
-    font-size: 64px;
+    font-size: 3.5rem;
     margin: 0;
     background: linear-gradient(90deg, #00F6FF 10%, #C756FF 90%);
     -webkit-background-clip: text;
@@ -281,7 +286,7 @@ body{
     text-align: left;
 }
 .coder p{
-    font-size: 28px;
+    font-size: 1.5rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
@@ -325,9 +330,10 @@ body{
 }
 
 .f-info-text{
-    font-size: 36px;
+    font-size: 2rem;
     margin-top: -1rem;
     color: var(--foreground-color);
+    text-align: center;
 }
 .fadeinAbout1{
     animation: fadeInAbout both;
@@ -433,7 +439,7 @@ body{
 .full-gradient{
     background: #ffffff;
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 1%, rgba(225, 129, 192, 0.4) 16%, rgba(75, 66, 148, 1) 40%, rgba(11, 20, 50, 1) 80%);width: 100vw;
-    height: 220vh;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -454,7 +460,7 @@ body{
     padding: 3rem;
 }
 .love_code h1{
-    font-size: 64px;
+    font-size: 3.4rem;
     margin: 0;
     background: white;
     -webkit-background-clip: text;
@@ -463,7 +469,7 @@ body{
     text-align: center;
 }
 .love_code p{
-    font-size: 24px;
+    font-size: 1.2rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
@@ -484,8 +490,9 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 1.5rem;
     justify-content: flex-start;
-    height: 350vh;
+    height: fit-content;
     width: 100vw;
     margin-top: 10rem;
     margin-bottom: 10rem;
@@ -996,4 +1003,145 @@ footer li {
 }
 .member:hover{
     height: 320px;
+}
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        opacity: 1;
+        width: 40px;
+        height: 40px;
+        transition: width 1s ease-out, opacity .5s ease-out;
+        will-change: width, opacity;
+    }
+    .navbar::before{
+        content: '=';
+        font-size: 40px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        color: var(--foreground-color);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+
+    }
+    .half-mobile{
+        display: none;
+    }
+    .navbar:hover::before{
+        opacity: 0;
+    }
+    .navbar:hover{
+        width: max-content;
+        height: auto;
+        flex-direction: column;
+    }
+    .navbar:hover a{
+        display: block;
+        margin: 8px 0;
+    }
+    .navbar a {
+        display: none;
+    }
+    .welcome-text h1{
+        font-size: 7rem;
+    }
+   
+    .speaker-image{
+        width: 50vw;
+        height: 50vw;
+        top: -10%;
+    }
+    .welcome-text p{
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        color: var(--primary-color);
+    }
+    .tablet {
+        display: none;
+    }
+    .developer-join{
+        flex-direction: column;
+        align-items: center;
+    }
+    .coder, .feature-info{
+        width: 80vw;
+        height: auto;
+    }
+    .pushdown{
+        animation: none;
+        transform: translateY(0);
+    }
+    .movedown{
+        animation: none;
+        transform: translateY(0);
+    }
+    .moveup{
+        animation: none;
+        transform: translateY(0);
+    }
+    .join_now_card{
+        width: 80vw;
+        margin: 4rem auto 0 auto;
+        transform: translateY(0);
+    }
+    .love_code p{
+        padding: 0px;
+    }
+    .feature-info{
+        margin-left: 0;
+        margin-top: 4rem;
+    }
+    .feature_card{
+        height: auto;
+    }
+    .feature_cards_container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90vw;
+        margin: 4rem auto 0 auto;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .people_follow{
+        flex-direction: column;
+        align-items: center;
+    }
+    .people_title{
+        width: 80vw;
+        transform: translateY(0);
+        margin-bottom: 2rem;
+        padding-left: 0;
+    }
+    .people{
+        width: 80vw;
+        margin-left: 0;
+    }
+    .title-one{
+        animation: none;
+    }
+    .people-card{
+        width: 80%;
+        height: auto;
+    }
+    .topcard, .middlecard, .lastcard{
+        animation: none;
+        transform: translateY(0) translateX(0);
+    }
+    .teammember{
+        flex-direction: column;
+    }
+    .vr_girl{
+        display: none;
+    }
+    footer{
+        flex-direction: column;
+        align-items: center;
+    }
 }
