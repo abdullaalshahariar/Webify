@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEBIFY • Community Questions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-7hF5mZ5E2K1bGf7wBfYQyqZVDfQ7u3o4q2Oa2Jp7gHcTQFQh0P5ZVq8bX9iLQmKfZgC2NwzR6YhTzN3jvM1Q9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="questions.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <ul>
+        <li title="Home"><i class="fa-solid fa-house"><h4 class="label">Home</h4></i></li>
+        <li title="Questions"><i class="fa-regular fa-circle-question"><h4 class="label">Questions</h4></i></li>
+        <li title="Tags"><i class="fa-solid fa-tags"><h4 class="label">Tags</h4></i></li>
+        <li title="Users"><i class="fa-regular fa-user"><h4 class="label">Users</h4></i></li>
+        <li title="Notifications"><i class="fa-regular fa-bell"><h4 class="label">Notifications</h4></i></li>
+      </ul>
+    </aside>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">WEBIFY</span>
+      </div>
+      <nav class="primary-nav">
+        <a href="../index.html">Home</a>
+        <a href="#">Store</a>
+      </nav>
+      <div class="search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search" />
+      </div>
+      <div class="actions">
+        <a class="nav-login" href="../auth/login.html">LOGIN</a>
+        <button id="askBtn" class="btn btn-primary">Ask Question</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-title">
+        <h1>Newest Question</h1>
+        <p class="count"><span id="questionCount">0</span> questions</p>
+      </section>
+
+      <section class="toolbar">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="newest">Newest</button>
+          <button class="tab" data-tab="unanswered">Unanswered</button>
+          <button class="tab" data-tab="trending">Trending</button>
+          <button class="tab" data-tab="lastyear">Last Year</button>
+        </div>
+        <div class="filters">
+          <button id="filterToggle" class="btn btn-light">
+            <i class="fa-solid fa-filter"></i>
+            <span>Filter</span>
+          </button>
+          <div id="filterPanel" class="filter-panel" hidden>
+            <label>
+              <span>Tag</span>
+              <select id="tagSelect">
+                <option value="">All</option>
+                <option value="Flexbox">Flexbox</option>
+                <option value="Alignment">Alignment</option>
+                <option value="CSS">CSS</option>
+              </select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select id="sortSelect">
+                <option value="newest">Newest</option>
+                <option value="votes">Top votes</option>
+                <option value="views">Top views</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section id="questionList" class="question-list" aria-live="polite"></section>
+    </main>
+
+    <!-- Answer Modal -->
+    <div id="answerModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="answerModalTitle" hidden>
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-dialog">
+        <header class="modal-header">
+          <h2 id="answerModalTitle">Answer Question</h2>
+          <button class="icon-close" type="button" aria-label="Close" data-close>×</button>
+        </header>
+        <div class="modal-body">
+          <div class="modal-question">
+            <strong id="answerQuestionTitle"></strong>
+          </div>
+          <textarea id="answerInput" class="modal-textarea" rows="6" placeholder="Type your answer..."></textarea>
+          <div class="modal-actions">
+            <button id="submitAnswer" class="btn btn-primary" type="button">Post Answer</button>
+            <button id="cancelAnswer" class="btn" type="button" data-close>Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="questions.js" defer></script>
+  </body>
+</html>
