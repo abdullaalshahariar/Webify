@@ -1,0 +1,40 @@
+/* Topbar.module.css - Scoped styles for Topbar component */
+.topbar_container {
+    background-color: white;
+    display: flex;
+}
+
+.logo {
+    height: 41px;
+    width: 40px;
+}
+
+.logo_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 64px;
+    width: 64px;
+    background-color: #292929;
+
+}
+
+.topbar_left {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 14px;
+}
+
+.topbar_right {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    gap: 14px;
+    padding-right: 10px;
+}
+
+button {
+    cursor: pointer;
+}
