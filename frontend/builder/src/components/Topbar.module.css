@@ -2,6 +2,7 @@
 .topbar_container {
     background-color: white;
     display: flex;
+    align-items: center;
 }
 
 .logo {
@@ -29,7 +30,6 @@
 
 .topbar_right {
     display: flex;
-    margin-left: auto;
     align-items: center;
     gap: 14px;
     padding-right: 10px;
@@ -37,4 +37,15 @@
 
 .topbar_container button {
     cursor: pointer;
+}
+
+.topbar_middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 32px;
+    width: 426px;
+    background-color: #E7E7E7;
+    margin: 0 auto;
 }

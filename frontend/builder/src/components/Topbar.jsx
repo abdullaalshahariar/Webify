@@ -36,6 +36,10 @@ export function Topbar() {
                     </button>
                 </div>
 
+                <div class={styles.topbar_middle}>
+                    <span>My Awsome Website</span>
+                </div>
+
 
                 <div class={styles.topbar_right}>
                     <button>
