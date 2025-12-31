@@ -37,7 +37,8 @@
 }
 
 
-.text_items button {
+.text_items button,
+.media_items button {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,7 +48,8 @@
     height: 90px;
 }
 
-.text_items {
+.text_items,
+.media_items {
     margin-top: 18px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);

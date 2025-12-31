@@ -4,6 +4,9 @@ import paragraph_icon from '../assets/icons/paragraph_icon.svg';
 import heading_icon from '../assets/icons/heading_icon.svg';
 import list_icon from '../assets/icons/list_icon.svg';
 import table_icon from '../assets/icons/table_icon.svg';
+import image_icon from '../assets/icons/image_icon.svg';
+import video_icon from '../assets/icons/video_icon.svg';
+import audio_icon from '../assets/icons/audio_icon.svg';
 
 export function Sidebar() {
     return (
@@ -20,8 +23,8 @@ export function Sidebar() {
                 </button>
             </div>
 
-            <span class={styles.label_span}>TEXT</span>
 
+            <span class={styles.label_span}>TEXT</span>
             <div class={styles.text_items}>
                 <button>
                     <img src={paragraph_icon} alt="paragraph" />
@@ -44,11 +47,25 @@ export function Sidebar() {
                 </button>
             </div>
 
+
             <span class={styles.label_span}>MEDIA</span>
+            <div class={styles.media_items}>
+                <button>
+                    <img src={image_icon} alt="image" />
+                    <span>Image</span>
+                </button>
 
-            <div>
+                <button>
+                    <img src={audio_icon} alt="audio" />
+                    <span>Audio</span>
+                </button>
 
+                <button>
+                    <img src={video_icon} alt="video" />
+                    <span>Video</span>
+                </button>
             </div>
+
         </div>
     )
 }
