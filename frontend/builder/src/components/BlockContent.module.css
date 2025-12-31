@@ -1,10 +1,10 @@
-.sidebar_container {
+.block_content_container {
     width: 300px;
     height: 100vh;
     background-color: white;
 }
 
-.sidebar_container button {
+.block_content_container button {
     cursor: pointer;
 }
 
