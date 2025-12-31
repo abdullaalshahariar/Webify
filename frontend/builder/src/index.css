@@ -3,14 +3,3 @@
 body {
     background-color: #ddd;
 }
-
-
-.test {
-    height: 64px;
-    width: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #292929;
-    border: none;
-}
