@@ -8,27 +8,6 @@
     cursor: pointer;
 }
 
-/* top section */
-.top_section {
-    display: flex;
-    align-items: center;
-    height: 47px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.top_section span {
-    font-size: 14px;
-}
-
-.top_section button:not(.close_button) {
-    margin-left: 20px;
-}
-
-.close_button {
-    margin-left: auto;
-    margin-right: 10px;
-}
-
 
 /* search bar */
 

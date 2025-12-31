@@ -21,6 +21,12 @@
 
 .top_section button:not(.close_button) {
     margin-left: 20px;
+    height: 100%;
+    border-bottom: 2px solid transparent;
+}
+
+.top_section button.active_tab {
+    border-bottom: 2px solid #0693E3;
 }
 
 .close_button {
