@@ -8,7 +8,7 @@ import style_icon from '../assets/icons/style_icon.svg'
 import menu_icon from '../assets/icons/menu_icon.svg'
 import styles from './Topbar.module.css'
 
-export function Topbar() {
+export function Topbar(props) {
     return (
         <>
             <div class={styles.topbar_container}>
@@ -16,7 +16,7 @@ export function Topbar() {
                     <button class={styles.logo_button}>
                         <img class={styles.logo} src={logo} alt="Site logo" />
                     </button>
-                    <button>
+                    <button onClick={props.onOpen}>
                         <img src={plus_icon} alt="plus_icon"
                             style={{
                                 "background-color": "#0693E3",

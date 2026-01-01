@@ -12,7 +12,7 @@ import { createSignal } from 'solid-js';
 
 const [activeTab, setActiveTab] = createSignal('block');
 
-export function BlockContent() {
+export function BlockContent(props) {
     return (
         <div class={styles.block_content_container}>
             <div class={styles.top_section}>
@@ -23,7 +23,7 @@ export function BlockContent() {
                 <button onclick={() => setActiveTab('pattern')} class={activeTab() === 'pattern' ? styles.active_tab : ''}>
                     <span>Pattern</span>
                 </button>
-                <button class={styles.close_button}>
+                <button class={styles.close_button} onClick={props.onClose}>
                     <img src={cross_icon} alt="close" />
                 </button>
             </div>
