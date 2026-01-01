@@ -16,7 +16,7 @@ export function Topbar(props) {
                     <button class={styles.logo_button}>
                         <img class={styles.logo} src={logo} alt="Site logo" />
                     </button>
-                    <button onClick={props.onOpen}>
+                    <button onClick={props.onOpenSidebar}>
                         <img src={plus_icon} alt="plus_icon"
                             style={{
                                 "background-color": "#0693E3",
@@ -42,7 +42,7 @@ export function Topbar(props) {
 
 
                 <div class={styles.topbar_right}>
-                    <button>
+                    <button onclick={props.onOpenDeviceSelector}>
                         <img src={desktop_icon} alt="desktop_icon" />
                     </button>
                     <button>
