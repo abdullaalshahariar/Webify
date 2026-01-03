@@ -6,9 +6,17 @@ import doc_overvier_icon from '../assets/icons/doc_overview_icon.svg'
 import desktop_icon from '../assets/icons/desktop_icon.svg'
 import style_icon from '../assets/icons/style_icon.svg'
 import menu_icon from '../assets/icons/menu_icon.svg'
+import tablet_icon from '../assets/icons/tablet_icon.svg'
+import mobile_icon from '../assets/icons/mobile_icon.svg'
 import styles from './Topbar.module.css'
 
 export function Topbar(props) {
+    const deviceIcons = {
+        Desktop: desktop_icon,
+        Tablet: tablet_icon,
+        Mobile: mobile_icon
+    }
+
     return (
         <>
             <div class={styles.topbar_container}>
@@ -42,8 +50,9 @@ export function Topbar(props) {
 
 
                 <div class={styles.topbar_right}>
-                    <button onclick={props.onOpenDeviceSelector}>
-                        <img src={desktop_icon} alt="desktop_icon" />
+                    <button onClick={props.onOpenDeviceSelector}>
+                        <img src={deviceIcons[props.selectedDevice]} alt="device_icon" />
+                        
                     </button>
                     <button>
                         <img src={style_icon} alt="style_icon" />

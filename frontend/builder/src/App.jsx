@@ -4,18 +4,23 @@ import { Topbar } from "./components/Topbar";
 import { DeviceSelector } from "./components/DeviceSelector";
 
 const App = () => {
+
+  //signal for sidebar block content
   const [showBlockContent, setShowBlockContent] = createSignal(false);
+  //signal for device selector
   const [showSelectedDevice, setShowSelectedDevice] = createSignal(false);
+  const [selectedDevice, setSelectedDevice] = createSignal("Desktop");
 
   return (
     <div>
-      <Topbar onOpenSidebar={() => setShowBlockContent(true)} onOpenDeviceSelector={() => !showSelectedDevice() ? setShowSelectedDevice(true) : setShowSelectedDevice(false)} />
+      <Topbar onOpenSidebar={() => setShowBlockContent(true)} onOpenDeviceSelector={() => !showSelectedDevice() ? setShowSelectedDevice(true) : setShowSelectedDevice(false)}
+        selectedDevice={selectedDevice()} />
 
       {showBlockContent() && (
         <BlockContent onClose={() => setShowBlockContent(false)} />
       )}
 
-      {showSelectedDevice() && <DeviceSelector />}
+      {showSelectedDevice() && <DeviceSelector select_a_Device={(device)=>setSelectedDevice(device)} selectedDevice={selectedDevice()} />}
     </div>
 
   );

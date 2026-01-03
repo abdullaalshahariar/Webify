@@ -4,20 +4,20 @@ import { createSignal } from "solid-js";
 
 const [selectedDevice, setSelectedDevice] = createSignal("Desktop");
 
-export function DeviceSelector() {
+export function DeviceSelector(props) {
     return (
         <div class={styles.container}>
-            <button onClick={() => setSelectedDevice('Desktop')}>
+            <button onClick={() => props.select_a_Device('Desktop')}>
                 <span>Desktop</span>
-                {selectedDevice() === 'Desktop' && <img src={tick_icon} alt="Selected" />}
+                {props.selectedDevice === 'Desktop' && <img src={tick_icon} alt="Selected" />}
             </button>
-            <button onClick={() => setSelectedDevice('Tablet')}>
+            <button onClick={() => props.select_a_Device('Tablet')}>
                 <span>Tablet</span>
-                {selectedDevice() === 'Tablet' && <img src={tick_icon} alt="Selected" />}
+                {props.selectedDevice === 'Tablet' && <img src={tick_icon} alt="Selected" />}
             </button>
-            <button onClick={() => setSelectedDevice('Mobile')}>
+            <button onClick={() => props.select_a_Device('Mobile')}>
                 <span>Mobile</span>
-                {selectedDevice() === 'Mobile' && <img src={tick_icon} alt="Selected" />}
+                {props.selectedDevice === 'Mobile' && <img src={tick_icon} alt="Selected" />}
             </button>
         </div>
     )
