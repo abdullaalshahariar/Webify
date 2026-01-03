@@ -324,4 +324,8 @@ console.log(
   "%cOpen-source, no-code website builder",
   "color: #6b7280; font-size: 14px;"
 );
+console.log(
+  "%cDashboard System v1.0 - Developed by Tamim",
+  "color: #a855f7; font-size: 12px;"
+);
 console.log("Ready to build amazing websites! 🚀");

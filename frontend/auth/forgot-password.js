@@ -132,4 +132,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Password Recovery System - Developed by Tamim
 console.log('WEBIFY Forgot Password page loaded successfully! 🔒');
+console.log('Password recovery system ready! 📧');

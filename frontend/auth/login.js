@@ -355,4 +355,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Authentication System - Developed by Tamim
 console.log("WEBIFY Login/Signup page loaded successfully! 🚀");
+console.log("Authentication System v1.0 - Ready to authenticate users! ✨");
