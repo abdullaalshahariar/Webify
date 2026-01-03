@@ -10,6 +10,7 @@ import tablet_icon from '../assets/icons/tablet_icon.svg'
 import mobile_icon from '../assets/icons/mobile_icon.svg'
 import styles from './Topbar.module.css'
 import { createSignal, Show } from 'solid-js';
+import { StyleMenu } from "./StyleMenu";
 
 export function Topbar(props) {
     //signal for popups
@@ -26,6 +27,9 @@ export function Topbar(props) {
             setPopupMsg("");
         }, 3000);
     }
+
+    //signal for style menu
+    const [showStyleMenu, setShowStyleMenu] = createSignal(false);
 
     const deviceIcons = {
         Desktop: desktop_icon,
@@ -71,7 +75,7 @@ export function Topbar(props) {
 
                     </button>
 
-                    <button>
+                    <button onClick={() => setShowStyleMenu(true)}>
                         <img src={style_icon} alt="style_icon" />
                     </button>
 
@@ -99,6 +103,10 @@ export function Topbar(props) {
                     <span>{popupMsg()}</span>
                     <div class={styles.savebtn_progress_bar}></div>
                 </div>
+            </Show>
+
+            <Show when={showStyleMenu()}>
+                <StyleMenu closeMenu={() => setShowStyleMenu(false)} />
             </Show>
         </>
     )

@@ -2,6 +2,7 @@ import { createSignal, onMount } from "solid-js";
 import { BlockContent } from "./components/BlockContent";
 import { Topbar } from "./components/Topbar";
 import { DeviceSelector } from "./components/DeviceSelector";
+import { StyleMenu } from "./components/StyleMenu";
 
 const App = () => {
   //signal for sidebar block content
@@ -29,6 +30,8 @@ const App = () => {
       )}
 
       {showSelectedDevice() && <DeviceSelector select_a_Device={(device) => setSelectedDevice(device)} selectedDevice={selectedDevice()} />}
+
+      {/* <StyleMenu /> */}
     </div>
 
   );
