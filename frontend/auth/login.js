@@ -60,6 +60,18 @@ const signupTab = document.getElementById("signupTab");
 const loginForm = document.getElementById("loginForm");
 const signupForm = document.getElementById("signupForm");
 
+// Check URL parameter for tab selection
+const urlParams = new URLSearchParams(window.location.search);
+const tabParam = urlParams.get("tab");
+
+if (tabParam === "signup") {
+  // Open signup tab
+  signupTab.classList.add("active", "signup");
+  loginTab.classList.remove("active");
+  loginForm.style.display = "none";
+  signupForm.style.display = "block";
+}
+
 loginTab.addEventListener("click", () => {
   loginTab.classList.add("active");
   loginTab.classList.remove("signup");
@@ -183,6 +195,9 @@ loginForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
+    // Store email in sessionStorage for use across pages
+    sessionStorage.setItem("userEmail", email);
+
     showNotification(
       "Welcome back! You have successfully signed in.",
       "success"
@@ -248,6 +263,10 @@ signupForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
+    // Store email and name in sessionStorage for use across pages
+    sessionStorage.setItem("userEmail", email);
+    sessionStorage.setItem("userName", name);
+
     showNotification(
       "A new journey begins! Welcome to the community.",
       "success",

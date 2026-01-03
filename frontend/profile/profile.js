@@ -351,10 +351,7 @@ function viewTemplate(templateId) {
 // Profile dropdown menu actions
 function openCommunity() {
   console.log("Opening community...");
-  alert(
-    "Opening WEBIFY Community! Share your templates and connect with other creators."
-  );
-  // Here you can add logic to open community page
+  window.location.href = "../community/questions.html";
 }
 
 function openHelp() {
@@ -379,9 +376,9 @@ function logout() {
   localStorage.clear();
   sessionStorage.clear();
 
-  // Redirect to login page after showing notification
+  // Redirect to home page after showing notification
   setTimeout(() => {
-    window.location.href = "../auth/login.html";
+    window.location.href = "../index.html";
   }, 2000);
 }
 
@@ -476,3 +473,22 @@ console.log(
   "color: #a855f7; font-size: 12px;"
 );
 console.log("Ready to build amazing websites! 🚀");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const userEmail = sessionStorage.getItem("userEmail");
+  if (userEmail) {
+    console.log("User is logged in with email:", userEmail);
+    // Use the email to display user info, load profile data, etc.
+  }
+});
+
+function userdetails() {
+  const userEmail = sessionStorage.getItem("userEmail");
+  const userDiv = document.getElementById("userdetails");
+  if (userEmail) {
+    userDiv.innerHTML = `<h4>Tanvir Jakaria</h4>
+    <p>${userEmail}</p>`;
+  }
+}
+
+userdetails();

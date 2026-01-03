@@ -5,6 +5,11 @@
     --foreground-color: #414040;
     --font-family: 'Times New Roman', Times, serif;
 }
+
+html {
+    scroll-behavior: smooth;
+    font-size: clamp(10px, 3vw, 20px);
+}
 body{
     margin: 0;
     padding: 0;
@@ -30,6 +35,7 @@ body{
     align-items: center;
     justify-content: space-evenly;
     z-index: 1000;
+    backdrop-filter: blur(3px);
 }
 
 .navbar a {
@@ -132,7 +138,7 @@ body{
     z-index: 1;
 }
 .welcome-text h1{
-    font-size: 190px;
+    font-size: 10rem;
     margin: 0;
     background: linear-gradient(114deg, var(--background-color) 10%, var(--primary-color) 90%);
     -webkit-background-clip: text;
@@ -187,7 +193,7 @@ body{
 }
 
 .begineer h1{
-    font-size: 68px;
+    font-size: 3.5rem;
     margin: 0;
     background: linear-gradient(114deg, var(--background-color) 10%, #DA56FF 90%);;
     -webkit-background-clip: text;
@@ -197,7 +203,7 @@ body{
 }
 
 .begineer p{
-    font-size: 28px;
+    font-size: 1.5rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
@@ -271,7 +277,7 @@ body{
     100% { transform: translateY(50vh); }
 }
 .coder h1{
-    font-size: 64px;
+    font-size: 3.5rem;
     margin: 0;
     background: linear-gradient(90deg, #00F6FF 10%, #C756FF 90%);
     -webkit-background-clip: text;
@@ -280,11 +286,12 @@ body{
     text-align: left;
 }
 .coder p{
-    font-size: 28px;
+    font-size: 1.5rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
     text-align: left;
+    text-wrap: wrap;
 }
 
 .feature-info{
@@ -300,7 +307,7 @@ body{
 .vr_girl{
     background-image: url(images/vr_girl.png);
     background-size: cover;
-    background-position: center;
+    background-position: top;
     width: 38vw;
     height: 50vw;
     z-index: -11;
@@ -324,9 +331,10 @@ body{
 }
 
 .f-info-text{
-    font-size: 36px;
+    font-size: 2rem;
     margin-top: -1rem;
     color: var(--foreground-color);
+    text-align: center;
 }
 .fadeinAbout1{
     animation: fadeInAbout both;
@@ -432,7 +440,7 @@ body{
 .full-gradient{
     background: #ffffff;
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 1%, rgba(225, 129, 192, 0.4) 16%, rgba(75, 66, 148, 1) 40%, rgba(11, 20, 50, 1) 80%);width: 100vw;
-    height: 220vh;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -453,7 +461,7 @@ body{
     padding: 3rem;
 }
 .love_code h1{
-    font-size: 64px;
+    font-size: 3.4rem;
     margin: 0;
     background: white;
     -webkit-background-clip: text;
@@ -462,7 +470,7 @@ body{
     text-align: center;
 }
 .love_code p{
-    font-size: 24px;
+    font-size: 1.2rem;
     margin-top: 1rem;
     transform: translateY(20px);
     color: var(--foreground-color);
@@ -483,13 +491,14 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    padding-bottom: 1.5rem;
+    justify-content: flex-start;
+    height: fit-content;
     width: 100vw;
     margin-top: 10rem;
     margin-bottom: 10rem;
     background: #5FE4FF;
-    background: linear-gradient(180deg, rgba(95, 228, 255, 0) 0%, rgba(129, 247, 255, 1) 86%);
+    background: linear-gradient(180deg, rgba(95, 228, 255, 0) 0%, rgba(129, 247, 255, 1) 50%,  #40028C 100%);
 }
 .feature_card h1{
     font-size: 4.5rem;
@@ -500,8 +509,10 @@ body{
     text-align: center;
 }
 .feature_cards_container{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
     
     justify-content: center;
     width: 90vw;
@@ -591,6 +602,183 @@ body{
     background-image: url(images/siri_logo2.png);
     background-size: cover;
     background-position: center;
+}
+.people_follow{
+    width: 100%;
+    height: auto;
+    margin-top: 4rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.people_title{
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-left: 4rem;
+    transform: translateY(75vh); 
+}
+.people_title h1{
+    font-size: 3.5rem;
+    margin: 0;
+    background: linear-gradient(114deg, var(--background-color) 10%, var(--primary-color) 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+.colorchange{
+    animation: colorchangeanimation;
+    animation-timeline: view();
+    animation-range: entry -300% exit 300%;
+}
+.explore-btn{
+
+    padding: 10px 40px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    background: transparent;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    filter: drop-shadow(  0 0 20px rgba(255, 230, 1, 0.1)) drop-shadow(0 0 40px rgba(255, 230, 1, 0.4)) drop-shadow(0 0 60px rgba(255, 230, 1, 0.3)) drop-shadow(0 0 80px rgba(255, 230, 1, 0.2));
+
+}
+
+.explore-btn a{
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+.people_title .explore-btn:hover{
+    background: #7CEED3;
+    color: #4a4a4a;
+    border: 3px solid #7ee8d4;
+}
+
+.people{
+    width: 50vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-left: 10vw;
+}
+
+.people-card{
+    width: 40%;
+    height: 500px;
+    background: #ffffff;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    box-shadow: 0px 4px 20px -9px rgba(0,0,0,0.7);
+    transition: z-index 0.3s ease;
+}
+.people-card:hover{
+    z-index: 10;
+}
+.people-card img{
+    width: 100%;
+    height: 390px;
+    border-radius: 18px;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 8px;
+}
+.people-info{
+    width: 100%;
+    text-align: left;
+}
+.people-info div{
+    display: flex;
+    margin-bottom: 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.people-info p{
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--foreground-color);
+    background-color: #DBA80E;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+.people-info h2{
+    font-size: 1.5rem;
+    margin: 0.5rem 0 0.2rem 0;
+    color: var(--foreground-color);
+}
+.people-info h3{
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--foreground-color);
+}
+.topcard{
+    transform: translateY(120vh) translateX(-20vw);
+    animation: topcardanimation;
+    animation-timeline: view();
+    animation-range: entry 0% exit 200%;
+}
+.middlecard{
+    transform: translateY(60vh) translateX(-10vw);
+    animation: middlecardanimation;
+    animation-timeline: view();
+    animation-range: entry -100% exit 200%;
+}
+.lastcard{
+    transform: translateY(0vh);
+}
+.title-one{
+    animation: followanimation;
+    animation-timeline: view();
+    animation-range: entry -300% exit 300%;
+}
+
+@keyframes followanimation {
+    0%,30% { transform: translateY(-85vh);}
+    100% { transform: translateY(75vh);
+    }
+}
+@keyframes colorchangeanimation {
+    0%,50%{background: linear-gradient(114deg, var(--background-color) 10%, var(--primary-color) 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+    99% { 
+        background: linear-gradient(114deg, #ffffff 10%, #ffffff 90%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+}
+
+@keyframes topcardanimation{
+    0%,40%{ transform: translateY(0vh) translateX(-20vw); }
+    41% { transform: translateY(0vh) translateX(-20vw);}
+    99% { transform: translateY(120vh) translateX(-20vw);}
+    
+}
+@keyframes middlecardanimation {
+    0%,30%{ transform: translateY(-2vh) translateX(-10vw); }
+    100% { transform: translateY(60vh) translateX(-10vw);}
+    
 }
 footer {
   display: flex;
@@ -727,4 +915,211 @@ footer li {
 .conncet-ul li:hover a span{
     opacity: 1;
     transform: scale(1) translateY(100%);
+}
+
+.ourteam{
+    width: 100vw;
+    height: auto;
+    margin-top: 10rem;
+    margin-bottom: 5rem;
+    text-align: center;
+}
+.ourteam h1{
+    font-size: 4.5rem;
+    margin: 0;
+    background: linear-gradient(114deg, var(--background-color) 10%, var(--primary-color) 90%);;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+.teammember{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 4rem;
+}
+.member{
+    width: 250px;
+    height: 250px;
+    padding: 10px;
+    background-color: var(--dark-background-color);
+    border-radius: 18px;
+    position: relative; 
+    transition: all 0.3s ease;
+}
+
+.member img{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    object-position: center;
+    transition: all 0.3s ease;
+    border-radius: 18px;
+    overflow: hidden;
+}
+.member h2{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    margin: 0;
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 4px 8px;
+    border-radius: 8px;
+    width: 240px;
+}
+.connectteam{
+    margin-top: 1rem;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.member i{
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    color: #0CA678;
+    font-size: 40px;
+    cursor: pointer;
+}
+.member:hover img{
+    height: 320px;
+}
+.member:hover h2{
+    bottom: 80px;
+    transition: all 0.3s ease;
+}   
+.member:hover .connectteam{
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+.member:hover{
+    height: 320px;
+}
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: auto;
+        transition: width 1s ease-out, opacity .5s ease-out;
+        will-change: width, opacity;
+        overflow: hidden;    
+    }
+    .half-mobile{
+        display: none;
+    }
+    .welcome-text h1{
+        font-size: 7rem;
+    }
+    .navbar a{
+        font-size: 1rem;
+    }
+   
+    .speaker-image{
+        width: 50vw;
+        height: 50vw;
+        top: -10%;
+    }
+    .welcome-text p{
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        color: var(--primary-color);
+    }
+    .tablet {
+        display: none;
+    }
+    .developer-join{
+        flex-direction: column;
+        align-items: center;
+    }
+    .coder, .feature-info{
+        width: 80vw;
+        height: auto;
+    }
+    .pushdown{
+        animation: none;
+        transform: translateY(0);
+    }
+    .movedown{
+        animation: none;
+        transform: translateY(0);
+    }
+    .moveup{
+        animation: none;
+        transform: translateY(0);
+    }
+    .join_now_card{
+        width: 80vw;
+        margin: 4rem auto 0 auto;
+        transform: translateY(0);
+    }
+    .love_code{
+        width: 90vw;
+        margin: 2rem auto 0rem auto;
+    }
+    .love_code p{
+        padding: 0px;
+    }
+    .feature-info{
+        margin-left: 0;
+        margin-top: 4rem;
+    }
+    .feature_card{
+        height: auto;
+    }
+    .feature_cards_container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90vw;
+        margin: 4rem auto 0 auto;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .people_follow{
+        flex-direction: column;
+        align-items: center;
+    }
+    .people_title{
+        width: 80vw;
+        transform: translateY(0);
+        margin-bottom: 2rem;
+        padding-left: 0;
+    }
+    .people{
+        width: 80vw;
+        margin-left: 0;
+    }
+    .title-one{
+        animation: none;
+    }
+    .people-card{
+        width: 80%;
+        height: auto;
+    }
+    .topcard, .middlecard, .lastcard{
+        animation: none;
+        transform: translateY(0) translateX(0);
+    }
+    .teammember{
+        flex-direction: column;
+    }
+    .vr_girl{
+        display: none;
+    }
+    footer{
+        flex-direction: column;
+        align-items: center;
+    }
 }
