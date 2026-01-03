@@ -37,12 +37,7 @@ body{
     z-index: 1000;
     backdrop-filter: blur(3px);
 }
-.navbar i{
-    display: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--foreground-color);
-}
+
 .navbar a {
     text-decoration: none;
     color: var(--foreground-color);
@@ -1021,24 +1016,14 @@ footer li {
         will-change: width, opacity;
         overflow: hidden;    
     }
-    .navbar i{
-        display: block;
-    }
-    .navbar:hover i{
-        display: none;
-    }
     .half-mobile{
-        display: none;
-    }
-    .navbar:hover a{
-        display: block;
-        margin: 8px 0;
-    }
-    .navbar a {
         display: none;
     }
     .welcome-text h1{
         font-size: 7rem;
+    }
+    .navbar a{
+        font-size: 1rem;
     }
    
     .speaker-image{
