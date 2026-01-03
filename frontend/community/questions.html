@@ -35,8 +35,11 @@
         <input type="text" id="searchInput" placeholder="Search" />
       </div>
       <div class="actions">
-        <a class="nav-login" href="../auth/login.html">LOGIN</a>
-        <button id="askBtn" class="btn btn-primary">Ask Question</button>
+          <a class="nav-login" href="../auth/login.html" id="loginLink">LOGIN</a>
+          <button id="askBtn" class="btn btn-primary">Ask Question</button>
+          <div id="userName" style="display: none;">
+            
+          </div>
       </div>
     </header>
 
@@ -83,24 +86,21 @@
       <section id="questionList" class="question-list" aria-live="polite"></section>
     </main>
 
-    <!-- Answer Modal -->
+
     <div id="answerModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="answerModalTitle" hidden>
-      <div class="modal-backdrop" data-close></div>
-      <div class="modal-dialog">
-        <header class="modal-header">
-          <h2 id="answerModalTitle">Answer Question</h2>
-          <button class="icon-close" type="button" aria-label="Close" data-close>×</button>
-        </header>
-        <div class="modal-body">
-          <div class="modal-question">
-            <strong id="answerQuestionTitle"></strong>
+      <div class="ask-question">
+        <h2>What Do You Want to Ask?</h2>
+          <div class="form-group">
+            <textarea id="questionInput" rows="4" placeholder="Feel free to ask your question here..."></textarea>
           </div>
-          <textarea id="answerInput" class="modal-textarea" rows="6" placeholder="Type your answer..."></textarea>
-          <div class="modal-actions">
-            <button id="submitAnswer" class="btn btn-primary" type="button">Post Answer</button>
-            <button id="cancelAnswer" class="btn" type="button" data-close>Cancel</button>
+          <h3>Add Tags</h3>
+          <div class="form-group tag-input-container" id="tagContainer">
+            <input type="text" id="tagInput" placeholder="Type tags separated by commas. e.g.,JavaScript, HTML, CSS.....">
           </div>
-        </div>
+          <div class="form-actions">
+            <button type="button" id="cancelAnswerBtn" class="btn btn-light" onclick="closeAnswerModal()">Cancel</button>
+            <button type="button" id="submitAnswerBtn" class="btn btn-primary" onclick="submitAnswer()">Submit Answer</button>
+          </div>
       </div>
     </div>
 

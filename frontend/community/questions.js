@@ -3,10 +3,10 @@ const questions = [
   {
     id: 1,
     title:
-      "Flexbox alignment issue: Child element not centering horizontally inside container.",
+      "CSS is not warping long words. How to fix it?",
     excerpt:
       "I'm using Flexbox for my layout, but I can't get my (.heading) to center horizontally within the parent div (.container). I've tried justify-content: center; on the container, but it's not working. The heading is still stuck on the left.",
-    tags: ["Flexbox", "Alignment", "CSS"],
+    tags: ["Flexbox"],
     votes: 10,
     answers: 2,
     views: 310,
@@ -20,7 +20,7 @@ const questions = [
       "Flexbox alignment issue: Child element not centering horizontally inside container.",
     excerpt:
       "I'm using Flexbox for my layout, but I can't get my (.heading) to center horizontally within the parent div (.container). I've tried justify-content: center; on the container, but it's not working. The heading is still stuck on the left.",
-    tags: ["Flexbox", "Alignment"],
+    tags: ["Alignment"],
     votes: 25,
     answers: 0,
     views: 860,
@@ -31,10 +31,10 @@ const questions = [
   {
     id: 3,
     title:
-      "Flexbox alignment issue: Child element not centering horizontally inside container.",
+      "How to center a child element horizontally using grid?",
     excerpt:
       "I'm using Flexbox for my layout, but I can't get my (.heading) to center horizontally within the parent div (.container). I've tried justify-content: center; on the container, but it's not working. The heading is still stuck on the left.",
-    tags: ["Flexbox", "CSS"],
+    tags: ["CSS"],
     votes: 7,
     answers: 1,
     views: 210,
@@ -65,6 +65,7 @@ const state = {
   query: "",
 };
 
+
 const countEl = document.getElementById("questionCount");
 const listEl = document.getElementById("questionList");
 
@@ -88,10 +89,10 @@ function questionCard(q) {
         <p class="excerpt">${q.excerpt}</p>
         <div class="tags">${tags}</div>
         <div class="actions-row">
-          <i class="fa-regular fa-thumbs-up"></i> Vote
-          <i class="fa-regular fa-eye"></i> Following
-          <i class="fa-regular fa-thumbs-down"></i> Dislike
-          <i class="fa-regular fa-comment" data-action="answer" data-id="${q.id}"></i> Answer
+          <span><i class="fa-regular fa-thumbs-up"></i> Vote</span>
+          <span><i class="fa-regular fa-eye"></i> Following</span>
+          <span><i class="fa-regular fa-thumbs-down"></i> Dislike</span>
+          <span><i class="fa-regular fa-comment"></i> Answer</span>
         </div>
       </div>
       <div class="user">
@@ -112,7 +113,7 @@ function applyFilters(data) {
   if (state.query) {
     const q = state.query.toLowerCase();
     rows = rows.filter(
-      (r) => r.title.toLowerCase().includes(q) || r.excerpt.toLowerCase().includes(q)
+      (r) => r.title.toLowerCase().includes(q)
     );
   }
 
@@ -145,7 +146,7 @@ function render() {
   listEl.innerHTML = rows.map(questionCard).join("");
 }
 
-// Event wiring
+
 const tabs = document.querySelectorAll(".tab");
 
 tabs.forEach((btn) =>
@@ -180,19 +181,20 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   render();
 });
 
-// Ask Question
-const askBtn = document.getElementById("askBtn");
-askBtn.addEventListener("click", () => {
-  window.location.href = "../auth/login.html";
-});
 
-// Answer Modal wiring
+
 const answerModal = document.getElementById("answerModal");
 const answerTitleEl = document.getElementById("answerQuestionTitle");
 const answerInputEl = document.getElementById("answerInput");
 const submitAnswerBtn = document.getElementById("submitAnswer");
 
 let activeQuestionId = null;
+
+const askBtn = document.getElementById("askBtn");
+askBtn.addEventListener("click", () => {
+  answerModal.removeAttribute("hidden");
+});
+
 
 function openAnswerModal(question) {
   activeQuestionId = question.id;
@@ -206,32 +208,97 @@ function closeAnswerModal() {
   activeQuestionId = null;
 }
 
-listEl.addEventListener("click", (e) => {
-  const target = e.target.closest('[data-action="answer"]');
-  if (!target) return;
-  const id = Number(target.dataset.id);
-  const q = questions.find((x) => x.id === id);
-  if (q) openAnswerModal(q);
-});
 
-answerModal.addEventListener("click", (e) => {
-  if (e.target.hasAttribute("data-close")) closeAnswerModal();
-});
+const isLoggedIn = sessionStorage.getItem("userEmail") !== null;
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !answerModal.hasAttribute("hidden")) closeAnswerModal();
-});
+function submitAnswer() {
+  if (isLoggedIn) {
+    alert("Your answer has been submitted!");  
+  } else {
+    window.location.href = '../auth/login.html';
+  }
+  closeAnswerModal();
+}
 
-submitAnswerBtn.addEventListener("click", () => {
-  const text = answerInputEl.value.trim();
-  if (!activeQuestionId || !text) return;
-  const idx = questions.findIndex((x) => x.id === activeQuestionId);
-  if (idx > -1) {
-    questions[idx].answers += 1;
-    render();
-    closeAnswerModal();
+
+function isUserLoggedIn() {
+const userName = "John Doe"; // Replace with actual user name
+
+  if (isLoggedIn) {
+    document.getElementById('loginLink').style.display = 'none';
+    const userNameDiv = document.getElementById('userName');
+    userNameDiv.style.display = 'flex';
+    userNameDiv.innerHTML = `<i class="fa-regular fa-user"></i> ${userName}`;
+    return true;  
+    }
+  else {
+    return false;
+  } 
+}
+
+isUserLoggedIn();
+const tagContainer = document.getElementById('tagContainer');
+const tagInput = document.getElementById('tagInput');
+const tagsOutput = document.getElementById('tagsOutput');
+let tags = [];
+  tagInput.addEventListener('input', function(e) {
+  const value = this.value;
+    if (value.includes(',')) {
+    const parts = value.split(',');
+      for (let i = 0; i < parts.length - 1; i++) {
+        const tagText = parts[i].trim();
+        if (tagText) {
+          addTag(tagText);
+          }
+      }
+      this.value= '';
+    }
+});
+tagInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+  e.preventDefault();
+  const tagText = this.value.trim();
+    if (tagText) {
+      addTag(tagText);
+      this.value = '';
+      }
+}
+  if (e.key === 'Backspace' && this.value === '' && tags.length > 0)  {
+    removeTag(tags.length - 1);
   }
 });
+tagContainer.addEventListener('click', function() {
+  tagInput.focus();
+});
+function addTag(text) {
+  if (!tags.includes(text)) {
+  tags.push(text);
+  renderTags();
+  }
+}
 
-// Initial render
+function removeTag(index) {
+  tags.splice(index, 1);
+  renderTags();
+}
+function renderTags() {
+  const existingTags = tagContainer.querySelectorAll('.tag');
+  existingTags.forEach(tag => tag.remove());
+  tags.forEach((tag, index) => {
+      const tagElement = document.createElement('span');
+      tagElement.className = 'tag';
+      tagElement.innerHTML = `
+          ${tag}
+          <span class="remove" data-index="${index}">×</span>
+      `;
+      tagElement.querySelector('.remove').addEventListener('click', function(e) {
+          e.stopPropagation();
+          removeTag(parseInt(this.dataset.index));
+      });
+      
+      tagContainer.insertBefore(tagElement, tagInput);
+});
+
+}
+
 render();
