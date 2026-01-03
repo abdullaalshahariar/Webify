@@ -1,0 +1,316 @@
+@import url("https://fonts.googleapis.com/css2?family=Nico+Moji&family=Noto+Sans&family=Roboto:wght@500&display=swap");
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Custom Animations */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Main Container */
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-image: url('back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Cards Container */
+.cards-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    margin-left: -8rem;
+}
+
+/* Card Lift Effect */
+.card-lift {
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transform: translateY(0) scale(1);
+}
+
+.card-lift:hover {
+    transform: translateY(-25px) scale(1.05) !important;
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.6),
+        0 40px 70px -15px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(255, 255, 255, 0.15) !important;
+    filter: brightness(1.15);
+    z-index: 10;
+}
+
+.card-lift:active {
+    transform: translateY(-10px) scale(1.02) !important;
+    transition: all 0.1s ease;
+}
+
+/* Left Card - Laptop Image */
+.left-card {
+    width: 520px;
+    height: 680px;
+    border-radius: 30px;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=800&fit=crop');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 20px 4px 8.9px 5px rgba(0, 0, 0, 0.25);
+    animation: slideInFromLeft 0.7s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+/* WEBIFY Text Overlay */
+.webify-text {
+    position: absolute;
+    left: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #FF1B8D 0%, #00D9FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 110px;
+    font-family: 'Nico Moji', cursive;
+    line-height: 1;
+    animation: fadeInZoom 1s ease-out 0.5s both;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Right Card - Login Card */
+.right-card {
+    width: 720px;
+    height: 620px;
+    border-radius: 30px;
+    margin-left: -180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #183b5d, #210e28);
+    box-shadow: 19px 1px 16.2px 7px rgba(0, 0, 0, 0.25);
+    animation: slideInFromRight 0.7s ease-out 0.15s both;
+    z-index: 1;
+}
+
+/* Logo Container */
+.logo-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInZoom 0.7s ease-out 0.3s both;
+}
+
+/* Description Text */
+.description-text {
+    color: white;
+    font-size: 32px;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    padding: 0 3rem;
+    margin-bottom: 3rem;
+    max-width: 407px;
+    animation: slideInFromBottom 0.7s ease-out 0.5s both;
+}
+
+/* Button Container */
+.button-container {
+    position: relative;
+    width: 338px;
+    height: 70px;
+}
+
+.login-button-wrapper {
+    margin-bottom: 1.5rem;
+    animation: slideInFromBottom 0.7s ease-out 0.7s both;
+}
+
+.join-button-wrapper {
+    animation: slideInFromBottom 0.7s ease-out 0.85s both;
+}
+
+/* Buttons */
+.btn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    background: rgba(155, 192, 234, 0.15);
+}
+
+.login-btn:hover {
+    transform: scale(1.05);
+    background: rgba(155, 192, 234, 0.30);
+}
+
+.join-btn {
+    background: transparent;
+}
+
+.join-btn:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Button Glow */
+.button-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 62px;
+    pointer-events: none;
+    box-shadow:
+        0px 0px 250px 0px #f5e58f,
+        0px 0px 250px 0px #f5e58f,
+        0px 0px 250px 0px #f5e58f,
+        0px 0px 147.638px 0px #f5e58f,
+        0px 0px 42.182px 0px #f5e58f,
+        0px 0px 21.091px 0px #f5e58f;
+}
+
+/* Button Text */
+.button-text {
+    position: relative;
+    z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cards-container {
+        margin-left: 0;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .right-card {
+        margin-left: 0;
+    }
+
+    .left-card,
+    .right-card {
+        width: 90%;
+        max-width: 520px;
+    }
+
+    .right-card {
+        height: auto;
+        padding: 3rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .webify-text {
+        font-size: 70px;
+        left: 2rem;
+    }
+
+    .description-text {
+        font-size: 24px;
+        padding: 0 2rem;
+    }
+
+    .btn {
+        font-size: 24px;
+    }
+
+    .button-container {
+        width: 280px;
+        height: 60px;
+    }
+
+    .logo-container svg {
+        width: 120px;
+        height: 120px;
+    }
+}
