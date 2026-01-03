@@ -9,8 +9,24 @@ import menu_icon from '../assets/icons/menu_icon.svg'
 import tablet_icon from '../assets/icons/tablet_icon.svg'
 import mobile_icon from '../assets/icons/mobile_icon.svg'
 import styles from './Topbar.module.css'
+import { createSignal, Show } from 'solid-js';
 
 export function Topbar(props) {
+    //signal for popups
+    const [showPopup, setShowPopup] = createSignal(false);
+    const [popupMsg, setPopupMsg] = createSignal("");
+
+    //this functino only set value of popup parameter
+    const triggerPopup = (msg) => {
+        setPopupMsg(msg);
+        setShowPopup(true);
+
+        setTimeout(() => {
+            setShowPopup(false);
+            setPopupMsg("");
+        }, 3000);
+    }
+
     const deviceIcons = {
         Desktop: desktop_icon,
         Tablet: tablet_icon,
@@ -52,11 +68,13 @@ export function Topbar(props) {
                 <div class={styles.topbar_right}>
                     <button onClick={props.onOpenDeviceSelector}>
                         <img src={deviceIcons[props.selectedDevice]} alt="device_icon" />
-                        
+
                     </button>
+
                     <button>
                         <img src={style_icon} alt="style_icon" />
                     </button>
+
                     <button style={{
                         "height": "24px",
                         "width": "43px",
@@ -65,14 +83,23 @@ export function Topbar(props) {
                         "color": "white",
                         "font-size": "14px",
                         "text-align": "center",
-                    }}>
+                    }}
+                        onClick={() => triggerPopup("Saved Progress!")}>
                         <span>Save</span>
                     </button>
+
                     <button>
                         <img src={menu_icon} alt="menu_icon" />
                     </button>
                 </div>
             </div>
+
+            <Show when={showPopup()}>
+                <div class={styles.popup}>
+                    <span>{popupMsg()}</span>
+                    <div class={styles.savebtn_progress_bar}></div>
+                </div>
+            </Show>
         </>
     )
 }
