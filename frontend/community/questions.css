@@ -447,6 +447,7 @@ body {
     padding: 6px;
     font-size: 1rem;
 }
+.form-group input[type="text"],
 .form-group textarea {
     width: 100%;
     padding: 1.25rem 1rem;
@@ -458,7 +459,7 @@ body {
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
-
+.form-group input[type="text"]::placeholder,
 .form-group textarea::placeholder {
     color: var(--dark-background-color);
 }
@@ -466,7 +467,7 @@ body {
     resize: vertical;
     min-height: 100px;
 }
-
+.form-group input[type="text"]:focus,
 .form-group textarea:focus {
     outline: none;
     border-color: #54c4f8;
