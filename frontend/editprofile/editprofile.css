@@ -165,8 +165,11 @@ body{
         margin: 1rem;
     }
     
-    .savechangesbtn {
+    .save_changes_btn {
+        position: static;
         font-size: 1rem;
         padding: 12px 30px;
+        width: 50%;
+        margin: 1rem 25%;
     }
 }

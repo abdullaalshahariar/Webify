@@ -183,6 +183,9 @@ loginForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
+    // Store email in sessionStorage for use across pages
+    sessionStorage.setItem("userEmail", email);
+    
     showNotification(
       "Welcome back! You have successfully signed in.",
       "success"
@@ -248,6 +251,10 @@ signupForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
+    // Store email and name in sessionStorage for use across pages
+    sessionStorage.setItem("userEmail", email);
+    sessionStorage.setItem("userName", name);
+    
     showNotification(
       "A new journey begins! Welcome to the community.",
       "success",
