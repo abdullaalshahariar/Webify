@@ -1,15 +1,23 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { BlockContent } from "./components/BlockContent";
 import { Topbar } from "./components/Topbar";
 import { DeviceSelector } from "./components/DeviceSelector";
 
 const App = () => {
-
   //signal for sidebar block content
   const [showBlockContent, setShowBlockContent] = createSignal(false);
   //signal for device selector
   const [showSelectedDevice, setShowSelectedDevice] = createSignal(false);
   const [selectedDevice, setSelectedDevice] = createSignal("Desktop");
+
+
+  //removing the loading gif
+  onMount(() => {
+    const loadingGif = document.getElementById('loading_gif');
+    if (loadingGif) {
+      loadingGif.remove();
+    }
+  })
 
   return (
     <div>
@@ -20,7 +28,7 @@ const App = () => {
         <BlockContent onClose={() => setShowBlockContent(false)} />
       )}
 
-      {showSelectedDevice() && <DeviceSelector select_a_Device={(device)=>setSelectedDevice(device)} selectedDevice={selectedDevice()} />}
+      {showSelectedDevice() && <DeviceSelector select_a_Device={(device) => setSelectedDevice(device)} selectedDevice={selectedDevice()} />}
     </div>
 
   );
