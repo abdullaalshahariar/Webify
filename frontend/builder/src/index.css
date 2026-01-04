@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+body {
+    background-color: #ddd;
+    font-size: 14px;
+}
+
+button:hover {
+    color: #0693E3;
+}

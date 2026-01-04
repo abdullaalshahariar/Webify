@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Solid App</title>
+</head>
+
+<style>
+  #loading_gif {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 9999;
+  }
+
+  #loading_gif p {
+    translate: -25% 0%;
+  }
+</style>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="loading_gif">
+    <img src="src/assets/icons/loadcat.gif" alt="Loading..." />
+    <p>Hang in there, loading... </p>
+  </div>
+
+  <div id="root"></div>
+
+
+  <script src="/src/index.jsx" type="module"></script>
+</body>
+
+</html>
