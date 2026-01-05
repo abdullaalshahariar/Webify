@@ -11,6 +11,7 @@ import mobile_icon from '../assets/icons/mobile_icon.svg'
 import styles from './Topbar.module.css'
 import { createSignal, Show } from 'solid-js';
 import { StyleMenu } from "./StyleMenu";
+import { ExportMenu } from "./ExportMenu";
 
 export function Topbar(props) {
     //signal for popups
@@ -30,6 +31,9 @@ export function Topbar(props) {
 
     //signal for style menu
     const [showStyleMenu, setShowStyleMenu] = createSignal(false);
+
+    //signal for export menu
+    const [showExportMenu, setShowExportMenu] = createSignal(false);
 
     const deviceIcons = {
         Desktop: desktop_icon,
@@ -92,7 +96,7 @@ export function Topbar(props) {
                         <span>Save</span>
                     </button>
 
-                    <button>
+                    <button onClick={() => { setShowExportMenu(true) }}>
                         <img src={menu_icon} alt="menu_icon" />
                     </button>
                 </div>
@@ -107,6 +111,10 @@ export function Topbar(props) {
 
             <Show when={showStyleMenu()}>
                 <StyleMenu closeMenu={() => setShowStyleMenu(false)} />
+            </Show>
+
+            <Show when={showExportMenu()}>
+                <ExportMenu closeMenu={() => setShowExportMenu(false)} />
             </Show>
         </>
     )
