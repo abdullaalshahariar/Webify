@@ -43,7 +43,7 @@ const App = () => {
         )}
 
         <main class={styles.canvasArea}>
-          <Canvas/>
+          <Canvas selectedDevice={selectedDevice()}/>
         </main>
       </div>
     </div>

@@ -79,7 +79,10 @@ export function Topbar(props) {
 
                     </button>
 
-                    <button onClick={() => setShowStyleMenu(true)}>
+                    <button onClick={() => {
+                        setShowStyleMenu(true);
+                        console.log("style menu opened");
+                    }}>
                         <img src={style_icon} alt="style_icon" />
                     </button>
 
