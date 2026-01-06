@@ -134,7 +134,7 @@ body {
 .header {
     background: white;
     border-bottom: 1px solid #e2e8f0;
-    padding:  2rem;
+    padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -143,7 +143,17 @@ body {
     z-index: 100;
     width: 100vw;
 }
-
+.settingsPopup{
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    width: 200px;
+}
 .header-left {
     display: flex;
     align-items: center;
@@ -255,7 +265,7 @@ body {
 
 .btn-save {
     padding: 0.75rem 1.5rem;
-    background: #7c3aed;
+    background: #1da3fd;
     color: white;
     border: none;
     border-radius: 8px;
@@ -954,6 +964,16 @@ body {
     justify-content: center;
     z-index: 10000;
 }
+.settingsModal{
+    position: fixed;
+    top: 10%;
+    right: 0;
+    width: 400px;
+    height:fit-content;
+    background: transparent;
+    z-index: 10000;
+    overflow-y: auto;
+}
 
 .modal-content {
     background: white;
@@ -962,7 +982,11 @@ body {
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.modal-content.noshadow {
+    box-shadow: none;
+    border: #718096 1px solid;
 }
 
 .modal-header {
@@ -1165,4 +1189,87 @@ body {
 .btn-back:hover {
     background: #f7fafc;
     border-color: #cbd5e0;
+}
+/* Layout Mode Toggle */
+.layout-mode-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.mode-btn:hover {
+    border-color: #cbd5e0;
+    background: #f7fafc;
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+}
+
+/* Device Selector Grid */
+.device-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.device-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.device-btn:hover {
+    border-color: #667eea;
+    background: #f7fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.device-btn i {
+    width: 32px;
+    height: 32px;
+    color: #667eea;
+}
+
+.device-btn span {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.device-btn small {
+    color: #718096;
+    font-size: 0.75rem;
+}
+
+.device-btn.active {
+    border-color: #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 }

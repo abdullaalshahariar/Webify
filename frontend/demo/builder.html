@@ -23,15 +23,9 @@
                 <div class="canvas-toolbar">
                     <input type="text" id="portfolioTitle" value="My Portfolio" placeholder="Portfolio Title" class="portfolio-title-input">
                     <div class="toolbar-actions">
-                        <i data-lucide="settings"></i>
-                        <i data-lucide="desktop"></i>
-                        
-                        
-                        <div class="layout-mode-toggle">
-                            <button onclick="setLayoutMode('flow')" id="flowModeBtn" class="mode-btn active">📄 Flow</button>
-                            <button onclick="setLayoutMode('free')" id="freeModeBtn" class="mode-btn">🎨 Free</button>
-                        </div>
-
+                        <i data-lucide="settings" onclick="openSettings()"></i>
+                        <i data-lucide="monitor-smartphone" onclick="openDeviceSelector()"></i>
+                        <button onclick="savefile()" class="btn-save">Save</button>
                         <button onclick="clearCanvas()" class="btn-clear">🗑️ Clear Canvas</button>
                         <button onclick="switchView('preview')" class="btn-preview">👁️ Preview</button>
                         <button onclick="downloadPortfolio()" class="btn-download">⬇️ Download</button>
@@ -58,6 +52,74 @@
                         <p>👈 Drag components here</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settingsModal hidden">
+        <div class="modal-content noshadow">
+            <div class="modal-header">
+                <h3>⚙️ Canvas Settings</h3>
+                <button onclick="closeSettings()" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="customization-section">
+                    <label>Canvas Width (px):</label>
+                    <input type="number" id="canvasWidth" min="300" max="3000" value="1200" class="number-input">
+                </div>
+                <div class="customization-section">
+                    <label>Canvas Height (px):</label>
+                    <input type="number" id="canvasHeight" min="300" max="3000" value="800" class="number-input">
+                </div>
+                <div class="customization-section">
+                    <label>Layout Mode:</label>
+                    <div class="layout-mode-toggle">
+                        <button onclick="setLayoutMode('flow')" id="flowModeBtn" class="mode-btn active">📄 Flow</button>
+                        <button onclick="setLayoutMode('free')" id="freeModeBtn" class="mode-btn">🎨 Free</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeSettings()" class="btn-cancel">Cancel</button>
+                <button onclick="applyCanvasSettings()" class="btn-apply">Apply Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Device Selector Modal -->
+    <div id="deviceSelectorModal" class="settingsModal hidden">
+        <div class="modal-content noshadow">
+            <div class="modal-header">
+                <h3>📱 Device Preview</h3>
+                <button onclick="closeDeviceSelector()" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="device-selector-grid">
+                    <button onclick="setCanvasDevice('desktop')" class="device-btn" data-device="desktop">
+                        <i data-lucide="monitor"></i>
+                        <span>Desktop</span>
+                        <small>1920 × 1080</small>
+                    </button>
+                    <button onclick="setCanvasDevice('laptop')" class="device-btn" data-device="laptop">
+                        <i data-lucide="laptop"></i>
+                        <span>Laptop</span>
+                        <small>1366 × 768</small>
+                    </button>
+                    <button onclick="setCanvasDevice('tablet')" class="device-btn" data-device="tablet">
+                        <i data-lucide="tablet"></i>
+                        <span>Tablet</span>
+                        <small>768 × 1024</small>
+                    </button>
+                    <button onclick="setCanvasDevice('mobile')" class="device-btn" data-device="mobile">
+                        <i data-lucide="smartphone"></i>
+                        <span>Mobile</span>
+                        <small>375 × 667</small>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeDeviceSelector()" class="btn-cancel">Close</button>
             </div>
         </div>
     </div>

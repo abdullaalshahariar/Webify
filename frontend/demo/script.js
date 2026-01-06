@@ -19,6 +19,98 @@ let canvasDimensions = {
     autoHeight: false
 };
 
+function openSettings(){
+    // Set current canvas dimensions
+    document.getElementById('canvasWidth').value = canvasDimensions.width;
+    document.getElementById('canvasHeight').value = canvasDimensions.height;
+    
+    // Set active layout mode button
+    updateLayoutModeButtons();
+    
+    document.getElementById('settingsModal').classList.remove('hidden');
+}
+
+function closeSettings(){
+    document.getElementById('settingsModal').classList.add('hidden');
+}
+
+function applyCanvasSettings() {
+    const width = parseInt(document.getElementById('canvasWidth').value);
+    const height = parseInt(document.getElementById('canvasHeight').value);
+    
+    canvasDimensions.width = width;
+    canvasDimensions.height = height;
+    
+    const canvas = document.getElementById('canvas');
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    
+    closeSettings();
+}
+
+function setLayoutMode(mode) {
+    layoutMode = mode;
+    updateLayoutModeButtons();
+    
+    const canvas = document.getElementById('canvas');
+    if (mode === 'flow') {
+        canvas.style.display = 'flex';
+        canvas.style.flexDirection = 'column';
+        canvas.style.gap = '1rem';
+    } else {
+        canvas.style.display = 'block';
+        canvas.style.position = 'relative';
+    }
+}
+
+function updateLayoutModeButtons() {
+    const flowBtn = document.getElementById('flowModeBtn');
+    const freeBtn = document.getElementById('freeModeBtn');
+    
+    if (layoutMode === 'flow') {
+        flowBtn.classList.add('active');
+        freeBtn.classList.remove('active');
+    } else {
+        flowBtn.classList.remove('active');
+        freeBtn.classList.add('active');
+    }
+}
+
+function openDeviceSelector() {
+    document.getElementById('deviceSelectorModal').classList.remove('hidden');
+    // Reinitialize icons in the modal
+    setTimeout(() => lucide.createIcons(), 10);
+}
+
+function closeDeviceSelector() {
+    document.getElementById('deviceSelectorModal').classList.add('hidden');
+}
+
+function setCanvasDevice(device) {
+    const canvas = document.getElementById('canvas');
+    const deviceDimensions = {
+        desktop: { width: 1920, height: 1080 },
+        laptop: { width: 1366, height: 768 },
+        tablet: { width: 768, height: 1024 },
+        mobile: { width: 375, height: 667 }
+    };
+    
+    const dimensions = deviceDimensions[device];
+    canvasDimensions.width = dimensions.width;
+    canvasDimensions.height = dimensions.height;
+    
+    canvas.style.width = dimensions.width + 'px';
+    canvas.style.height = dimensions.height + 'px';
+    
+    // Update active state on device buttons
+    document.querySelectorAll('.device-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-device="${device}"]`).classList.add('active');
+    
+    closeDeviceSelector();
+}
+
 // Basic Components (User can edit)
 const basicComponents = [
     {
