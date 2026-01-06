@@ -1,33 +1,26 @@
-.style_menu_container {
-    height: 220px;
-    width: 226px;
+.container {
+    width: 200px;
+    height: 180px;
 
-    background-color: white;
-
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-    border: rgba(0, 0, 0, 0.3) 1px solid;
+    background-color: white;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
 
     position: absolute;
-    top: 70px;
+    top: 60px;
     right: 5px;
-    z-index: 1001;
-}
-
-.style_menu_container button {
-    cursor: pointer;
+    z-index: 998;
 }
 
 .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    width: 226px;
     height: 47px;
+    width: 200px;
 
-
-    border-bottom: rgba(0, 0, 0, 0.3) 1px solid;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .top span {
@@ -39,10 +32,8 @@
     padding: 5px;
 
     border: transparent 1px solid;
-}
 
-.top button:hover {
-    border: #0693E3 1px solid
+    cursor: pointer;
 }
 
 .bottom {
@@ -56,12 +47,17 @@
     align-items: center;
 
     height: 40px;
-    width: 226px;
+    width: 200px;
 
     margin-top: 13px;
+
+    cursor: pointer;
 }
 
 .bottom button img {
-    margin-left: 40px;
-    margin-right: 10px;
+    margin-left: 41px;
+}
+
+.bottom button span {
+    margin-left: 30px;
 }

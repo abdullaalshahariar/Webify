@@ -1,4 +1,64 @@
-// Notification Toast Function
+// Demo users for testing - try Tamim/Tamim123, Fahim/Fahim123, Abdullah/Abdullah123, or Erin/Erin123
+const demoUsers = [
+  {
+    username: "Tamim",
+    password: "Tamim123",
+    userData: {
+      name: "Tamim Ahmed",
+      email: "tamim@webify.com",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      bio: "Full-stack developer passionate about building innovative web solutions.",
+      projects: 15,
+      templates: 8,
+      followers: 234,
+    },
+  },
+  {
+    username: "Fahim",
+    password: "Fahim123",
+    userData: {
+      name: "Fahim Rahman",
+      email: "fahim@webify.com",
+      avatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      bio: "UI/UX designer and front-end developer. Love creating beautiful interfaces.",
+      projects: 22,
+      templates: 12,
+      followers: 456,
+    },
+  },
+  {
+    username: "Abdullah",
+    password: "Abdullah123",
+    userData: {
+      name: "Abdullah Khan",
+      email: "abdullah@webify.com",
+      avatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      bio: "Backend specialist with expertise in Node.js and database architecture.",
+      projects: 18,
+      templates: 5,
+      followers: 189,
+    },
+  },
+  {
+    username: "Erin",
+    password: "Erin123",
+    userData: {
+      name: "Erin Mitchell",
+      email: "erin@webify.com",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      bio: "Creative designer and developer. Specialized in responsive web design.",
+      projects: 28,
+      templates: 16,
+      followers: 672,
+    },
+  },
+];
+
+// Show toast notifications - auto-hides after 5 seconds
 function showNotification(message, type = "success", title = "") {
   const toast = document.getElementById("notification-toast");
 
@@ -54,7 +114,10 @@ function hideNotification() {
   toast.classList.remove("show");
 }
 
-// Tab Switching
+/**
+ * Tab Switching System
+ * Handles switching between login and signup forms
+ */
 const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
 const loginForm = document.getElementById("loginForm");
@@ -195,18 +258,36 @@ loginForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
-    // Store email in sessionStorage for use across pages
-    sessionStorage.setItem("userEmail", email);
-
-    showNotification(
-      "Welcome back! You have successfully signed in.",
-      "success"
+    // Check if credentials match any demo user
+    const user = demoUsers.find(
+      (u) =>
+        (u.username.toLowerCase() === email.toLowerCase() ||
+          u.userData.email.toLowerCase() === email.toLowerCase()) &&
+        u.password === password
     );
-    // Redirect to profile page after short delay
-    setTimeout(() => {
-      window.location.href = "../profile/profile.html";
-    }, 1500);
-    console.log("Login with:", { email, password });
+
+    if (user) {
+      // Store user data in localStorage
+      localStorage.setItem("currentUser", JSON.stringify(user.userData));
+      localStorage.setItem("isLoggedIn", "true");
+
+      showNotification(
+        `Welcome back, ${user.userData.name}! You have successfully signed in.`,
+        "success",
+        "Login Successful! 🎉"
+      );
+      // Redirect to profile page after short delay
+      setTimeout(() => {
+        window.location.href = "../profile/profile.html";
+      }, 1500);
+    } else {
+      showNotification(
+        "Invalid username or password. Try demo users: Tamim/Tamim123, Fahim/Fahim123, Abdullah/Abdullah123, Erin/Erin123",
+        "error",
+        "Login Failed"
+      );
+    }
+    console.log("Login attempt with:", { email });
   }
 });
 
