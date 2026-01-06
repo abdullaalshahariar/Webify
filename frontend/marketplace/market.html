@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webify - UI Marketplace</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="market.css">
 </head>
 <body>
     <!-- Header -->
@@ -12,12 +12,12 @@
         <div class="header-container">
             <div class="header-left">
                 <div class="logo">
-                    <div class="logo-icon">W</div>
+                    <div class="logo-icon"><img src="../images/logo.png" alt=""></div>
                     <span class="logo-text">WEBIFY</span>
                 </div>
                 <div class="nav-buttons">
                     <button class="nav-btn active">Marketplace</button>
-                    <button class="nav-btn">Developer Hub</button>
+                    <button class="nav-btn" onclick="location.href='../community/questions.html'">Community</button>
                 </div>
             </div>
             <div class="header-right">
@@ -62,6 +62,6 @@
         <div class="products-grid" id="productsGrid"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="market.js"></script>
 </body>
 </html>

@@ -41,7 +41,6 @@ header {
 .logo-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -49,6 +48,10 @@ header {
     color: white;
     font-weight: bold;
     font-size: 1.25rem;
+}
+.logo img {
+    width: 40px;
+    height: 40px;
 }
 
 .logo-text {
@@ -164,6 +167,10 @@ header {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: row;
 }
 
 .category-filters {
