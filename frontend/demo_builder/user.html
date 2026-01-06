@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Builder - User Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header" class="header">
+        <div class="header-left">
+            <h1>Portfolio Builder</h1>
+            <span id="userBadge" class="badge">User</span>
+        </div>
+        
+        <div class="header-right" id="headerNav">
+            <!-- Navigation buttons will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Portfolio Builder View (User) -->
+    <div id="builderView" class="view">
+        <div class="canvas-builder-container">
+            <!-- Component Sidebar -->
+            <div class="component-sidebar">
+                <h3>Components</h3>
+                <div id="componentList" class="component-list">
+                    <!-- Available components will be listed here -->
+                </div>
+            </div>
+            
+            <!-- Canvas Area -->
+            <div class="canvas-wrapper">
+                <div class="canvas-toolbar">
+                    <input type="text" id="portfolioTitle" value="My Portfolio" placeholder="Portfolio Title" class="portfolio-title-input">
+                    <div class="toolbar-actions">
+                        <div class="layout-mode-toggle">
+                            <button onclick="setLayoutMode('flow')" id="flowModeBtn" class="mode-btn active">📄 Flow</button>
+                            <button onclick="setLayoutMode('free')" id="freeModeBtn" class="mode-btn">🎨 Free</button>
+                        </div>
+                        <button onclick="clearCanvas()" class="btn-clear">🗑️ Clear Canvas</button>
+                        <button onclick="switchView('preview')" class="btn-preview">👁️ Preview</button>
+                        <button onclick="downloadPortfolio()" class="btn-download">⬇️ Download</button>
+                    </div>
+                </div>
+                
+                <div id="canvas" class="white-canvas">
+                    <!-- Dropped components will appear here -->
+                    <div class="canvas-empty-state">
+                        <p>👈 Drag components here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Customization Modal -->
+    <div id="customizationModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Customize Component</h3>
+                <button onclick="closeCustomizationModal()" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="htmlEditorSection" class="customization-section hidden">
+                    <label>HTML Content:</label>
+                    <textarea id="customHtml" class="html-textarea" rows="4" placeholder="Edit HTML content..."></textarea>
+                </div>
+                <div class="customization-section">
+                    <label>Background Color:</label>
+                    <input type="color" id="customBgColor" class="color-picker">
+                </div>
+                <div class="customization-section">
+                    <label>Text Color:</label>
+                    <input type="color" id="customTextColor" class="color-picker">
+                </div>
+                <div class="customization-section">
+                    <label>Font Size:</label>
+                    <input type="range" id="customFontSize" min="10" max="72" value="16" class="slider">
+                    <span id="fontSizeValue">16px</span>
+                </div>
+                <div class="customization-section">
+                    <label>Width (px):</label>
+                    <input type="number" id="customWidth" min="100" max="1200" value="300" class="number-input">
+                </div>
+                <div class="customization-section">
+                    <label>Height (px):</label>
+                    <input type="number" id="customHeight" min="50" max="800" value="200" class="number-input">
+                </div>
+                <div class="customization-section">
+                    <label>Border Radius (px):</label>
+                    <input type="range" id="customBorderRadius" min="0" max="50" value="0" class="slider">
+                    <span id="borderRadiusValue">0px</span>
+                </div>
+                <div class="customization-section">
+                    <label>Opacity:</label>
+                    <input type="range" id="customOpacity" min="0" max="100" value="100" class="slider">
+                    <span id="opacityValue">100%</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeCustomizationModal()" class="btn-cancel">Cancel</button>
+                <button onclick="applyCustomization()" class="btn-apply">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Preview View -->
+    <div id="previewView" class="view hidden">
+        <div class="preview-back-button">
+            <button onclick="switchView('builder')" class="btn-back">← Back to Builder</button>
+        </div>
+        <iframe id="portfolioPreviewFrame" class="portfolio-preview-iframe" sandbox="allow-same-origin"></iframe>
+    </div>
+
+    <script src="user.js"></script>
+</body>
+</html>
