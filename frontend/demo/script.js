@@ -30,6 +30,15 @@ function openSettings(){
     document.getElementById('settingsModal').classList.remove('hidden');
 }
 
+function publishfile() {
+    document.getElementById('publishModal').classList.remove('hidden');
+}
+
+function closePublishModal() {
+    document.getElementById('publishModal').classList.add('hidden');
+}
+
+
 function closeSettings(){
     document.getElementById('settingsModal').classList.add('hidden');
 }

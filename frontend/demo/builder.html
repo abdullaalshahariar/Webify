@@ -12,7 +12,9 @@
     <!-- Header -->
     <div id="header" class="header">
         <div class="header-left">
-            <img src="../images/logo.png" alt="Logo">
+            <a href="../profile/profile.html">
+                <img src="../images/logo.png" alt="Logo">
+            </a>
             <i data-lucide="plus" class="plus show" onclick="showComponentSidebar()" id="ShowComponentSidebarIcon"></i>
             <i data-lucide="x" class="plus hide hidden" onclick="hideComponentSidebar()" id="HideComponentSidebarIcon"></i>
             <i data-lucide="undo" class="undo"></i>
@@ -26,9 +28,7 @@
                         <i data-lucide="settings" onclick="openSettings()"></i>
                         <i data-lucide="monitor-smartphone" onclick="openDeviceSelector()"></i>
                         <button onclick="savefile()" class="btn-save">Save</button>
-                        <button onclick="clearCanvas()" class="btn-clear">🗑️ Clear Canvas</button>
-                        <button onclick="switchView('preview')" class="btn-preview">👁️ Preview</button>
-                        <button onclick="downloadPortfolio()" class="btn-download">⬇️ Download</button>
+                        <i data-lucide="rocket" onclick="publishfile()"></i>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div id="canvas" class="white-canvas">
                     <!-- Dropped components will appear here -->
                     <div class="canvas-empty-state">
-                        <p>👈 Drag components here</p>
+                        <p>Drag components here</p>
                     </div>
                 </div>
             </div>
@@ -79,6 +79,8 @@
                         <button onclick="setLayoutMode('free')" id="freeModeBtn" class="mode-btn">🎨 Free</button>
                     </div>
                 </div>
+                
+                        <button onclick="clearCanvas()" class="btn-clear"> Clear Canvas</button>
             </div>
             <div class="modal-footer">
                 <button onclick="closeSettings()" class="btn-cancel">Cancel</button>
@@ -87,6 +89,20 @@
         </div>
     </div>
 
+    <div id ="publishModal" class ="settingsModal hidden">
+        <div class="modal-content noshadow">
+            <div class="modal-header">
+                <h3>Download File</h3>
+                <button onclick="closePublishModal()" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Your File is ready to be published!</p>
+                <br>
+                <button onclick="switchView('preview')" class="btn-preview">Preview</button>
+                <button onclick="downloadPortfolio()" class="btn-download">Download</button>
+            </div>
+        </div>
+    </div>
     <!-- Device Selector Modal -->
     <div id="deviceSelectorModal" class="settingsModal hidden">
         <div class="modal-content noshadow">
