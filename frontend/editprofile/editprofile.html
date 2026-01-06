@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEBIFY - Edit Profile</title>
     <link rel="stylesheet" href="../profile/profile.css">
-    <link rel="icon" type="image/png" href="../images/logo.png"/>
+    <link rel="icon" type="image/png" href="../images/logo.png" />
     <link rel="stylesheet" href="editprofile.css">
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -75,9 +75,9 @@
         <!-- User Info -->
         <div class="dropdown-user-info">
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User">
-            <div class="user-details">
-                <h4>Tanvir Jakaria</h4>
-                <p>tanvirjakaria@gmail.com</p>
+            <div class="user-details" id="userdetails">
+                <h4>Loading...</h4>
+                <p>Loading...</p>
             </div>
         </div>
 
@@ -111,7 +111,8 @@
     <main class="main-content">
         <h1 class="editprofile_title">Edit Profile Page</h1>
         <div class="profile_pic">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User" id="profilePic">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User"
+                id="profilePic">
             <button class="change_pic_btn" onclick="changeProfilePic()">Change Profile Picture</button>
             <input type="file" id="picInput" style="display:none" accept="image/*">
         </div>
@@ -120,15 +121,15 @@
             <form id="profileForm" class="profile-form">
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" value="Tanvir Jakariah" required>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" value="tanvirjakaria@gmail.com" required>
+                    <input type="email" id="email" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
                     <label for="bio">Bio</label>
-                    <textarea id="bio" rows="4" placeholder="Tell us about yourself...">Web Developer passionate about modern web technologies.</textarea>
+                    <textarea id="bio" rows="4" placeholder="Tell us about yourself..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="password">New Password</label>
@@ -136,7 +137,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" value="+880 1234 567890">
+                    <input type="tel" id="phone" placeholder="Enter phone number (optional)">
                 </div>
             </form>
 

@@ -1,10 +1,4 @@
-/**
- * Dashboard Notification System
- * Manages all dashboard notifications and alerts
- * @param {string} message - Notification message
- * @param {string} type - Type: 'success', 'error', 'warning'
- * @param {string} title - Notification title
- */
+// Show toast notifications with icons - disappears after 5 seconds
 function showNotification(message, type = "success", title = "") {
   const toast = document.getElementById("notification-toast");
 
@@ -63,8 +57,67 @@ function hideNotification() {
 // Initialize Lucide icons
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
+  loadUserData();
   initializeApp();
+
+  // Check if there's a section parameter in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const section = urlParams.get("section");
+  if (section) {
+    handleNavigation(section);
+
+    // Update active nav item
+    document
+      .querySelectorAll(".nav-item")
+      .forEach((nav) => nav.classList.remove("active"));
+    const activeNav = document.querySelector(
+      `.nav-item[data-nav="${section}"]`
+    );
+    if (activeNav) {
+      activeNav.classList.add("active");
+    }
+  }
 });
+
+// Load user data and update UI - redirects to login if not logged in
+function loadUserData() {
+  const currentUser = localStorage.getItem("currentUser");
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  // Redirect to login if not logged in
+  if (!isLoggedIn || !currentUser) {
+    window.location.href = "../auth/login.html";
+    return;
+  }
+
+  const userData = JSON.parse(currentUser);
+
+  // Update avatar images
+  const avatarImages = document.querySelectorAll(
+    ".sidebar-avatar img, .dropdown-user-info img"
+  );
+  avatarImages.forEach((img) => {
+    img.src = userData.avatar;
+    img.alt = userData.name;
+  });
+
+  // Update user details in dropdown
+  const userDetailsDiv = document.getElementById("userdetails");
+  if (userDetailsDiv) {
+    userDetailsDiv.innerHTML = `
+      <h4>${userData.name}</h4>
+      <p>${userData.email}</p>
+    `;
+  }
+
+  // Update page title with user name
+  const mainTitle = document.querySelector(".main-title");
+  if (mainTitle) {
+    mainTitle.textContent = `Welcome back, ${userData.name.split(" ")[0]}!`;
+  }
+
+  console.log("User data loaded:", userData);
+}
 
 function initializeApp() {
   // Profile dropdown toggle
@@ -155,6 +208,15 @@ function handleTabSwitch(tab) {
 // Handle navigation between sections
 function handleNavigation(section) {
   console.log("handleNavigation called with section:", section);
+
+  // Handle Create button - redirect to builder
+  if (section === "create") {
+    console.log("Opening website builder...");
+    // TODO: Update this URL when builder is ready
+    window.location.href = "https://grapesjs.com/demo.html"; // Placeholder demo builder
+    return;
+  }
+
   const container = document.querySelector(".container");
   const notificationsSection = document.getElementById("notificationsSection");
 
@@ -172,8 +234,116 @@ function handleNavigation(section) {
   }
 }
 
-// Sample notifications data
-const notifications = [
+// User-specific notifications data
+const userNotifications = {
+  "tamim@webify.com": [
+    {
+      id: 1,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "reviewed your code and left feedback",
+      time: "15 min ago",
+    },
+    {
+      id: 2,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "starred your repository",
+      time: "1 hour ago",
+    },
+    {
+      id: 3,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "used your template in a new project",
+      time: "2 hours ago",
+    },
+  ],
+  "fahim@webify.com": [
+    {
+      id: 1,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "liked your new UI design",
+      time: "20 min ago",
+    },
+    {
+      id: 2,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "commented on your portfolio template",
+      time: "45 min ago",
+    },
+    {
+      id: 3,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "requested collaboration on a project",
+      time: "3 hours ago",
+    },
+  ],
+  "abdullah@webify.com": [
+    {
+      id: 1,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "asked a question about your API design",
+      time: "30 min ago",
+    },
+    {
+      id: 2,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "wants to use your backend template",
+      time: "2 hours ago",
+    },
+    {
+      id: 3,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "mentioned you in a discussion",
+      time: "5 hours ago",
+    },
+  ],
+  "erin@webify.com": [
+    {
+      id: 1,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "loved your responsive design approach",
+      time: "10 min ago",
+    },
+    {
+      id: 2,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "cloned your landing page template",
+      time: "1 hour ago",
+    },
+    {
+      id: 3,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "shared your component library",
+      time: "4 hours ago",
+    },
+  ],
+};
+
+// Default notifications for users not in the system
+const defaultNotifications = [
   {
     id: 1,
     userName: "Abul",
@@ -272,11 +442,26 @@ const notifications = [
   },
 ];
 
-// Render notifications
+// Render notifications based on current user
 function renderNotifications() {
   console.log("renderNotifications called");
   const notificationsList = document.getElementById("notificationsList");
+
+  // Get current user's email
+  const currentUser = localStorage.getItem("currentUser");
+  let userEmail = null;
+  let notifications = defaultNotifications;
+
+  if (currentUser) {
+    const userData = JSON.parse(currentUser);
+    userEmail = userData.email;
+
+    // Get user-specific notifications or use default
+    notifications = userNotifications[userEmail] || defaultNotifications;
+  }
+
   console.log("notificationsList element:", notificationsList);
+  console.log("User email:", userEmail);
   console.log("notifications data:", notifications);
 
   notificationsList.innerHTML = notifications
@@ -319,9 +504,9 @@ function openProject(projectId) {
 
 function createNewProject() {
   console.log("Creating new project...");
-  alert("Creating a new project! This will open the website builder.");
-  // Here you can add logic to create a new project
-  // and redirect to the editor
+  // Redirect to website builder
+  // TODO: Update this URL when builder is ready
+  window.location.href = "https://grapesjs.com/demo.html"; // Placeholder demo builder
 }
 
 function uploadFiles() {
@@ -378,7 +563,9 @@ function logout() {
     "Goodbye! 👋"
   );
 
-  // Clear any session data (localStorage, sessionStorage)
+  // Clear user data from localStorage
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("isLoggedIn");
   localStorage.clear();
   sessionStorage.clear();
 
