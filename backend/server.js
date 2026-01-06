@@ -4,9 +4,13 @@ const PORT = process.env.PORT || 3000;
 
 const path = require('path');
 
-// Serve static files from the frontend directory
+// Serve builder app static files FIRST (more specific route)
+app.use('/builder', express.static(path.join(__dirname, '../frontend/builder/dist')));
+
+// Serve other static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+// Home route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
