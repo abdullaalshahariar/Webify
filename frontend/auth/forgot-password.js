@@ -1,4 +1,10 @@
-// Notification Toast Function
+/**
+ * Password Recovery - Notification System
+ * Enhanced toast notifications for password recovery flow
+ * @param {string} message - Recovery status message
+ * @param {string} type - Notification type
+ * @param {string} title - Notification title
+ */
 function showNotification(message, type = 'success', title = '') {
     const toast = document.getElementById('notification-toast');
     
