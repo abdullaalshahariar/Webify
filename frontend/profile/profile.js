@@ -313,9 +313,10 @@ function openProject(projectId) {
 
 function createNewProject() {
   console.log("Creating new project...");
-  alert("Creating a new project! This will open the website builder.");
-  // Here you can add logic to create a new project
-  // and redirect to the editor
+  showNotification("Creating a new project. Wait to be redirected...", "success", "New Project");
+  setTimeout(() => {
+    window.location.href = "../demo/builder.html";
+  }, 1500); 
 }
 
 function uploadFiles() {
@@ -347,7 +348,9 @@ function viewTemplate(templateId) {
   // Here you can add logic to show template preview
   // or open it in the editor
 }
-
+function openBuilder() {
+  window.location.href = "../demo/builder.html";
+}
 // Profile dropdown menu actions
 function openCommunity() {
   console.log("Opening community...");
@@ -360,6 +363,18 @@ function openHelp() {
 
 function editProfile() {
   window.location.href = "../editprofile/editprofile.html";
+}
+
+function openMarketplace() {
+  window.location.href = "../marketplace/marketplace.html";
+}
+function openNotification() {
+  console.log("Opening notifications...");
+  const container = document.querySelector(".container");
+  const notificationsSection = document.getElementById("notificationsSection");
+  container.style.display = "none";
+  notificationsSection.style.display = "block";
+  renderNotifications();
 }
 
 function logout() {
