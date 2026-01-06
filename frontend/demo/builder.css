@@ -134,7 +134,7 @@ body {
 .header {
     background: white;
     border-bottom: 1px solid #e2e8f0;
-    padding: 0 2rem;
+    padding:  2rem;
     display: flex;
     align-items: center;
     justify-content: flex-start;

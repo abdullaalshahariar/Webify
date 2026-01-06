@@ -1,4 +1,3 @@
-// Global State
 let userType = null;
 let currentView = 'builder';
 let components = [];
@@ -6,8 +5,6 @@ let portfolio = {
     title: 'My Portfolio',
     selectedComponents: []
 };
-
-// Canvas State
 let droppedComponents = [];
 let currentEditingComponent = null;
 let zIndexCounter = 1;
@@ -15,7 +12,7 @@ let isDragging = false;
 let draggedElement = null;
 let offsetX = 0;
 let offsetY = 0;
-let layoutMode = 'flow'; // 'flow' or 'free'
+let layoutMode = 'free'; // 'flow' or 'free'
 let canvasDimensions = {
     width: 1200,
     height: 800,
@@ -168,8 +165,7 @@ function hideComponentSidebar() {
 function switchView(view) {
     currentView = view;
     showView(view);
-    
-    // Update active nav button
+
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(btn => {
         btn.classList.remove('active', 'active-user');
@@ -177,8 +173,6 @@ function switchView(view) {
             btn.classList.add(userType === 'developer' ? 'active' : 'active-user');
         }
     });
-    
-    // Render view content
    if (view === 'builder') {
         renderBuilder();
     } else if (view === 'preview') {
