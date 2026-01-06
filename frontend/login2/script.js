@@ -1,8 +1,4 @@
-/**
- * Login Page 2 - Alternative Login Interface
- * Provides a visual card-based login experience
- * Author: Tamim | Version: 1.0 | Last Updated: Jan 2026
- */
+
 
 /**
  * Login Button Handler
