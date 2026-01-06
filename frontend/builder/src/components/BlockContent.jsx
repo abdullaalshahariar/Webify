@@ -9,8 +9,26 @@ import video_icon from '../assets/icons/video_icon.svg';
 import audio_icon from '../assets/icons/audio_icon.svg';
 import { PatternContent } from './PatternContent';
 import { createSignal } from 'solid-js';
+import { createDraggable } from '@thisbeyond/solid-dnd';
+import {
+    DragDropProvider,
+    DragDropSensors,
+    DragOverlay,
+    createPointerSensor
+} from "@thisbeyond/solid-dnd";
 
 const [activeTab, setActiveTab] = createSignal('block');
+
+const DraggableBlock = (props) => {
+    const draggable = createDraggable(props.type, { type: props.type });
+
+    return (
+        <div ref={draggable} {...draggable.dragActivators} class={props.class} style={{ "touch-action": "none" }}>
+            {props.children}
+        </div>
+    )
+}
+
 
 export function BlockContent(props) {
     return (
@@ -32,44 +50,58 @@ export function BlockContent(props) {
                 <div>
                     <span class={styles.label_span}>TEXT</span>
                     <div class={styles.text_items}>
-                        <button>
-                            <img src={paragraph_icon} alt="paragraph" />
-                            <span>Paragraph</span>
-                        </button>
+                        <DraggableBlock type="paragraph">
+                            <button>
+                                <img src={paragraph_icon} alt="paragraph" />
+                                <span>Paragraph</span>
+                            </button>
+                        </DraggableBlock>
 
-                        <button>
-                            <img src={heading_icon} alt="heading" />
-                            <span>Heading</span>
-                        </button>
+                        <DraggableBlock type="heading">
+                            <button>
+                                <img src={heading_icon} alt="heading" />
+                                <span>Heading</span>
+                            </button>
+                        </DraggableBlock>
 
-                        <button>
-                            <img src={list_icon} alt="list" />
-                            <span>List </span>
-                        </button>
+                        <DraggableBlock type="list">
+                            <button>
+                                <img src={list_icon} alt="list" />
+                                <span>List </span>
+                            </button>
+                        </DraggableBlock>
 
-                        <button>
-                            <img src={table_icon} alt="table" />
-                            <span>Table</span>
-                        </button>
+                        <DraggableBlock type="table">
+                            <button>
+                                <img src={table_icon} alt="table" />
+                                <span>Table</span>
+                            </button>
+                        </DraggableBlock>
                     </div>
 
 
                     <span class={styles.label_span}>MEDIA</span>
                     <div class={styles.media_items}>
-                        <button>
-                            <img src={image_icon} alt="image" />
-                            <span>Image</span>
-                        </button>
+                        <DraggableBlock type="image">
+                            <button>
+                                <img src={image_icon} alt="image" />
+                                <span>Image</span>
+                            </button>
+                        </DraggableBlock>
 
-                        <button>
-                            <img src={audio_icon} alt="audio" />
-                            <span>Audio</span>
-                        </button>
+                        <DraggableBlock type="audio">
+                            <button>
+                                <img src={audio_icon} alt="audio" />
+                                <span>Audio</span>
+                            </button>
+                        </DraggableBlock>
 
-                        <button>
-                            <img src={video_icon} alt="video" />
-                            <span>Video</span>
-                        </button>
+                        <DraggableBlock type="video">
+                            <button>
+                                <img src={video_icon} alt="video" />
+                                <span>Video</span>
+                            </button>
+                        </DraggableBlock>
                     </div>
                 </div>
             )}
