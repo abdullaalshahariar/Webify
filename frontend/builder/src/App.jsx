@@ -3,6 +3,7 @@ import { BlockContent } from "./components/BlockContent";
 import { Topbar } from "./components/Topbar";
 import { DeviceSelector } from "./components/DeviceSelector";
 import { Canvas } from "./components/Canvas";
+import styles from "./App.module.css";
 
 const App = () => {
   //signal for sidebar block content
@@ -21,17 +22,30 @@ const App = () => {
   })
 
   return (
-    <div>
-      <Topbar onOpenSidebar={() => setShowBlockContent(true)} onOpenDeviceSelector={() => !showSelectedDevice() ? setShowSelectedDevice(true) : setShowSelectedDevice(false)}
-        selectedDevice={selectedDevice()} />
+    <div class={styles.appContainer}>
+      <div class={styles.topbarWrapper}>
+        <Topbar onOpenSidebar={() => setShowBlockContent(true)} onOpenDeviceSelector={() => !showSelectedDevice() ? setShowSelectedDevice(true) : setShowSelectedDevice(false)}
+          selectedDevice={selectedDevice()} />
+      </div>
 
-      {showBlockContent() && (
-        <BlockContent onClose={() => setShowBlockContent(false)} />
-      )}
 
-      {showSelectedDevice() && <DeviceSelector select_a_Device={(device) => setSelectedDevice(device)} selectedDevice={selectedDevice()} />}
+      <div class={styles.mainContent}>
+        {showBlockContent() && (
+          <aside class={styles.sidebar}>
+            <BlockContent onClose={() => setShowBlockContent(false)} />
+          </aside>
+        )}
 
-      <Canvas />
+        {showSelectedDevice() && (
+          <div>
+            <DeviceSelector select_a_Device={(device) => setSelectedDevice(device)} selectedDevice={selectedDevice()} />
+          </div>
+        )}
+
+        <main class={styles.canvasArea}>
+          <Canvas/>
+        </main>
+      </div>
     </div>
 
   );
