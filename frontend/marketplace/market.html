@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webify - UI Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon">W</div>
+                    <span class="logo-text">WEBIFY</span>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-btn active">Marketplace</button>
+                    <button class="nav-btn">Developer Hub</button>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="search-container">
+                    <svg class="search-icon icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search templates, components, themes">
+                </div>
+                <button class="user-icon">
+                    <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Discover Your Own Preminum Ui Designs</h1>
+        <p>Browse thousands of professionally crafted UI kits, templates, and components for your next project</p>
+    </section>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="category-filters">
+            <button class="filter-btn active" data-category="all">All Designs</button>
+            <button class="filter-btn" data-category="free">Free</button>
+            <button class="filter-btn" data-category="premium">Premium</button>
+        </div>
+        <div class="type-filters">
+            <button class="type-btn active" data-type="all">All</button>
+            <button class="type-btn" data-type="dashboard">Dashboard</button>
+            <button class="type-btn" data-type="portfolio">Portfolio</button>
+            <button class="type-btn" data-type="webpage">Webpage</button>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-container">
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
