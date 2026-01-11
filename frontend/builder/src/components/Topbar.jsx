@@ -12,6 +12,7 @@ import styles from './Topbar.module.css'
 import { createSignal, Show } from 'solid-js';
 import { StyleMenu } from "./StyleMenu";
 import { ExportMenu } from "./ExportMenu";
+import { getEditor } from './Canvas';
 
 export function Topbar(props) {
     //signal for popups
@@ -39,7 +40,33 @@ export function Topbar(props) {
         Desktop: desktop_icon,
         Tablet: tablet_icon,
         Mobile: mobile_icon
-    }
+    };
+
+    //wiring up the tobar button using grapejs api
+    // with their respective functinos
+    const handleUndo = () => {
+        const editor = getEditor();
+        if (editor) { editor.runCommand('core:undo') };
+    };
+
+    const handleRedo = () => {
+        const editor = getEditor();
+        if (editor) { editor.runCommand('core:redo') };
+    };
+
+    const handleSave = () => {
+        const editor = getEditor();
+        if (editor) {
+            const html = editor.getHtml();
+            const css = editor.getCss();
+
+            localStorage.setItem('savedHtml', html);
+            localStorage.setItem('savedCss', css);
+            triggerPopup("Progress Saved!");
+        };
+    };
+
+
 
     return (
         <>
@@ -57,10 +84,10 @@ export function Topbar(props) {
                                 "width": "24px",
                             }} />
                     </button>
-                    <button>
+                    <button onClick={handleUndo}>
                         <img src={undo_icon} alt="undo_icon" />
                     </button>
-                    <button>
+                    <button onClick={handleRedo}>
                         <img src={redo_icon} alt="redo_icon" />
                     </button>
                     <button>
@@ -81,7 +108,6 @@ export function Topbar(props) {
 
                     <button onClick={() => {
                         setShowStyleMenu(true);
-                        console.log("style menu opened");
                     }}>
                         <img src={style_icon} alt="style_icon" />
                     </button>
@@ -95,7 +121,7 @@ export function Topbar(props) {
                         "font-size": "14px",
                         "text-align": "center",
                     }}
-                        onClick={() => triggerPopup("Saved Progress!")}>
+                        onClick={handleSave}>
                         <span>Save</span>
                     </button>
 
