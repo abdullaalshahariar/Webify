@@ -1,4 +1,6 @@
 /* Reset and Base Styles */
+/* Authentication System Styles - Developed by Tamim */
+/* Version: 1.0 | Last Updated: Jan 2026 */
 * {
     margin: 0;
     padding: 0;
@@ -10,95 +12,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Notification Toast */
-.notification-toast {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    max-width: 400px;
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    transform: translateX(500px);
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    display: flex;
-    align-items: start;
-    gap: 16px;
-}
 
-.notification-toast.show {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.notification-toast.success {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
-    border-color: rgba(34, 211, 238, 0.4);
-}
-
-.notification-toast.error {
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(239, 68, 68, 0.2) 100%);
-    border-color: rgba(236, 72, 153, 0.4);
-}
-
-.notification-toast.warning {
-    background: linear-gradient(135deg, rgba(234, 179, 8, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%);
-    border-color: rgba(234, 179, 8, 0.4);
-}
-
-.toast-icon {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.toast-icon svg {
-    width: 24px;
-    height: 24px;
-}
-
-.toast-content {
-    flex: 1;
-}
-
-.toast-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: white;
-    margin-bottom: 4px;
-}
-
-.toast-message {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.4;
-}
-
-.toast-close {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s ease;
-}
-
-.toast-close:hover {
-    color: white;
-}
 
 /* Container */
 .container {
@@ -230,12 +144,14 @@ body {
     gap: 12px;
     margin-bottom: 48px;
 }
-.logo-link{
+
+.logo-link {
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 12px;
 }
+
 .logo-icon {
     width: 48px;
     height: 48px;
@@ -255,7 +171,7 @@ body {
 .logo-text {
     font-size: 48px;
     font-weight: 900;
-    background:  linear-gradient(114deg, #FA13F2 10%, #00D4FE 90%);
+    background: linear-gradient(114deg, #FA13F2 10%, #00D4FE 90%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -627,7 +543,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.custom-checkbox input[type="checkbox"]:checked + .checkbox-box {
+.custom-checkbox input[type="checkbox"]:checked+.checkbox-box {
     background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
     border-color: #22d3ee;
 }
@@ -638,7 +554,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.custom-checkbox input[type="checkbox"]:checked + .checkbox-box .check-icon {
+.custom-checkbox input[type="checkbox"]:checked+.checkbox-box .check-icon {
     opacity: 1;
     transform: scale(1);
 }
@@ -892,21 +808,28 @@ body {
 
 /* Animations */
 @keyframes blob {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0) scale(1);
     }
+
     33% {
         transform: translate(30px, -50px) scale(1.1);
     }
+
     66% {
         transform: translate(-20px, 20px) scale(0.9);
     }
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0) rotate(0deg);
     }
+
     50% {
         transform: translateY(-20px) rotate(5deg);
     }
@@ -917,6 +840,7 @@ body {
         opacity: 0;
         transform: translateX(-40px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -928,6 +852,7 @@ body {
         opacity: 0;
         transform: translateX(40px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -939,6 +864,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -950,6 +876,7 @@ body {
         opacity: 0;
         transform: translateX(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -957,13 +884,24 @@ body {
 }
 
 @keyframes shake {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateX(0);
     }
-    10%, 30%, 50%, 70%, 90% {
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
         transform: translateX(-5px);
     }
-    20%, 40%, 60%, 80% {
+
+    20%,
+    40%,
+    60%,
+    80% {
         transform: translateX(5px);
     }
 }

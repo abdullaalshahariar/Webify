@@ -13,6 +13,17 @@ import { getEditor } from './Canvas';
 
 const [activeTab, setActiveTab] = createSignal('block');
 
+const DraggableBlock = (props) => {
+    const draggable = createDraggable(props.type, { type: props.type });
+
+    return (
+        <div ref={draggable} {...draggable.dragActivators} class={props.class} style={{ "touch-action": "none" }}>
+            {props.children}
+        </div>
+    )
+}
+
+
 export function BlockContent(props) {
     //we are going to add the blocks that we have registered 
     // in Canvas.jsk

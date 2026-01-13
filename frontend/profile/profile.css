@@ -1,4 +1,6 @@
 /* Reset and Base Styles */
+/* Dashboard & Profile System Styles - Developed by Tamim */
+/* Version: 1.0 | Last Updated: Jan 2026 */
 * {
     margin: 0;
     padding: 0;
@@ -536,19 +538,22 @@ button {
 
 .create-card:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease  ;
+    transition: all 0.3s ease;
 
 }
+
 .create-card:hover .create-icon {
     border-radius: 90px;
     transform: scale(1.5) rotateZ(180deg);
-    transition: all 0.3s ease ;;
+    transition: all 0.3s ease;
+    ;
 }
+
 .create-card:hover .create-content p {
     color: #7c3aed;
     font-weight: 600;
     transform: translateY(8px);
-    transition: all 0.3s ease ;
+    transition: all 0.3s ease;
 }
 
 .create-content {
@@ -728,6 +733,11 @@ button {
     .sidebar-logo h1 {
         font-size: 16px;
     }
+
+    .profile-dropdown {
+        left: 88px;
+        width: 280px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -739,5 +749,137 @@ button {
     .tab-button {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* Notifications Section */
+.notifications-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.notifications-title {
+    font-size: 72px;
+    font-weight: 400;
+    color: #a855f7;
+    text-align: center;
+    margin-bottom: 60px;
+    letter-spacing: -1px;
+}
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(216, 180, 254, 0.3) 0%, rgba(233, 213, 255, 0.4) 100%);
+    border-radius: 32px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 40px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(216, 180, 254, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(10px);
+}
+
+.notification-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid rgba(168, 85, 247, 0.3);
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-text {
+    font-size: 24px;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.notification-text strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+.notification-time {
+    font-size: 16px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+/* Responsive adjustments for notifications */
+@media (max-width: 768px) {
+    .notifications-title {
+        font-size: 48px;
+        margin-bottom: 40px;
+    }
+
+    .notification-item {
+        padding: 24px 20px;
+        gap: 16px;
+    }
+
+    .notification-avatar {
+        width: 48px;
+        height: 48px;
+    }
+
+    .notification-text {
+        font-size: 18px;
+    }
+
+    .notification-time {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notifications-title {
+        font-size: 36px;
+        margin-bottom: 30px;
+    }
+
+    .notification-item {
+        padding: 20px 16px;
+        gap: 12px;
+    }
+
+    .notification-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .notification-text {
+        font-size: 16px;
+    }
+
+    .notification-time {
+        font-size: 13px;
     }
 }

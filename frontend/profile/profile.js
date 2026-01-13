@@ -1,4 +1,4 @@
-// Notification Toast Function
+// Show toast notifications with icons - disappears after 5 seconds
 function showNotification(message, type = "success", title = "") {
   const toast = document.getElementById("notification-toast");
 
@@ -57,8 +57,67 @@ function hideNotification() {
 // Initialize Lucide icons
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
+  loadUserData();
   initializeApp();
+
+  // Check if there's a section parameter in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const section = urlParams.get("section");
+  if (section) {
+    handleNavigation(section);
+
+    // Update active nav item
+    document
+      .querySelectorAll(".nav-item")
+      .forEach((nav) => nav.classList.remove("active"));
+    const activeNav = document.querySelector(
+      `.nav-item[data-nav="${section}"]`
+    );
+    if (activeNav) {
+      activeNav.classList.add("active");
+    }
+  }
 });
+
+// Load user data and update UI - redirects to login if not logged in
+function loadUserData() {
+  const currentUser = localStorage.getItem("currentUser");
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  // Redirect to login if not logged in
+  if (!isLoggedIn || !currentUser) {
+    window.location.href = "../auth/login.html";
+    return;
+  }
+
+  const userData = JSON.parse(currentUser);
+
+  // Update avatar images
+  const avatarImages = document.querySelectorAll(
+    ".sidebar-avatar img, .dropdown-user-info img"
+  );
+  avatarImages.forEach((img) => {
+    img.src = userData.avatar;
+    img.alt = userData.name;
+  });
+
+  // Update user details in dropdown
+  const userDetailsDiv = document.getElementById("userdetails");
+  if (userDetailsDiv) {
+    userDetailsDiv.innerHTML = `
+      <h4>${userData.name}</h4>
+      <p>${userData.email}</p>
+    `;
+  }
+
+  // Update page title with user name
+  const mainTitle = document.querySelector(".main-title");
+  if (mainTitle) {
+    mainTitle.textContent = `Welcome back, ${userData.name.split(" ")[0]}!`;
+  }
+
+  console.log("User data loaded:", userData);
+}
 
 function initializeApp() {
   // Profile dropdown toggle
@@ -95,7 +154,7 @@ function initializeApp() {
 
       const section = item.getAttribute("data-nav");
       console.log(`Navigating to: ${section}`);
-      // Here you can add logic to show/hide different sections
+      handleNavigation(section);
     });
   });
 
@@ -146,6 +205,285 @@ function handleTabSwitch(tab) {
   }
 }
 
+// Handle navigation between sections
+function handleNavigation(section) {
+  console.log("handleNavigation called with section:", section);
+
+  // Handle Create button - redirect to builder
+  if (section === "create") {
+    console.log("Opening website builder...");
+    // TODO: Update this URL when builder is ready
+    window.location.href = "https://grapesjs.com/demo.html"; // Placeholder demo builder
+    return;
+  }
+
+  const container = document.querySelector(".container");
+  const notificationsSection = document.getElementById("notificationsSection");
+
+  console.log("container:", container);
+  console.log("notificationsSection:", notificationsSection);
+
+  if (section === "notification") {
+    container.style.display = "none";
+    notificationsSection.style.display = "block";
+    console.log("Rendering notifications...");
+    renderNotifications();
+  } else {
+    container.style.display = "block";
+    notificationsSection.style.display = "none";
+  }
+}
+
+// User-specific notifications data
+const userNotifications = {
+  "tamim@webify.com": [
+    {
+      id: 1,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "reviewed your code and left feedback",
+      time: "15 min ago",
+    },
+    {
+      id: 2,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "starred your repository",
+      time: "1 hour ago",
+    },
+    {
+      id: 3,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "used your template in a new project",
+      time: "2 hours ago",
+    },
+  ],
+  "fahim@webify.com": [
+    {
+      id: 1,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "liked your new UI design",
+      time: "20 min ago",
+    },
+    {
+      id: 2,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "commented on your portfolio template",
+      time: "45 min ago",
+    },
+    {
+      id: 3,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "requested collaboration on a project",
+      time: "3 hours ago",
+    },
+  ],
+  "abdullah@webify.com": [
+    {
+      id: 1,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "asked a question about your API design",
+      time: "30 min ago",
+    },
+    {
+      id: 2,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "wants to use your backend template",
+      time: "2 hours ago",
+    },
+    {
+      id: 3,
+      userName: "Erin Mitchell",
+      userAvatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      message: "mentioned you in a discussion",
+      time: "5 hours ago",
+    },
+  ],
+  "erin@webify.com": [
+    {
+      id: 1,
+      userName: "Fahim Rahman",
+      userAvatar:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      message: "loved your responsive design approach",
+      time: "10 min ago",
+    },
+    {
+      id: 2,
+      userName: "Tamim Ahmed",
+      userAvatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      message: "cloned your landing page template",
+      time: "1 hour ago",
+    },
+    {
+      id: 3,
+      userName: "Abdullah Khan",
+      userAvatar:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+      message: "shared your component library",
+      time: "4 hours ago",
+    },
+  ],
+};
+
+// Default notifications for users not in the system
+const defaultNotifications = [
+  {
+    id: 1,
+    userName: "Abul",
+    userAvatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    message: "has answered your question",
+    time: "30 min ago",
+  },
+  {
+    id: 2,
+    userName: "Kuddus",
+    userAvatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+    message: "has liked your template",
+    time: "30 min ago",
+  },
+  {
+    id: 3,
+    userName: "Jakaria",
+    userAvatar:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+    message: "has posted new component",
+    time: "30 min ago",
+  },
+  {
+    id: 4,
+    userName: "Sarah Mitchell",
+    userAvatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    message: "commented on your project",
+    time: "1 hour ago",
+  },
+  {
+    id: 5,
+    userName: "David Chen",
+    userAvatar:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
+    message: "shared your template",
+    time: "2 hours ago",
+  },
+  {
+    id: 6,
+    userName: "Emma Wilson",
+    userAvatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    message: "started following you",
+    time: "3 hours ago",
+  },
+  {
+    id: 7,
+    userName: "Michael Brown",
+    userAvatar:
+      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop",
+    message: "mentioned you in a comment",
+    time: "5 hours ago",
+  },
+  {
+    id: 8,
+    userName: "Olivia Taylor",
+    userAvatar:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
+    message: "rated your component 5 stars",
+    time: "6 hours ago",
+  },
+  {
+    id: 9,
+    userName: "James Anderson",
+    userAvatar:
+      "https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&h=100&fit=crop",
+    message: "forked your project",
+    time: "8 hours ago",
+  },
+  {
+    id: 10,
+    userName: "Sophia Garcia",
+    userAvatar:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+    message: "requested help on your template",
+    time: "1 day ago",
+  },
+  {
+    id: 11,
+    userName: "Daniel Martinez",
+    userAvatar:
+      "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=100&h=100&fit=crop",
+    message: "added your component to favorites",
+    time: "1 day ago",
+  },
+  {
+    id: 12,
+    userName: "Isabella Lopez",
+    userAvatar:
+      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop",
+    message: "purchased your premium template",
+    time: "2 days ago",
+  },
+];
+
+// Render notifications based on current user
+function renderNotifications() {
+  console.log("renderNotifications called");
+  const notificationsList = document.getElementById("notificationsList");
+
+  // Get current user's email
+  const currentUser = localStorage.getItem("currentUser");
+  let userEmail = null;
+  let notifications = defaultNotifications;
+
+  if (currentUser) {
+    const userData = JSON.parse(currentUser);
+    userEmail = userData.email;
+
+    // Get user-specific notifications or use default
+    notifications = userNotifications[userEmail] || defaultNotifications;
+  }
+
+  console.log("notificationsList element:", notificationsList);
+  console.log("User email:", userEmail);
+  console.log("notifications data:", notifications);
+
+  notificationsList.innerHTML = notifications
+    .map(
+      (notif) => `
+    <div class="notification-item">
+      <img src="${notif.userAvatar}" alt="${notif.userName}" class="notification-avatar">
+      <div class="notification-content">
+        <p class="notification-text"><strong>${notif.userName}</strong> ${notif.message}</p>
+        <p class="notification-time">${notif.time}</p>
+      </div>
+    </div>
+  `
+    )
+    .join("");
+
+  console.log(
+    "Notifications rendered. HTML length:",
+    notificationsList.innerHTML.length
+  );
+}
+
 // Handle search
 function handleSearch(query) {
   // This function can be expanded to filter projects/templates
@@ -166,9 +504,10 @@ function openProject(projectId) {
 
 function createNewProject() {
   console.log("Creating new project...");
-  alert("Creating a new project! This will open the website builder.");
-  // Here you can add logic to create a new project
-  // and redirect to the editor
+  showNotification("Creating a new project. Wait to be redirected...", "success", "New Project");
+  setTimeout(() => {
+    window.location.href = "../demo/builder.html";
+  }, 1500); 
 }
 
 function uploadFiles() {
@@ -200,14 +539,13 @@ function viewTemplate(templateId) {
   // Here you can add logic to show template preview
   // or open it in the editor
 }
-
+function openBuilder() {
+  window.location.href = "../demo/builder.html";
+}
 // Profile dropdown menu actions
 function openCommunity() {
   console.log("Opening community...");
-  alert(
-    "Opening WEBIFY Community! Share your templates and connect with other creators."
-  );
-  // Here you can add logic to open community page
+  window.location.href = "../community/questions.html";
 }
 
 function openHelp() {
@@ -215,7 +553,19 @@ function openHelp() {
 }
 
 function editProfile() {
-  window.location.href = "../editprofile/editprofile.html"; 
+  window.location.href = "../editprofile/editprofile.html";
+}
+
+function openMarketplace() {
+  window.location.href = "../marketplace/marketplace.html";
+}
+function openNotification() {
+  console.log("Opening notifications...");
+  const container = document.querySelector(".container");
+  const notificationsSection = document.getElementById("notificationsSection");
+  container.style.display = "none";
+  notificationsSection.style.display = "block";
+  renderNotifications();
 }
 
 function logout() {
@@ -228,13 +578,15 @@ function logout() {
     "Goodbye! 👋"
   );
 
-  // Clear any session data (localStorage, sessionStorage)
+  // Clear user data from localStorage
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("isLoggedIn");
   localStorage.clear();
   sessionStorage.clear();
 
-  // Redirect to login page after showing notification
+  // Redirect to home page after showing notification
   setTimeout(() => {
-    window.location.href = "../auth/login.html";
+    window.location.href = "../index.html";
   }, 2000);
 }
 
@@ -324,4 +676,27 @@ console.log(
   "%cOpen-source, no-code website builder",
   "color: #6b7280; font-size: 14px;"
 );
+console.log(
+  "%cDashboard System v1.0 - Developed by Tamim",
+  "color: #a855f7; font-size: 12px;"
+);
 console.log("Ready to build amazing websites! 🚀");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const userEmail = sessionStorage.getItem("userEmail");
+  if (userEmail) {
+    console.log("User is logged in with email:", userEmail);
+    // Use the email to display user info, load profile data, etc.
+  }
+});
+
+function userdetails() {
+  const userEmail = sessionStorage.getItem("userEmail");
+  const userDiv = document.getElementById("userdetails");
+  if (userEmail) {
+    userDiv.innerHTML = `<h4>Tanvir Jakaria</h4>
+    <p>${userEmail}</p>`;
+  }
+}
+
+userdetails();

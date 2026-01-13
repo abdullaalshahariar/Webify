@@ -1,0 +1,432 @@
+@import url("https://fonts.googleapis.com/css2?family=Nico+Moji&family=Noto+Sans&family=Roboto:wght@500&display=swap");
+
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Custom Animations */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes blob {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(236, 72, 153, 0.3),
+            0 0 40px rgba(236, 72, 153, 0.2),
+            0 0 60px rgba(236, 72, 153, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(236, 72, 153, 0.5),
+            0 0 60px rgba(236, 72, 153, 0.3),
+            0 0 90px rgba(236, 72, 153, 0.2);
+    }
+}
+
+/* Main Container */
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-image: url('back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+/* Overlay with animated blobs - matching auth style */
+.overlay {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.overlay::before,
+.overlay::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.7;
+    animation: blob 7s infinite ease-in-out;
+}
+
+.overlay::before {
+    top: -160px;
+    left: -160px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+}
+
+.overlay::after {
+    bottom: -128px;
+    right: -80px;
+    width: 384px;
+    height: 384px;
+    background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+    animation-delay: 2s;
+}
+
+/* Cards Container */
+.cards-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    margin-left: -8rem;
+}
+
+/* Card Lift Effect */
+.card-lift {
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transform: translateY(0) scale(1);
+}
+
+.card-lift:hover {
+    transform: translateY(-25px) scale(1.05) !important;
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.6),
+        0 40px 70px -15px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(255, 255, 255, 0.15) !important;
+    filter: brightness(1.15);
+    z-index: 10;
+}
+
+.card-lift:active {
+    transform: translateY(-10px) scale(1.02) !important;
+    transition: all 0.1s ease;
+}
+
+/* Left Card - Laptop Image */
+.left-card {
+    width: 520px;
+    height: 680px;
+    border-radius: 24px;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=800&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 80px rgba(34, 211, 238, 0.2);
+    animation: slideInFromLeft 0.7s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+/* WEBIFY Text Overlay */
+.webify-text {
+    position: absolute;
+    left: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #f472b6 0%, #c084fc 50%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 110px;
+    font-family: 'Nico Moji', cursive;
+    line-height: 1;
+    animation: fadeInZoom 1s ease-out 0.5s both;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Right Card - Login Card */
+.right-card {
+    width: 720px;
+    height: 620px;
+    border-radius: 24px;
+    margin-left: -180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.85) 0%, rgba(88, 28, 135, 0.85) 50%, rgba(159, 18, 57, 0.75) 100%);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 80px rgba(236, 72, 153, 0.2);
+    animation: slideInFromRight 0.7s ease-out 0.15s both;
+    z-index: 1;
+}
+
+/* Logo Container */
+.logo-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInZoom 0.7s ease-out 0.3s both;
+}
+
+/* Description Text */
+.description-text {
+    color: white;
+    font-size: 32px;
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    padding: 0 3rem;
+    margin-bottom: 3rem;
+    max-width: 407px;
+    animation: slideInFromBottom 0.7s ease-out 0.5s both;
+}
+
+/* Button Container */
+.button-container {
+    position: relative;
+    width: 338px;
+    height: 70px;
+}
+
+.login-button-wrapper {
+    margin-bottom: 1.5rem;
+    animation: slideInFromBottom 0.7s ease-out 0.7s both;
+}
+
+.join-button-wrapper {
+    animation: slideInFromBottom 0.7s ease-out 0.85s both;
+}
+
+/* Buttons */
+.btn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.login-btn {
+    background: linear-gradient(90deg, #ec4899 0%, #a855f7 50%, #9333ea 100%);
+    box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
+}
+
+.login-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(236, 72, 153, 0.4);
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    animation: shimmer 3s infinite;
+}
+
+.join-btn {
+    background: linear-gradient(90deg, #a855f7 0%, #22d3ee 50%, #06b6d4 100%);
+    box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+}
+
+.join-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(34, 211, 238, 0.4);
+}
+
+.join-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    animation: shimmer 3s infinite;
+    animation-delay: 0.5s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Button Glow - Enhanced with auth colors */
+.button-glow {
+    position: absolute;
+    inset: -2px;
+    border-radius: 62px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.login-btn .button-glow {
+    animation: pulseGlow 2s infinite;
+}
+
+.join-btn .button-glow {
+    animation: pulseGlow 2s infinite;
+    animation-delay: 1s;
+}
+
+.btn:hover .button-glow {
+    opacity: 1;
+}
+
+/* Button Text */
+.button-text {
+    position: relative;
+    z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cards-container {
+        margin-left: 0;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .right-card {
+        margin-left: 0;
+    }
+
+    .left-card,
+    .right-card {
+        width: 90%;
+        max-width: 520px;
+    }
+
+    .right-card {
+        height: auto;
+        padding: 3rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .webify-text {
+        font-size: 70px;
+        left: 2rem;
+    }
+
+    .description-text {
+        font-size: 24px;
+        padding: 0 2rem;
+    }
+
+    .btn {
+        font-size: 24px;
+    }
+
+    .button-container {
+        width: 280px;
+        height: 60px;
+    }
+
+    .logo-container svg {
+        width: 120px;
+        height: 120px;
+    }
+}
