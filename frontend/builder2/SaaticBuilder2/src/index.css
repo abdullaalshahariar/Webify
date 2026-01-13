@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+/* Ensure the body and root take up the full screen */
+html,
+body,
+#root,
+.app-container {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+#gjs {
+    border: none;
+}

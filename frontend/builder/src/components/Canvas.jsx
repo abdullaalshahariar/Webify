@@ -2,6 +2,7 @@ import { createEffect, onCleanup, onMount } from 'solid-js';
 import styles from './Canvas.module.css';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import gjsBasicBlocks from 'grapesjs-blocks-basic';
 
 //selected device classes
 const deviceClasses = {
@@ -62,6 +63,11 @@ export function Canvas(props) {
                 ],
             },
 
+            plugins: [gjsBasicBlocks],
+            pluginsOpts: {
+                [gjsBasicBlocks]: {},
+            },
+
             //we will not attach mamnagers to default UI
             // rather provide our own custom UI
             layerManager: { appendTo: '' },
@@ -70,9 +76,6 @@ export function Canvas(props) {
             traitManager: { appendTo: '' },
             blockManager: { appendTo: '' },
 
-
-            height: '100%',
-            width: '100%',
         });
 
         //registering my custom blocks
