@@ -1,6 +1,7 @@
-import { onCleanup, onMount } from 'solid-js';
+import { createEffect, onCleanup, onMount } from 'solid-js';
 import styles from './Canvas.module.css';
 import grapesjs from 'grapesjs';
+import 'grapesjs/dist/css/grapes.min.css';
 
 //selected device classes
 const deviceClasses = {
@@ -24,16 +25,21 @@ export function Canvas(props) {
         editor = grapesjs.init({
             container: canvasRef,
             fromElement: true,
-            height: '100%',
-            width: '100%',
 
             //prevents auto save
             storageManager: false,
+
+            //remove the purple ouline around the canvas
+            showOffsets: true,
+
+            //prevents body highlight on load
+            componentFirst: true, //doesn't do anything
 
             //do not create default panels
             panels: { defaults: [] },
 
             //grapes js handles different devices
+            //we are registering our devices here
             deviceManager: {
                 devices: [
                     {
@@ -60,9 +66,13 @@ export function Canvas(props) {
             // rather provide our own custom UI
             layerManager: { appendTo: '' },
             selectorManager: { appendTo: '' },
-            styleManager: { appendTo: '' },
+            styleManager: { sectors: [], },
             traitManager: { appendTo: '' },
             blockManager: { appendTo: '' },
+
+
+            height: '100%',
+            width: '100%',
         });
 
         //registering my custom blocks
@@ -107,12 +117,23 @@ export function Canvas(props) {
             content: '<audio controls><source src="" type="audio/mpeg"></audio>',
             category: 'Media',
         });
+    });
 
-        //clearing the default components and styles
-        // editor.on('load', () => {
-        //     const bm = editor.BlockManager;
-        //     bm.getAll().reset();
-        // });
+    createEffect(() => {
+        //grapes js is non reactive but solid is reactive
+        //to tell grapes js about device change we use crateEffect
+        //so, if a signal changes, we can use createEffect
+        // to run code in response
+
+        //test
+        console.log("Selected device changed to: " + props.selectedDevice);
+        if (editor) {
+            const device = props.selectedDevice;
+            if (device) {
+                //this line is grapejs code
+                editor.setDevice(device);
+            }
+        }
     });
 
     onCleanup(() => {
