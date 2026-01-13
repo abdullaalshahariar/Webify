@@ -13,6 +13,15 @@ body,
     font-family: sans-serif;
 }
 
-#gjs {
-    border: none;
+:global(.gjs-pn-panels) {
+    background-color: red !important;
+}
+
+/* Target the actual bars, not just the container */
+:global(.gjs-pn-panels),
+:global(.gjs-pn-commands),
+:global(.gjs-pn-options),
+:global(.gjs-pn-views),
+:global(.gjs-pn-views-container) {
+    background-color: red !important;
 }

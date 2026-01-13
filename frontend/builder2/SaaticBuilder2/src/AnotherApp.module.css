@@ -1,0 +1,80 @@
+:global(.editor-shell) {
+    display: flex;
+    height: 100vh;
+    background-color: #121212; /* Matches sidebar */
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+:global(.sidebar-left),
+:global(.sidebar-right) {
+    width: 280px;
+    background-color: #121212; /* Matches shell */
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+:global(.editor-main) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+:global(.editor-topbar) {
+    height: 50px;
+    background-color: #1e1e1e; /* Darker than sidebar/shell */
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-shrink: 0;
+}
+
+:global(.canvas-wrapper) {
+    flex: 1;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* The Fix for the "Top/Right Space":
+   GrapesJS needs to be forced to fill the relative wrapper 100% 
+*/
+:global(.gjs-editor) {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+}
+
+:global(.panel-header) {
+    padding: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #333;
+}
+
+
+/* solves the panel wrapper issue */
+/* Removes the top panel wrapper space */
+:global(.gjs-pn-panels) {
+    padding: 0 !important;
+    height: 0 !important;
+}
+
+/* Removes the default top bar container height */
+:global(.gjs-pn-views-container) {
+    height: 0 !important;
+}
+
+/* Ensures the canvas occupies every pixel of the middle column */
+:global(.gjs-cv-canvas) {
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}

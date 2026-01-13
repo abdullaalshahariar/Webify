@@ -13,8 +13,22 @@ export const initEditor = (container) => {
         height: '100vh',
         width: 'auto',
 
+        blockManager: {
+            appendTo: '#blocks-container',
+        },
+        styleManager: {
+            appendTo: '#styles-container',
+        },
+        traitManager: {
+            appendTo: '#traits-container',
+        },
+
         //diable local database for now
         storageManager: false,
+
+        panels: {
+            defaults: [],
+        },
 
         //load the preset webpage plugin
         plugins: [gjsBlocksBasic],
