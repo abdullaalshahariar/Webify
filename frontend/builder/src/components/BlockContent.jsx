@@ -9,13 +9,7 @@ import video_icon from '../assets/icons/video_icon.svg';
 import audio_icon from '../assets/icons/audio_icon.svg';
 import { PatternContent } from './PatternContent';
 import { createSignal } from 'solid-js';
-import { createDraggable } from '@thisbeyond/solid-dnd';
-import {
-    DragDropProvider,
-    DragDropSensors,
-    DragOverlay,
-    createPointerSensor
-} from "@thisbeyond/solid-dnd";
+import { getEditor } from './Canvas';
 
 const [activeTab, setActiveTab] = createSignal('block');
 
@@ -31,6 +25,23 @@ const DraggableBlock = (props) => {
 
 
 export function BlockContent(props) {
+    //we are going to add the blocks that we have registered 
+    // in Canvas.jsk
+    const addBlock = (blockId) => {
+        //before we add a block (string passed as blockId), 
+        // it has to be registered in block manager
+        // which we did in Canvas.jsx
+        const editor = getEditor();
+
+        if (editor) {
+            const block = editor.BlockManager.get(blockId);
+            if (block) {
+                editor.addComponents(block.getContent());
+            }
+        }
+    }
+
+
     return (
         <div class={styles.block_content_container}>
             <div class={styles.top_section}>
@@ -50,58 +61,44 @@ export function BlockContent(props) {
                 <div>
                     <span class={styles.label_span}>TEXT</span>
                     <div class={styles.text_items}>
-                        <DraggableBlock type="paragraph">
-                            <button>
-                                <img src={paragraph_icon} alt="paragraph" />
-                                <span>Paragraph</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('paragraph')}>
+                            <img src={paragraph_icon} alt="paragraph" />
+                            <span>Paragraph</span>
+                        </button>
 
-                        <DraggableBlock type="heading">
-                            <button>
-                                <img src={heading_icon} alt="heading" />
-                                <span>Heading</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('heading')}>
+                            <img src={heading_icon} alt="heading" />
+                            <span>Heading</span>
+                        </button>
 
-                        <DraggableBlock type="list">
-                            <button>
-                                <img src={list_icon} alt="list" />
-                                <span>List </span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('list')}>
+                            <img src={list_icon} alt="list" />
+                            <span>List </span>
+                        </button>
 
-                        <DraggableBlock type="table">
-                            <button>
-                                <img src={table_icon} alt="table" />
-                                <span>Table</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('table')}>
+                            <img src={table_icon} alt="table" />
+                            <span>Table</span>
+                        </button>
                     </div>
 
 
                     <span class={styles.label_span}>MEDIA</span>
                     <div class={styles.media_items}>
-                        <DraggableBlock type="image">
-                            <button>
-                                <img src={image_icon} alt="image" />
-                                <span>Image</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('image')}>
+                            <img src={image_icon} alt="image" />
+                            <span>Image</span>
+                        </button>
 
-                        <DraggableBlock type="audio">
-                            <button>
-                                <img src={audio_icon} alt="audio" />
-                                <span>Audio</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('audio')}>
+                            <img src={audio_icon} alt="audio" />
+                            <span>Audio</span>
+                        </button>
 
-                        <DraggableBlock type="video">
-                            <button>
-                                <img src={video_icon} alt="video" />
-                                <span>Video</span>
-                            </button>
-                        </DraggableBlock>
+                        <button onClick={() => addBlock('video')}>
+                            <img src={video_icon} alt="video" />
+                            <span>Video</span>
+                        </button>
                     </div>
                 </div>
             )}
