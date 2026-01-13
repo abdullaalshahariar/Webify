@@ -5,7 +5,12 @@ const PORT = process.env.PORT || 3000;
 const path = require('path');
 
 // Serve builder app static files FIRST (more specific route)
-app.use('/builder', express.static(path.join(__dirname, '../frontend/builder/dist')));
+app.use('/builder', express.static(path.join(__dirname, '../frontend/builder2/SaaticBuilder2/dist')));
+
+// Route to serve the builder's index.html
+app.get('/builder', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/builder2/SaaticBuilder2/dist/index.html'));
+});
 
 // Serve other static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../frontend')));
