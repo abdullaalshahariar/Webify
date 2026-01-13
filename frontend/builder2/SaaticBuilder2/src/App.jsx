@@ -1,6 +1,6 @@
 import { initEditor } from "./editor/config";
 import { onMount, onCleanup, createSignal } from "solid-js";
-import styles from "./AnotherApp.module.css";
+import "./AnotherApp.css";
 
 const App = () => {
   let editorRef;

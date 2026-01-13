@@ -1,5 +1,5 @@
 /* --- 1. GLOBAL VARIABLES (Default = Light Theme) --- */
-:global(:root) {
+:root {
     /* Font & Dimensions */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --sidebar-width: 280px;
@@ -26,7 +26,7 @@
 }
 
 /* --- 2. DARK THEME OVERRIDES --- */
-:global([data-theme="dark"]) {
+[data-theme="dark"] {
     /* App Colors */
     --app-bg: #121212;
     --app-text: #e0e0e0;
@@ -50,11 +50,11 @@
     --gjs-input-bg: #333;
 }
 
-:global(*) {
+* {
     box-sizing: border-box;
 }
 
-:global(.editor-shell) {
+.editor-shell {
     display: flex;
     height: 100vh;
     width: 100vw;
@@ -67,7 +67,7 @@
 }
 
 /* --- ICON BAR --- */
-:global(.icon-bar) {
+.icon-bar {
     width: var(--icon-bar-width);
     background-color: var(--panel-bg);
     border-right: 1px solid var(--panel-border);
@@ -76,7 +76,7 @@
     z-index: 10;
 }
 
-:global(.icon-bar) button {
+.icon-bar button {
     background: none;
     border: none;
     color: var(--icon-color);
@@ -91,20 +91,20 @@
     font-size: 14px;
 }
 
-:global(.icon-bar) button:hover {
+.icon-bar button:hover {
     color: var(--app-text);
     background-color: var(--button-hover);
 }
 
-:global(.icon-bar) button.active {
+.icon-bar button.active {
     color: var(--icon-active);
     background-color: var(--icon-bg-active);
     border-left: 3px solid var(--icon-active);
 }
 
 /* --- SIDEBARS --- */
-:global(.sidebar-left),
-:global(.sidebar-right) {
+.sidebar-left,
+.sidebar-right {
     width: var(--sidebar-width);
     background-color: var(--panel-bg);
     border-right: 1px solid var(--panel-border);
@@ -114,18 +114,18 @@
     flex-shrink: 0;
 }
 
-:global(.sidebar-right) {
+.sidebar-right {
     border-right: none;
     border-left: 1px solid var(--panel-border);
 }
 
-:global(.sidebar-collapsed) {
+.sidebar-collapsed {
     width: 0 !important;
     border: none;
     overflow: hidden;
 }
 
-:global(.panel-header) {
+.panel-header {
     height: 40px;
     display: flex;
     align-items: center;
@@ -138,10 +138,10 @@
     color: var(--app-text);
 }
 
-:global(#blocks-container),
-:global(#layers-container),
-:global(#styles-container),
-:global(#traits-container) {
+#blocks-container,
+#layers-container,
+#styles-container,
+#traits-container {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -149,7 +149,7 @@
 }
 
 /* --- MAIN AREA & TOPBAR --- */
-:global(.editor-main) {
+.editor-main {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -157,7 +157,7 @@
     min-width: 0;
 }
 
-:global(.editor-topbar) {
+.editor-topbar {
     height: var(--topbar-height);
     background-color: var(--panel-bg);
     border-bottom: 1px solid var(--panel-border);
@@ -167,7 +167,7 @@
     padding: 0 20px;
 }
 
-:global(.device-toggles) {
+.device-toggles {
     display: flex;
     gap: 5px;
     background: var(--button-hover);
@@ -175,7 +175,7 @@
     border-radius: 6px;
 }
 
-:global(.device-toggles) button {
+.device-toggles button {
     background: transparent;
     border: none;
     color: var(--icon-color);
@@ -186,14 +186,14 @@
     font-weight: 500;
 }
 
-:global(.device-toggles) button:hover,
-:global(.device-toggles) button.active {
+.device-toggles button:hover,
+.device-toggles button.active {
     background-color: var(--panel-bg);
     color: var(--app-text);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-:global(.btn-primary) {
+.btn-primary {
     background-color: #3b97e3;
     color: white;
     border: none;
@@ -202,7 +202,7 @@
     cursor: pointer;
 }
 
-:global(.btn-toggle) {
+.btn-toggle {
     background: none;
     border: 1px solid var(--panel-border);
     color: var(--app-text);
@@ -212,7 +212,7 @@
 }
 
 /* --- CANVAS --- */
-:global(.canvas-wrapper) {
+.canvas-wrapper {
     flex: 1;
     /* Use a checkerboard pattern for transparent canvas areas */
     background-color: #e5e5e5;
@@ -228,39 +228,39 @@
 }
 
 /* Dark theme canvas background adjustment */
-:global([data-theme="dark"]) :global(.canvas-wrapper) {
+[data-theme="dark"] .canvas-wrapper {
     background-color: #121212;
     background-image: none;
 }
 
 /* --- GRAPESJS OVERRIDES --- */
-:global(.gjs-editor),
-:global(.gjs-cv-canvas) {
+.gjs-editor,
+.gjs-cv-canvas {
     width: 100% !important;
     height: 100% !important;
 }
 
 /* Hide default panels */
-:global(.gjs-pn-panels),
-:global(.gjs-pn-views-container) {
+.gjs-pn-panels,
+.gjs-pn-views-container {
     display: none !important;
 }
 
 /* Apply variables to GrapesJS Classes to force theme match */
-:global(.gjs-one-bg) {
+.gjs-one-bg {
     background-color: var(--panel-bg);
 }
 
-:global(.gjs-two-color) {
+.gjs-two-color {
     color: var(--app-text);
 }
 
-:global(.gjs-three-bg) {
+.gjs-three-bg {
     background-color: var(--icon-active);
     color: white;
 }
 
-:global(.gjs-field) {
+.gjs-field {
     background-color: var(--button-hover);
     color: var(--app-text);
     border: 1px solid var(--panel-border);
@@ -268,7 +268,7 @@
 
 
 /* code for top bar */
-:global(.editor-topbar) {
+.editor-topbar {
     height: var(--topbar-height);
     background-color: var(--panel-bg);
     border-bottom: 1px solid var(--panel-border);
@@ -279,14 +279,14 @@
     padding: 0 15px;
 }
 
-:global(.topbar-left),
-:global(.topbar-right) {
+.topbar-left,
+.topbar-right {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-:global(.divider-vertical) {
+.divider-vertical {
     width: 1px;
     height: 20px;
     background-color: var(--panel-border);
@@ -294,7 +294,7 @@
 }
 
 /* Button styles */
-:global(.btn-icon) {
+.btn-icon {
     background: none;
     border: none;
     color: var(--icon-color);
@@ -309,13 +309,13 @@
     transition: all 0.2s;
 }
 
-:global(.btn-icon:hover),
-:global(.btn-icon.active) {
+.btn-icon:hover,
+.btn-icon.active {
     background-color: var(--button-hover);
     color: var(--app-text);
 }
 
-:global(.btn-ghost) {
+.btn-ghost {
     background: none;
     border: 1px solid transparent;
     color: var(--icon-color);
@@ -325,13 +325,13 @@
     font-size: 12px;
 }
 
-:global(.btn-ghost:hover) {
+.btn-ghost:hover {
     border-color: var(--panel-border);
     color: var(--app-text);
 }
 
 /* Modal Style */
-:global(.modal-body) {
+.modal-body {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -339,7 +339,7 @@
     padding: 20px;
 }
 
-:global(.modal-body textarea) {
+.modal-body textarea {
     width: 100%;
     height: 100%;
     background: #1e1e1e;
@@ -352,7 +352,7 @@
 
 
 /* Exit Preview Button */
-:global(.exit-preview-btn) {
+.exit-preview-btn {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -367,7 +367,7 @@
 }
 
 /* Ensure Sidebars don't show ghost text */
-:global(#styles-container:empty::before) {
+#styles-container:empty::before {
     content: "Select an element to edit styles";
     display: block;
     padding: 20px;
