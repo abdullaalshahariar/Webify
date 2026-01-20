@@ -3,12 +3,14 @@
 
 async function checkAuthentication() {
     try {
-        const response = await fetch('/api/check-auth');
+        const response = await fetch('/api/check-auth', {
+            credentials: 'include' // Important: send cookies with request
+        });
         const data = await response.json();
 
         if (!data.authenticated) {
             // User is not logged in, redirect to login page
-            window.location.href = '/auth/login.html';
+            window.location.href = '../auth/login.html';
             return false;
         }
 
@@ -17,7 +19,7 @@ async function checkAuthentication() {
     } catch (error) {
         console.error('Auth check error:', error);
         // On error, redirect to login to be safe
-        window.location.href = '/auth/login.html';
+        window.location.href = '../auth/login.html';
         return false;
     }
 }

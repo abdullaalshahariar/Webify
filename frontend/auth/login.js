@@ -268,6 +268,7 @@ loginForm.addEventListener("submit", async (e) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           username: email, // Backend uses 'username' field
           password: password
@@ -277,6 +278,21 @@ loginForm.addEventListener("submit", async (e) => {
       const data = await response.json();
 
       if (response.ok) {
+        // Store user data in localStorage for profile page
+        // Add default values for fields that profile.js expects
+        const userData = {
+          name: data.user.username,
+          email: data.user.email || `${data.user.username}@webify.com`,
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+          bio: "Welcome to Webify! Update your bio in settings.",
+          projects: 0,
+          templates: 0,
+          followers: 0,
+          ...data.user // Include any additional fields from backend
+        };
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("currentUser", JSON.stringify(userData));
+
         showNotification(
           "Welcome back! You have successfully signed in.",
           "success"
@@ -374,6 +390,7 @@ signupForm.addEventListener("submit", async (e) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           username: name, // Using name as username
           email: email,
