@@ -568,14 +568,21 @@ function openNotification() {
   renderNotifications();
 }
 
-function logout() {
+async function logout() {
   console.log("Logging out...");
+
+  try {
+    // Call backend logout API
+    await fetch('/api/logout');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
 
   // Show beautiful logout message
   showNotification(
     "See you soon! You have been logged out successfully.",
     "success",
-    "Goodbye! 👋"
+    "Goodbye"
   );
 
   // Clear user data from localStorage
@@ -676,27 +683,4 @@ console.log(
   "%cOpen-source, no-code website builder",
   "color: #6b7280; font-size: 14px;"
 );
-console.log(
-  "%cDashboard System v1.0 - Developed by Tamim",
-  "color: #a855f7; font-size: 12px;"
-);
 console.log("Ready to build amazing websites! 🚀");
-
-document.addEventListener("DOMContentLoaded", () => {
-  const userEmail = sessionStorage.getItem("userEmail");
-  if (userEmail) {
-    console.log("User is logged in with email:", userEmail);
-    // Use the email to display user info, load profile data, etc.
-  }
-});
-
-function userdetails() {
-  const userEmail = sessionStorage.getItem("userEmail");
-  const userDiv = document.getElementById("userdetails");
-  if (userEmail) {
-    userDiv.innerHTML = `<h4>Tanvir Jakaria</h4>
-    <p>${userEmail}</p>`;
-  }
-}
-
-userdetails();
