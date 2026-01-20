@@ -7,8 +7,10 @@ const path = require('path');
 // Serve builder app static files FIRST (more specific route)
 app.use('/builder', express.static(path.join(__dirname, '../frontend/builder2/SaaticBuilder2/dist')));
 
-// Route to serve the builder's index.html
-app.get('/builder', (req, res) => {
+// Route to serve the builder's index.html (handles SPA routing)
+// Use a regexp-style path to match /builder and any subpath without using the
+// unsupported '/builder*' pattern which path-to-regexp rejects.
+app.get(/^\/builder(\/.*)?$/, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/builder2/SaaticBuilder2/dist/index.html'));
 });
 
