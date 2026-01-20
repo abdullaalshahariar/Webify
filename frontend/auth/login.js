@@ -233,7 +233,7 @@ function validateEmail(email) {
 }
 
 // Login Form Submission
-loginForm.addEventListener("submit", (e) => {
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("login-email").value;
@@ -242,10 +242,7 @@ loginForm.addEventListener("submit", (e) => {
   let hasError = false;
 
   if (!email) {
-    showError("login-email", "Email is required");
-    hasError = true;
-  } else if (!validateEmail(email)) {
-    showError("login-email", "Email is invalid");
+    showError("login-email", "Username or email is required");
     hasError = true;
   }
 
@@ -258,41 +255,61 @@ loginForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
-    // Check if credentials match any demo user
-    const user = demoUsers.find(
-      (u) =>
-        (u.username.toLowerCase() === email.toLowerCase() ||
-          u.userData.email.toLowerCase() === email.toLowerCase()) &&
-        u.password === password
-    );
+    // Show loading state
+    const submitBtn = loginForm.querySelector(".submit-btn");
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<span>Logging in...</span>';
+    submitBtn.disabled = true;
 
-    if (user) {
-      // Store user data in localStorage
-      localStorage.setItem("currentUser", JSON.stringify(user.userData));
-      localStorage.setItem("isLoggedIn", "true");
+    try {
+      // Call backend API
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: email, // Backend uses 'username' field
+          password: password
+        }),
+      });
 
+      const data = await response.json();
+
+      if (response.ok) {
+        showNotification(
+          "Welcome back! You have successfully signed in.",
+          "success"
+        );
+        // Redirect to profile page after short delay
+        setTimeout(() => {
+          window.location.href = "../profile/profile.html";
+        }, 1500);
+      } else {
+        // Show error from backend
+        showNotification(
+          data.error || "Invalid credentials. Please try again.",
+          "error",
+          "Login Failed"
+        );
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
       showNotification(
-        `Welcome back, ${user.userData.name}! You have successfully signed in.`,
-        "success",
-        "Login Successful! 🎉"
-      );
-      // Redirect to profile page after short delay
-      setTimeout(() => {
-        window.location.href = "../profile/profile.html";
-      }, 1500);
-    } else {
-      showNotification(
-        "Invalid username or password. Try demo users: Tamim/Tamim123, Fahim/Fahim123, Abdullah/Abdullah123, Erin/Erin123",
+        "Unable to connect to server. Please try again later.",
         "error",
-        "Login Failed"
+        "Connection Error"
       );
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
     }
-    console.log("Login attempt with:", { email });
   }
 });
 
 // Signup Form Submission
-signupForm.addEventListener("submit", (e) => {
+signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("signup-name").value;
@@ -344,20 +361,66 @@ signupForm.addEventListener("submit", (e) => {
   }
 
   if (!hasError) {
-    // Store email and name in sessionStorage for use across pages
-    sessionStorage.setItem("userEmail", email);
-    sessionStorage.setItem("userName", name);
+    // Show loading state
+    const submitBtn = signupForm.querySelector(".submit-btn");
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<span>Creating account...</span>';
+    submitBtn.disabled = true;
 
-    showNotification(
-      "A new journey begins! Welcome to the community.",
-      "success",
-      "Welcome! 🎉"
-    );
-    // Redirect to profile page after short delay
-    setTimeout(() => {
-      window.location.href = "../profile/profile.html";
-    }, 1500);
-    console.log("Signup with:", { name, email, password });
+    try {
+      // Call backend API
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: name, // Using name as username
+          email: email,
+          password: password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showNotification(
+          "Account created successfully! Please login with your credentials.",
+          "success",
+          "Success"
+        );
+
+        // Reset form and switch to login tab
+        signupForm.reset();
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+
+        // Switch to login tab after short delay
+        setTimeout(() => {
+          loginTab.click();
+          // Pre-fill username in login form
+          document.getElementById("login-email").value = name;
+        }, 1500);
+      } else {
+        // Show error from backend
+        showNotification(
+          data.error || "Unable to create account. Please try again.",
+          "error",
+          "Signup Failed"
+        );
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      showNotification(
+        "Unable to connect to server. Please try again later.",
+        "error",
+        "Connection Error"
+      );
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    }
   }
 });
 
@@ -455,6 +518,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Authentication System - Developed by Tamim
-console.log("WEBIFY Login/Signup page loaded successfully! 🚀");
-console.log("Authentication System v1.0 - Ready to authenticate users! ✨");
+console.log("WEBIFY Login/Signup page loaded successfully");
