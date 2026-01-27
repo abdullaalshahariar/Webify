@@ -155,14 +155,18 @@
 }
 
 /* forceing all inputs, fields, and dropdowns to be visible */
-:global(.gjs-field), :global(.gjs-fields), :global(.gjs-select), :global(.gjs-input) {
+:global(.gjs-field),
+:global(.gjs-fields),
+:global(.gjs-select),
+:global(.gjs-input) {
     background-color: #f6f7f7 !important;
     color: #3c434a !important;
     border: 1px solid #dcdcde !important;
 }
 
 /* Modalss (the add picture" / asset manager window) */
-:global(.gjs-mdl-container), :global(.gjs-mdl-content) {
+:global(.gjs-mdl-container),
+:global(.gjs-mdl-content) {
     background-color: #ffffff !important;
     color: #3c434a !important;
 }
@@ -172,7 +176,8 @@
 }
 
 /* Style Manafer issues */
-:global(.gjs-sm-sector), :global(.gjs-sm-property) {
+:global(.gjs-sm-sector),
+:global(.gjs-sm-property) {
     border-color: #dcdcde !important;
 }
 
@@ -184,3 +189,5 @@
 :global(.gjs-editor-wrapper svg) {
     fill: #50575e !important;
 }
+
+

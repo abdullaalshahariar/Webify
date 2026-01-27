@@ -10,7 +10,7 @@ export const initEditor = (container) => {
         container: container,
         height: '100%',
         width: '100%',
-        fromElement: true, //allows to modify existing HTML
+        // fromElement: false, //allows to modify existing HTML
 
         //prevent loading default panels
         panels: {
@@ -38,20 +38,24 @@ export const initEditor = (container) => {
                 { name: 'Mobile', width: '320px', widthMedia: '480px' },
             ]
         },
+        storageManager: {
+            id: 'webify-builder',
+            type: 'local',
+            autosave: true,
+            autoload: true,
+            stepsBeforeSave: 1,
 
-        // Define commands for the buttons in SolidJS
-        // editor.Commands.add('set-device-desktop', {
-        //     run: (editor) => editor.setDevice('Desktop')
-        // }),
-        // editor.Commands.add('set-device-tablet', {
-        //     run: (editor) => editor.setDevice('Tablet')
-        // }),
-        // editor.Commands.add('set-device-mobile', {
-        //     run: (editor) => editor.setDevice('Mobile')
-        // }),
+            options: {
+                local: {
+                    key: 'gjs-project-data',
+                }
+            },
 
-        //diable local database for now
-        storageManager: false,
+            // storeComponents: true,
+            // storeStyles: true,
+            // storeHtml:true,
+            // storeCss: true,
+        },
 
         //load the preset webpage plugin
         plugins: [gjsBlocksBasic],

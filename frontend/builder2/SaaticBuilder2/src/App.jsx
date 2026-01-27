@@ -98,10 +98,14 @@ const App = () => {
 
   //code editor logic
   const openCodeEditor = () => {
+    // if (!editorInstance) return;
+    // setCodeHtml(editorInstance.getHtml());
+    // setCodeCss(editorInstance.getCss());
+    // setShowCodeModal(true);
+
     if (!editorInstance) return;
-    setCodeHtml(editorInstance.getHtml());
-    setCodeCss(editorInstance.getCss());
-    setShowCodeModal(true);
+    // This opens the default GrapesJS code viewer modal
+    editorInstance.runCommand('export-template');
   };
 
   const saveCode = () => {
@@ -263,21 +267,27 @@ const App = () => {
 
         {/* The code editor modal */}
         <Show when={showCodeModal()}>
-          <div class="modal-overlay">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3>Source Code</h3>
-                <button onClick={() => setShowCodeModal(false)}>✕</button>
+          <div class="code-modal-container">
+            <div class="code-modal-overlay">
+              {/* top part */}
+              <div class="code-modal-header">
+                <span>Code</span>
+                <button onClick={() => { setShowCodeModal(false) }}>X</button>
               </div>
-              <div class="modal-body">
+
+              {/* middle part */}
+              <div class="code-modal-body">
                 <textarea value={codeHtml()} onInput={(e) => setCodeHtml(e.target.value)} placeholder="HTML"></textarea>
                 <textarea value={codeCss()} onInput={(e) => setCodeCss(e.target.value)} placeholder="CSS"></textarea>
               </div>
-              <div class="modal-footer">
-                <button class="btn-primary" onClick={saveCode}>Apply Changes</button>
+
+              {/* bottom part */}
+              <div class="code-modal-footer">
+                <button>Export ZIP</button>
               </div>
             </div>
           </div>
+
         </Show>
 
       </div>
