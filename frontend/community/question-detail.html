@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEBIFY • Question Detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-7hF5mZ5E2K1bGf7wBfYQyqZVDfQ7u3o4q2Oa2Jp7gHcTQFQh0P5ZVq8bX9iLQmKfZgC2NwzR6YhTzN3jvM1Q9A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="question-detail.css" />
+    <link rel="icon" type="image/png" href="../images/logo.png" />
+    <link rel="stylesheet" href="../css/notificationtoast.css">
+</head>
+
+<body>
+    <div id="notification-toast" class="notification-toast"></div>
+
+    <aside class="sidebar">
+        <ul>
+            <li title="Home"><i class="fa-solid fa-house">
+                    <h4 class="label">Home</h4>
+                </i></li>
+            <li title="Questions"><i class="fa-regular fa-circle-question">
+                    <h4 class="label">Questions</h4>
+                </i></li>
+            <li title="Tags"><i class="fa-solid fa-tags">
+                    <h4 class="label">Tags</h4>
+                </i></li>
+            <li title="Users"><i class="fa-regular fa-user">
+                    <h4 class="label">Users</h4>
+                </i></li>
+            <li title="Notifications"><i class="fa-regular fa-bell">
+                    <h4 class="label">Notifications</h4>
+                </i></li>
+        </ul>
+    </aside>
+
+    <header class="topbar">
+        <div class="brand">
+            <span class="logo">WEBIFY</span>
+        </div>
+        <nav class="primary-nav">
+            <a href="../index.html">Home</a>
+            <a href="#">Store</a>
+        </nav>
+        <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search" />
+        </div>
+        <div class="actions">
+            <a class="nav-login" href="../auth/login.html" id="loginLink">LOGIN</a>
+            <button onclick="window.location.href='questions.html'" class="btn btn-primary">Back to Questions</button>
+            <div id="userName" onclick="openprofile()" style="display: none;"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="loadingState" class="loading">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading question...
+        </div>
+
+        <div id="questionContent" style="display: none;">
+            <!-- Question Header -->
+            <section class="question-header">
+                <h1 id="questionTitle"></h1>
+                <div class="question-meta">
+                    <span id="questionTime"></span>
+                    <span id="questionViews"></span>
+                </div>
+            </section>
+
+            <!-- Question Body -->
+            <section class="question-body">
+                <div class="vote-section">
+                    <button class="vote-btn" onclick="voteQuestion('up')" title="This question is useful">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </button>
+                    <div class="vote-count" id="questionVotes">0</div>
+                    <button class="vote-btn" onclick="voteQuestion('down')" title="This question is not useful">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="content-section">
+                    <div class="text-content" id="questionBody"></div>
+                    <div class="tags" id="questionTags"></div>
+                    <div class="post-footer">
+                        <div class="actions">
+                            <button class="btn-text" id="deleteBtn" style="display: none;" onclick="deleteQuestion()">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-avatar" id="authorAvatar"></div>
+                            <div>
+                                <div class="author-name" id="authorName"></div>
+                                <div class="author-time" id="authorTime"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Answers Section -->
+            <section class="answers-section">
+                <h2><span id="answerCount">0</span> Answers</h2>
+                <div id="answersList"></div>
+            </section>
+
+            <!-- Answer Form -->
+            <section class="answer-form" id="answerFormSection">
+                <h3>Your Answer</h3>
+                <textarea id="answerInput" placeholder="Write your answer here..." rows="8"></textarea>
+                <button class="btn btn-primary" onclick="submitAnswer()">Post Answer</button>
+            </section>
+
+            <div id="loginPrompt" class="login-prompt" style="display: none;">
+                <p>Please <a href="../auth/login.html">login</a> to submit an answer.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="question-detail.js"></script>
+</body>
+
+</html>
