@@ -1,6 +1,7 @@
 import { initEditor } from "./editor/config";
 import { onMount, onCleanup, createSignal } from "solid-js";
 import "./AnotherApp.css";
+import export_icon from './assets/icons/export_icon.svg';
 
 const App = () => {
   let editorRef;
@@ -19,14 +20,34 @@ const App = () => {
   const [isPreview, setIsPreview] = createSignal(false);
 
 
-  //signal for code modal, html and css
-  const [showCodeModal, setShowCodeModal] = createSignal(false);
-  const [codeHtml, setCodeHtml] = createSignal("");
-  const [codeCss, setCodeCss] = createSignal("");
-
   onMount(() => {
     if (editorRef) {
       editorInstance = initEditor(editorRef);
+
+      // --- NEW LOGIC: Render and Move Managers ---
+      const sm = editorInstance.StyleManager;
+      const slm = editorInstance.SelectorManager;
+      const tm = editorInstance.TraitManager;
+
+      // 1. Target your SolidJS containers
+      const stylesCont = document.getElementById('styles-container');
+      const selectorCont = document.getElementById('selector-container');
+      const traitsCont = document.getElementById('traits-container');
+
+      // 2. Clear out the "Select an element" text and append GrapesJS UI
+      if (stylesCont) {
+        stylesCont.innerHTML = ''; // Remove the empty-state text
+        stylesCont.appendChild(sm.render());
+      }
+
+      if (selectorCont) {
+        selectorCont.appendChild(slm.render()); // This is your "Hover" state & classes
+      }
+
+      if (traitsCont) {
+        traitsCont.appendChild(tm.render()); // Attributes/Settings
+      }
+      // ------------------------------------------
 
 
       //listening to device changes, so that UI can change accordingly, this is optional
@@ -34,11 +55,6 @@ const App = () => {
         // device.getName() might return 'Desktop', 'Tablet', etc.
         setActiveDevice(device.getName() || 'Desktop');
       });
-
-      //lisenting for preview mode toggle
-      // Listen for preview mode toggle
-      editorInstance.on('run:core:preview:before', () => setIsPreview(true));
-      editorInstance.on('stop:core:preview:before', () => setIsPreview(false));
     }
   });
 
@@ -72,49 +88,66 @@ const App = () => {
     if (editorInstance) editorInstance.runCommand(command);
   };
 
+
   const togglePreview = () => {
     if (!editorInstance) return;
-    if (isPreview()) {
-      editorInstance.stopCommand('core:preview');
-    } else {
-      editorInstance.runCommand('core:preview');
-    }
-  };
 
-  const handleExport = () => {
-    if (!editorInstance) return;
+    // 1. Get the raw data
     const html = editorInstance.getHtml();
     const css = editorInstance.getCss();
-    const fullCode = `<html><style>${css}</style><body>${html}</body></html>`;
 
-    // Create a download link
-    const blob = new Blob([fullCode], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'export.html';
-    a.click();
+    // 2. Create the full HTML document string
+    const fullCode = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Preview</title>
+        <style>${css}</style>
+      </head>
+      <body>
+        ${html}
+      </body>
+    </html>
+  `;
+
+    // 3. Open a new tab
+    const previewWindow = window.open('', '_blank');
+
+    // 4. Inject the code into the new tab
+    previewWindow.document.open();
+    previewWindow.document.write(fullCode);
+    previewWindow.document.close();
   };
+
 
   //code editor logic
   const openCodeEditor = () => {
     if (!editorInstance) return;
-    setCodeHtml(editorInstance.getHtml());
-    setCodeCss(editorInstance.getCss());
-    setShowCodeModal(true);
+    // This opens the default GrapesJS code viewer modal
+    editorInstance.runCommand('export-template');
+
+    const modal = editorInstance.Modal;
+
+    const btnExport = document.createElement('button');
+    btnExport.innerHTML = 'Download ZIP';
+    btnExport.className = 'btn-primary-modal';
+    btnExport.style.marginTop = '15px';
+    btnExport.style.width = '100%';
+
+    btnExport.onclick = () => {
+      editorInstance.runCommand('gjs-export-zip');
+    };
+
+    const container = modal.getContentEl();
+    container.appendChild(btnExport);
   };
 
-  const saveCode = () => {
+
+  //code import logic, allows to edit the code
+  const openCodeImportModal = () => {
     if (!editorInstance) return;
-
-    // 1. Update HTML: Replace components
-    // If we are editing the root, we set the whole canvas
-    editorInstance.setComponents(codeHtml());
-
-    // 2. Update CSS
-    editorInstance.setStyle(codeCss());
-
-    setShowCodeModal(false);
+    editorInstance.runCommand('gjs-open-import-template');
   };
 
 
@@ -220,16 +253,19 @@ const App = () => {
 
               <div class="divider-vertical"></div>
 
-              <button class={`btn-icon ${isPreview() ? 'active' : ''}`} onClick={() => triggerCommand('core:preview')} title="Preview">
+              <button class={`btn-icon ${isPreview() ? 'active' : ''}`} onClick={togglePreview} title="Preview">
                 👁
               </button>
 
               <button class="btn-icon" onClick={openCodeEditor} title="Edit Code">
+                <img src={export_icon} alt="Export" />
+              </button>
+
+              <button class="btn-icon" onClick={openCodeImportModal} title="Import Code">
                 {/* Code Icon */}
                 &lt;/&gt;
               </button>
 
-              <button class="btn-primary" onClick={() => console.log(editorInstance.getHtml())}>Export</button>
 
               {!isRightOpen() && (
                 <button class="btn-ghost" onClick={() => setRightOpen(true)}>← Styles</button>
@@ -251,34 +287,13 @@ const App = () => {
             <button class="btn-toggle" onClick={() => setRightOpen(false)}> x </button>
           </div>
 
+          <div id="selector-container"></div>
           <div id="styles-container"> </div>
-
-          {/* <div class="panel-header" style="margin-top: auto; border-top: 1px solid var(--gjs-border)">
-            <span>Settings</span>
-          </div> */}
-
           <div id="traits-container"></div>
         </aside>
 
 
-        {/* The code editor modal */}
-        <Show when={showCodeModal()}>
-          <div class="modal-overlay">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3>Source Code</h3>
-                <button onClick={() => setShowCodeModal(false)}>✕</button>
-              </div>
-              <div class="modal-body">
-                <textarea value={codeHtml()} onInput={(e) => setCodeHtml(e.target.value)} placeholder="HTML"></textarea>
-                <textarea value={codeCss()} onInput={(e) => setCodeCss(e.target.value)} placeholder="CSS"></textarea>
-              </div>
-              <div class="modal-footer">
-                <button class="btn-primary" onClick={saveCode}>Apply Changes</button>
-              </div>
-            </div>
-          </div>
-        </Show>
+
 
       </div>
     </div>
