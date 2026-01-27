@@ -1,3 +1,39 @@
+/* 1. Force all GrapesJS inputs, selects, and number fields to use your variables */
+.gjs-field, 
+.gjs-field input, 
+.gjs-field select, 
+.gjs-field textarea,
+.gjs-clm-select,
+.gjs-sm-input,
+.gjs-sm-unit {
+    background-color: var(--button-hover) !important;
+    color: var(--app-text) !important;
+    border: 1px solid var(--panel-border) !important;
+}
+
+/* 2. Fix the specific dropdown menus (Select options) */
+.gjs-field select option,
+.gjs-clm-select option {
+    background-color: var(--panel-bg); /* Use panel bg so it stands out */
+    color: var(--app-text);
+}
+
+/* 3. Fix the 'Class' tags and dropdowns in the Selector Manager */
+.gjs-clm-tag, .gjs-clm-tag-label {
+    color: white !important; /* Usually better as white on the blue tag */
+}
+
+/* 4. Fix labels (like 'Border Radius', 'Width', etc.) */
+.gjs-sm-label, .gjs-sm-header, .gjs-clm-header {
+    color: var(--app-text) !important;
+}
+
+/* 5. Fix icons inside the style manager */
+.gjs-sm-icon, .gjs-clm-icon {
+    fill: var(--icon-color) !important;
+}
+
+
 /* --- 1. GLOBAL VARIABLES (Default = Light Theme) --- */
 :root {
     /* Font & Dimensions */
@@ -140,11 +176,14 @@
 
 #blocks-container,
 #layers-container,
-#styles-container,
-#traits-container {
+#styles-container {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 20px;
+}
+
+#traits-container {
     padding-bottom: 20px;
 }
 

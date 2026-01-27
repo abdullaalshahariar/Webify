@@ -31,6 +31,13 @@ export const initEditor = (container) => {
         traitManager: {
             appendTo: '#traits-container',
         },
+        selectorManager: {
+            appendTo: '#selector-container', // This puts it in the same box as your styles
+            states: [
+                { name: 'hover', label: 'Hover' },
+                { name: 'active', label: 'Click' },
+            ],
+        },
 
         // aetting up devices for the toggles to work
         deviceManager: {

@@ -23,6 +23,31 @@ const App = () => {
     if (editorRef) {
       editorInstance = initEditor(editorRef);
 
+      // --- NEW LOGIC: Render and Move Managers ---
+      const sm = editorInstance.StyleManager;
+      const slm = editorInstance.SelectorManager;
+      const tm = editorInstance.TraitManager;
+
+      // 1. Target your SolidJS containers
+      const stylesCont = document.getElementById('styles-container');
+      const selectorCont = document.getElementById('selector-container');
+      const traitsCont = document.getElementById('traits-container');
+
+      // 2. Clear out the "Select an element" text and append GrapesJS UI
+      if (stylesCont) {
+        stylesCont.innerHTML = ''; // Remove the empty-state text
+        stylesCont.appendChild(sm.render());
+      }
+
+      if (selectorCont) {
+        selectorCont.appendChild(slm.render()); // This is your "Hover" state & classes
+      }
+
+      if (traitsCont) {
+        traitsCont.appendChild(tm.render()); // Attributes/Settings
+      }
+      // ------------------------------------------
+
 
       //listening to device changes, so that UI can change accordingly, this is optional
       editorInstance.on('device:select', (device) => {
@@ -260,12 +285,8 @@ const App = () => {
             <button class="btn-toggle" onClick={() => setRightOpen(false)}> x </button>
           </div>
 
+          <div id="selector-container"></div>
           <div id="styles-container"> </div>
-
-          {/* <div class="panel-header" style="margin-top: auto; border-top: 1px solid var(--gjs-border)">
-            <span>Settings</span>
-          </div> */}
-
           <div id="traits-container"></div>
         </aside>
 
