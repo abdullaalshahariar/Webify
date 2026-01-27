@@ -67,16 +67,6 @@ const App = () => {
     if (editorInstance) editorInstance.runCommand(command);
   };
 
-  // const togglePreview = () => {
-  //   if (!editorInstance) return;
-  //   if (isPreview()) {
-  //     editorInstance.stopCommand('core:preview');
-  //     setIsPreview(false);
-  //   } else {
-  //     editorInstance.runCommand('core:preview');
-  //     setIsPreview(true);
-  //   }
-  // };
 
   const togglePreview = () => {
     if (!editorInstance) return;
@@ -110,19 +100,6 @@ const App = () => {
   };
 
   const handleExport = () => {
-    // if (!editorInstance) return;
-    // const html = editorInstance.getHtml();
-    // const css = editorInstance.getCss();
-    // const fullCode = `<html><style>${css}</style><body>${html}</body></html>`;
-
-    // // Create a download link
-    // const blob = new Blob([fullCode], { type: 'text/html' });
-    // const url = URL.createObjectURL(blob);
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = 'export.html';
-    // a.click();
-
     if (editorInstance) {
       editorInstance.runCommand('gjs-export-zip');
     }

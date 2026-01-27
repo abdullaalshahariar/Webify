@@ -1,6 +1,7 @@
 import grapesjs from 'grapesjs';
 import gjsBlocksBasic from 'grapesjs-blocks-basic';
 import gjsExport from 'grapesjs-plugin-export';
+import gjsForms from 'grapesjs-plugin-forms';
 
 // Import GrapesJS core styles
 //We will override some of them
@@ -58,8 +59,16 @@ export const initEditor = (container) => {
             // storeCss: true,
         },
 
+        selectorManager: {
+            states: [
+                { name: 'hover', label: 'Hover' },
+                { name: 'active', label: 'Click' },
+                { name: 'nth-of-type(2n)', label: 'Even/Odd' }
+            ],
+        },
+
         //load the preset webpage plugin
-        plugins: [gjsBlocksBasic, gjsExport],
+        plugins: [gjsBlocksBasic, gjsExport, gjsForms,],
         pluginsOpts: {
             [gjsBlocksBasic]: {
                 flexGrid: true,
