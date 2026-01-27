@@ -1,5 +1,6 @@
 import grapesjs from 'grapesjs';
 import gjsBlocksBasic from 'grapesjs-blocks-basic';
+import gjsExport from 'grapesjs-plugin-export';
 
 // Import GrapesJS core styles
 //We will override some of them
@@ -58,7 +59,7 @@ export const initEditor = (container) => {
         },
 
         //load the preset webpage plugin
-        plugins: [gjsBlocksBasic],
+        plugins: [gjsBlocksBasic, gjsExport],
         pluginsOpts: {
             [gjsBlocksBasic]: {
                 flexGrid: true,

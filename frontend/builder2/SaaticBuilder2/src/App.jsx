@@ -19,11 +19,6 @@ const App = () => {
   const [isPreview, setIsPreview] = createSignal(false);
 
 
-  //signal for code modal, html and css
-  const [showCodeModal, setShowCodeModal] = createSignal(false);
-  const [codeHtml, setCodeHtml] = createSignal("");
-  const [codeCss, setCodeCss] = createSignal("");
-
   onMount(() => {
     if (editorRef) {
       editorInstance = initEditor(editorRef);
@@ -72,53 +67,87 @@ const App = () => {
     if (editorInstance) editorInstance.runCommand(command);
   };
 
+  // const togglePreview = () => {
+  //   if (!editorInstance) return;
+  //   if (isPreview()) {
+  //     editorInstance.stopCommand('core:preview');
+  //     setIsPreview(false);
+  //   } else {
+  //     editorInstance.runCommand('core:preview');
+  //     setIsPreview(true);
+  //   }
+  // };
+
   const togglePreview = () => {
     if (!editorInstance) return;
-    if (isPreview()) {
-      editorInstance.stopCommand('core:preview');
-    } else {
-      editorInstance.runCommand('core:preview');
-    }
+
+    // 1. Get the raw data
+    const html = editorInstance.getHtml();
+    const css = editorInstance.getCss();
+
+    // 2. Create the full HTML document string
+    const fullCode = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Preview</title>
+        <style>${css}</style>
+      </head>
+      <body>
+        ${html}
+      </body>
+    </html>
+  `;
+
+    // 3. Open a new tab
+    const previewWindow = window.open('', '_blank');
+
+    // 4. Inject the code into the new tab
+    previewWindow.document.open();
+    previewWindow.document.write(fullCode);
+    previewWindow.document.close();
   };
 
   const handleExport = () => {
-    if (!editorInstance) return;
-    const html = editorInstance.getHtml();
-    const css = editorInstance.getCss();
-    const fullCode = `<html><style>${css}</style><body>${html}</body></html>`;
+    // if (!editorInstance) return;
+    // const html = editorInstance.getHtml();
+    // const css = editorInstance.getCss();
+    // const fullCode = `<html><style>${css}</style><body>${html}</body></html>`;
 
-    // Create a download link
-    const blob = new Blob([fullCode], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'export.html';
-    a.click();
+    // // Create a download link
+    // const blob = new Blob([fullCode], { type: 'text/html' });
+    // const url = URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'export.html';
+    // a.click();
+
+    if (editorInstance) {
+      editorInstance.runCommand('gjs-export-zip');
+    }
   };
 
   //code editor logic
   const openCodeEditor = () => {
-    // if (!editorInstance) return;
-    // setCodeHtml(editorInstance.getHtml());
-    // setCodeCss(editorInstance.getCss());
-    // setShowCodeModal(true);
-
     if (!editorInstance) return;
     // This opens the default GrapesJS code viewer modal
     editorInstance.runCommand('export-template');
-  };
 
-  const saveCode = () => {
-    if (!editorInstance) return;
+    const modal = editorInstance.Modal;
 
-    // 1. Update HTML: Replace components
-    // If we are editing the root, we set the whole canvas
-    editorInstance.setComponents(codeHtml());
+    const btnExport = document.createElement('button');
+    btnExport.innerHTML = 'Download ZIP';
+    btnExport.className = 'btn-primary-modal';
+    btnExport.style.marginTop = '15px';
+    btnExport.style.width = '100%';
 
-    // 2. Update CSS
-    editorInstance.setStyle(codeCss());
+    btnExport.onclick = () => {
+      editorInstance.runCommand('gjs-export-zip');
+    };
 
-    setShowCodeModal(false);
+    const container = modal.getContentEl();
+    container.appendChild(btnExport);
   };
 
 
@@ -224,7 +253,7 @@ const App = () => {
 
               <div class="divider-vertical"></div>
 
-              <button class={`btn-icon ${isPreview() ? 'active' : ''}`} onClick={() => triggerCommand('core:preview')} title="Preview">
+              <button class={`btn-icon ${isPreview() ? 'active' : ''}`} onClick={togglePreview} title="Preview">
                 👁
               </button>
 
@@ -233,7 +262,6 @@ const App = () => {
                 &lt;/&gt;
               </button>
 
-              <button class="btn-primary" onClick={() => console.log(editorInstance.getHtml())}>Export</button>
 
               {!isRightOpen() && (
                 <button class="btn-ghost" onClick={() => setRightOpen(true)}>← Styles</button>
@@ -265,30 +293,7 @@ const App = () => {
         </aside>
 
 
-        {/* The code editor modal */}
-        <Show when={showCodeModal()}>
-          <div class="code-modal-container">
-            <div class="code-modal-overlay">
-              {/* top part */}
-              <div class="code-modal-header">
-                <span>Code</span>
-                <button onClick={() => { setShowCodeModal(false) }}>X</button>
-              </div>
 
-              {/* middle part */}
-              <div class="code-modal-body">
-                <textarea value={codeHtml()} onInput={(e) => setCodeHtml(e.target.value)} placeholder="HTML"></textarea>
-                <textarea value={codeCss()} onInput={(e) => setCodeCss(e.target.value)} placeholder="CSS"></textarea>
-              </div>
-
-              {/* bottom part */}
-              <div class="code-modal-footer">
-                <button>Export ZIP</button>
-              </div>
-            </div>
-          </div>
-
-        </Show>
 
       </div>
     </div>
