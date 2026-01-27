@@ -8,6 +8,54 @@ import gjsForms from 'grapesjs-plugin-forms';
 import 'grapesjs/dist/css/grapes.min.css';
 
 export const initEditor = (container) => {
+    // editor/commands.js
+
+    const formatHtml = (html) => {
+        let tab = '  ';
+        let result = '';
+        let indent = '';
+        html.split(/>\s*</).forEach(element => {
+            if (element.match(/^\/\w/)) indent = indent.substring(tab.length);
+            result += indent + '<' + element + '>\r\n';
+            if (element.match(/^<?\w[^>]*[^\/]$/)) indent += tab;
+        });
+        return result.substring(1, result.length - 3);
+    };
+
+    const openImportCommand = (editor) => {
+        const modal = editor.Modal;
+        const container = document.createElement('div');
+        container.className = 'import-container';
+
+        const rawHtml = editor.getHtml();
+        const rawCss = editor.getCss();
+        const beautifiedCode = `<style>\n${rawCss}\n</style>\n\n${formatHtml(rawHtml)}`;
+
+        const textarea = document.createElement('textarea');
+        textarea.className = 'import-textarea';
+        textarea.value = beautifiedCode;
+        textarea.spellcheck = false;
+
+        const btn = document.createElement('button');
+        btn.innerHTML = 'Save Changes';
+        btn.className = 'btn-primary-modal';
+
+        btn.onclick = () => {
+            editor.setComponents(textarea.value);
+            modal.close();
+        };
+
+        container.appendChild(textarea);
+        container.appendChild(btn);
+
+        modal.setTitle('Source Code Editor');
+        modal.setContent(container);
+        modal.open();
+    };
+
+
+
+
     const editor = grapesjs.init({
         container: container,
         height: '100%',
@@ -36,7 +84,11 @@ export const initEditor = (container) => {
             states: [
                 { name: 'hover', label: 'Hover' },
                 { name: 'active', label: 'Click' },
+                { name: 'nth-of-type(2n)', label: 'Even/Odd' }
             ],
+        },
+        modal: {
+            backdrop: true,
         },
 
         // aetting up devices for the toggles to work
@@ -66,21 +118,24 @@ export const initEditor = (container) => {
             // storeCss: true,
         },
 
-        selectorManager: {
-            states: [
-                { name: 'hover', label: 'Hover' },
-                { name: 'active', label: 'Click' },
-                { name: 'nth-of-type(2n)', label: 'Even/Odd' }
-            ],
-        },
-
         //load the preset webpage plugin
         plugins: [gjsBlocksBasic, gjsExport, gjsForms,],
         pluginsOpts: {
             [gjsBlocksBasic]: {
                 flexGrid: true,
             },
-        }
+        },
+
+
+        // editor/config.js
+        commands: {
+            defaults: [
+                {
+                    id: 'gjs-open-import-template',
+                    run: (editor) => openImportCommand(editor),
+                },
+            ],
+        },
     });
 
     return editor;

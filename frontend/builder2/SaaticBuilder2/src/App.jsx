@@ -1,6 +1,7 @@
 import { initEditor } from "./editor/config";
 import { onMount, onCleanup, createSignal } from "solid-js";
 import "./AnotherApp.css";
+import export_icon from './assets/icons/export_icon.svg';
 
 const App = () => {
   let editorRef;
@@ -54,11 +55,6 @@ const App = () => {
         // device.getName() might return 'Desktop', 'Tablet', etc.
         setActiveDevice(device.getName() || 'Desktop');
       });
-
-      //lisenting for preview mode toggle
-      // Listen for preview mode toggle
-      editorInstance.on('run:core:preview:before', () => setIsPreview(true));
-      editorInstance.on('stop:core:preview:before', () => setIsPreview(false));
     }
   });
 
@@ -124,11 +120,6 @@ const App = () => {
     previewWindow.document.close();
   };
 
-  const handleExport = () => {
-    if (editorInstance) {
-      editorInstance.runCommand('gjs-export-zip');
-    }
-  };
 
   //code editor logic
   const openCodeEditor = () => {
@@ -150,6 +141,13 @@ const App = () => {
 
     const container = modal.getContentEl();
     container.appendChild(btnExport);
+  };
+
+
+  //code import logic, allows to edit the code
+  const openCodeImportModal = () => {
+    if (!editorInstance) return;
+    editorInstance.runCommand('gjs-open-import-template');
   };
 
 
@@ -260,6 +258,10 @@ const App = () => {
               </button>
 
               <button class="btn-icon" onClick={openCodeEditor} title="Edit Code">
+                <img src={export_icon} alt="Export" />
+              </button>
+
+              <button class="btn-icon" onClick={openCodeImportModal} title="Import Code">
                 {/* Code Icon */}
                 &lt;/&gt;
               </button>

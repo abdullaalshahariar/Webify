@@ -20,8 +20,7 @@ app.config.timestamp_*.js
 *.launch
 .settings/
 
-# Temp
-gitignore
+backend/.env
 
 # System Files
 .DS_Store
