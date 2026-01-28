@@ -1,5 +1,4 @@
 // Community questions page with backend API integration
-
 const state = {
   tab: "newest",
   tag: "",
@@ -55,7 +54,6 @@ async function fetchQuestions() {
     const response = await fetch(`/api/questions?${params}`, {
       credentials: "include",
     });
-
     if (!response.ok) {
       throw new Error("Failed to fetch questions");
     }
