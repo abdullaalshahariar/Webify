@@ -53,8 +53,8 @@ router.get("/questions", async (req, res) => {
 
     const questions = await Question.find(filter)
       .sort(sortOption)
-      .populate("author", "username email")
-      .populate("answers.author", "username")
+      .populate("author", "username email profilePicture")
+      .populate("answers.author", "username profilePicture")
       .limit(50)
       .lean();
 
@@ -79,8 +79,8 @@ router.get("/questions/:id", async (req, res) => {
       { $inc: { views: 1 } },
       { new: true },
     )
-      .populate("author", "username email")
-      .populate("answers.author", "username email");
+      .populate("author", "username email profilePicture")
+      .populate("answers.author", "username email profilePicture");
 
     if (!question) {
       return res.status(404).json({ error: "Question not found" });
@@ -154,8 +154,8 @@ router.post("/questions/:id/answers", isAuthenticated, async (req, res) => {
     }
 
     await question.save();
-    await question.populate("author", "username email");
-    await question.populate("answers.author", "username email");
+    await question.populate("author", "username email profilePicture");
+    await question.populate("answers.author", "username email profilePicture");
 
     res.status(201).json({
       success: true,

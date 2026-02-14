@@ -2,44 +2,110 @@
 lucide.createIcons();
 loadUserData();
 
-// Load user data from localStorage
-function loadUserData() {
-  const currentUser = localStorage.getItem("currentUser");
+// Load user data from server
+async function loadUserData() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   // Redirect to login if not logged in
-  if (!isLoggedIn || !currentUser) {
+  if (!isLoggedIn) {
     window.location.href = "../auth/login.html";
     return;
   }
 
-  const userData = JSON.parse(currentUser);
-
-  // Update all avatar images
-  document
-    .querySelectorAll(
-      ".sidebar-avatar img, .dropdown-user-info img, #profilePic"
-    )
-    .forEach((img) => {
-      img.src = userData.avatar;
-      img.alt = userData.name;
+  try {
+    // Fetch current user data from server
+    const response = await fetch('/api/profile', {
+      method: 'GET',
+      credentials: 'include'
     });
 
-  // Update user details in dropdown
-  const userDetailsDiv = document.getElementById("userdetails");
-  if (userDetailsDiv) {
-    userDetailsDiv.innerHTML = `
-                    <h4>${userData.name}</h4>
-                    <p>${userData.email}</p>
-                `;
-  }
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
 
-  // Populate form fields
-  document.getElementById("fullName").value = userData.name || "";
-  document.getElementById("email").value = userData.email || "";
-  document.getElementById("bio").value = userData.bio || "";
-  document.getElementById("phone").value = userData.phone || "";
+    const data = await response.json();
+    if (data.success) {
+      const userData = data.user;
+      console.log("Loaded user data:", userData);
+      
+      // Update localStorage with fresh data
+      localStorage.setItem("currentUser", JSON.stringify({
+        name: userData.username,
+        email: userData.email,
+        profilePicture: userData.profilePicture,
+        bio: userData.bio,
+        phone: userData.phoneNumber
+      }));
+
+      // Update all avatar images
+      document
+        .querySelectorAll(
+          ".sidebar-avatar img, .dropdown-user-info img, #profilePic"
+        )
+        .forEach((img) => {
+          img.src = userData.profilePicture || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+          img.alt = userData.username;
+        });
+
+      // Update user details in dropdown
+      const userDetailsDiv = document.getElementById("userdetails");
+      if (userDetailsDiv) {
+        userDetailsDiv.innerHTML = `
+                        <h4>${userData.username}</h4>
+                        <p>${userData.email}</p>
+                    `;
+      }
+
+      // Populate form fields
+      document.getElementById("fullName").value = userData.username || "";
+      document.getElementById("email").value = userData.email || "";
+      document.getElementById("bio").value = userData.bio || "";
+      document.getElementById("phone").value = userData.phoneNumber || "";
+    }
+  } catch (error) {
+    console.error('Error loading user data:', error);
+    // If server request fails, try localStorage as fallback
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) {
+      const userData = JSON.parse(currentUser);
+      document.getElementById("fullName").value = userData.name || "";
+      document.getElementById("email").value = userData.email || "";
+      document.getElementById("bio").value = userData.bio || "";
+      document.getElementById("phone").value = userData.phone || "";
+    } else {
+      window.location.href = "../auth/login.html";
+    }
+  }
 }
+
+function initializeApp() {
+  // Profile dropdown toggle
+  const userAvatar = document.getElementById("userAvatar");
+  const profileDropdown = document.getElementById("profileDropdown");
+
+  userAvatar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    profileDropdown.classList.add("active");
+    // Re-initialize icons after dropdown is shown
+    setTimeout(() => lucide.createIcons(), 10);
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!profileDropdown.contains(e.target) && !userAvatar.contains(e.target)) {
+      profileDropdown.classList.remove("active");
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside it
+  profileDropdown.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+}
+
+
+
 
 // Form submission handler
 document.getElementById("profileForm").addEventListener("submit", function (e) {
@@ -64,37 +130,77 @@ document.getElementById("picInput").addEventListener("change", function (e) {
   }
 });
 
-// Save profile data
-function saveProfile() {
-  const currentUser = localStorage.getItem("currentUser");
-  if (!currentUser) return;
+// Save profile data to MongoDB
+async function saveProfile() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  if (!isLoggedIn) {
+    showToast("Please log in to update your profile", "error");
+    return;
+  }
 
-  const userData = JSON.parse(currentUser);
+  // Get form data
+  const profileData = {
+    fullName: document.getElementById("fullName").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    bio: document.getElementById("bio").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    profilePicture: document.getElementById("profilePic").src
+  };
 
-  // Update user data
-  userData.name = document.getElementById("fullName").value;
-  userData.email = document.getElementById("email").value;
-  userData.bio = document.getElementById("bio").value;
-  userData.phone = document.getElementById("phone").value || userData.phone;
+  // Validate required fields
+  if (!profileData.fullName || !profileData.email) {
+    showToast("Full name and email are required", "error");
+    return;
+  }
 
-  // Save back to localStorage
-  localStorage.setItem("currentUser", JSON.stringify(userData));
-
-  showToast("Profile updated successfully!", "success");
-
-  // Update all displayed user info
-  document
-    .querySelectorAll(".sidebar-avatar img, .dropdown-user-info img")
-    .forEach((img) => {
-      img.src = document.getElementById("profilePic").src;
+  try {
+    showToast("Updating profile...", "info");
+    
+    // Send data to server
+    const response = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(profileData)
     });
 
-  const userDetailsDiv = document.getElementById("userdetails");
-  if (userDetailsDiv) {
-    userDetailsDiv.innerHTML = `
-                    <h4>${userData.name}</h4>
-                    <p>${userData.email}</p>
-                `;
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      // Update localStorage with the updated data from server
+      const updatedUser = result.user;
+      localStorage.setItem("currentUser", JSON.stringify({
+        name: updatedUser.username,
+        email: updatedUser.email,
+        profilePicture: updatedUser.profilePicture,
+        bio: updatedUser.bio,
+        phone: updatedUser.phoneNumber
+      }));
+
+      showToast("Profile updated successfully!", "success");
+
+      // Update all displayed user info
+      document
+        .querySelectorAll(".sidebar-avatar img, .dropdown-user-info img")
+        .forEach((img) => {
+          img.src = updatedUser.profilePicture;
+        });
+
+      const userDetailsDiv = document.getElementById("userdetails");
+      if (userDetailsDiv) {
+        userDetailsDiv.innerHTML = `
+          <h4>${updatedUser.username}</h4>
+          <p>${updatedUser.email}</p>
+      `;
+      }
+    } else {
+      showToast(result.error || "Failed to update profile", "error");
+    }
+  } catch (error) {
+    console.error('Error saving profile:', error);
+    showToast("Network error. Please try again.", "error");
   }
 }
 
@@ -163,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation();
     });
   }
+  initializeApp();
 });
 
 // Dropdown menu functions
@@ -198,3 +305,5 @@ function logout() {
     window.location.href = "../auth/login.html";
   }, 1500);
 }
+
+

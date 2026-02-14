@@ -26,6 +26,7 @@
     "express-session": "^1.18.2",
     "grapesjs-preset-webpage": "^1.0.3",
     "mongoose": "^9.1.5",
+    "nodemailer": "^8.0.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0"
   }

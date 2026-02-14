@@ -20,26 +20,6 @@
 
 <body>
     <div id="notification-toast" class="notification-toast"></div>
-    <aside class="sidebar">
-        <ul>
-        <li title="Home"><i class="fa-solid fa-house">
-            <h4 class="label">Home</h4>
-            </i></li>
-        <li title="Questions"><i class="fa-regular fa-circle-question">
-            <h4 class="label">Questions</h4>
-            </i></li>
-        <li title="Tags"><i class="fa-solid fa-tags">
-            <h4 class="label">Tags</h4>
-            </i></li>
-        <li title="Users"><i class="fa-regular fa-user">
-            <h4 class="label">Users</h4>
-            </i></li>
-        <li title="Notifications"><i class="fa-regular fa-bell">
-            <h4 class="label">Notifications</h4>
-            </i></li>
-        </ul>
-    </aside>
-
     <header class="topbar">
         <div class="brand">
             <span class="logo">WEBIFY</span>
@@ -63,48 +43,46 @@
         <div id="loadingState" class="loading">
             <i class="fa-solid fa-spinner fa-spin"></i> Loading question...
         </div>
-
         <div id="questionContent" style="display: none;">
-            <!-- Question Header -->
-            <section class="question-header">
-                <h1 id="questionTitle"></h1>
-                <div class="question-meta">
-                    <span id="questionTime"></span>
-                    <span id="questionViews"></span>
+                    
+            <article class="question-card" data-id="${q._id}">
+            <div class="stats">
+                <div class="stat">
+                    <div class="value" id="questionVotes"></div>
+                    <div class="label">votes</div>
                 </div>
-            </section>
-
-            <!-- Question Body -->
-            <section class="question-body">
-                <div class="vote-section">
-                    <button class="vote-btn" onclick="voteQuestion('up')" title="This question is useful">
-                        <i class="fa-solid fa-chevron-up"></i>
-                    </button>
-                    <div class="vote-count" id="questionVotes">0</div>
-                    <button class="vote-btn" onclick="voteQuestion('down')" title="This question is not useful">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                <div class="stat">
+                    <div class="value" id="answerCount2"></div>
+                    <div class="label">answers</div>
                 </div>
-                <div class="content-section">
-                    <div class="text-content" id="questionBody"></div>
-                    <div class="tags" id="questionTags"></div>
-                    <div class="post-footer">
-                        <div class="actions">
-                            <button class="btn-text" id="deleteBtn" style="display: none;" onclick="deleteQuestion()">
-                                <i class="fa-solid fa-trash"></i> Delete
-                            </button>
-                        </div>
-                        <div class="author-info">
-                            <div class="author-avatar" id="authorAvatar"></div>
-                            <div>
-                                <div class="author-name" id="authorName"></div>
-                                <div class="author-time" id="authorTime"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat">
+                    <div class="value" id="questionViews"></div>
+                    <div class="label">views</div>
                 </div>
-            </section>
-
+            </div>
+            <div class="content">
+                <h2 class="title" id="questionTitle"></h2>
+                <p class="excerpt" id="questionBody"></p>
+                <div class="tags" id="questionTags"></div>
+                <div class="actions-row">
+                <span onclick="voteQuestion('up')" id="questionVoteUp" ><i class="fa-regular fa-thumbs-up"></i> Upvote</span>
+                <span onclick="voteQuestion('down')" id="questionVoteDown"><i class="fa-regular fa-thumbs-down"></i> Downvote</span>
+                <span onclick="answerQuestion()"><i class="fa-regular fa-comment"></i> Answer</span>
+                <button class="btn-text" id="deleteBtn" style="display: none;" onclick="deleteQuestion()">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </button>
+                </div>
+            </div>
+            <div class="user">
+                <div class="avatar" id ="authorAvatar"></div>
+                <div>
+                <div class="name" id="authorName"></div>
+                <div class="time" id ="authorTime"></div>
+                </div>
+            </div>
+            </article>
+            
+            
             <!-- Answers Section -->
             <section class="answers-section">
                 <h2><span id="answerCount">0</span> Answers</h2>

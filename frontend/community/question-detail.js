@@ -11,7 +11,6 @@ function getQuestionIdFromURL() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
-
 // Check authentication
 async function checkAuthentication() {
   try {
@@ -65,9 +64,9 @@ async function fetchQuestion() {
   } catch (error) {
     console.error("Error fetching question:", error);
     showNotification("Failed to load question", "error light", "Error");
-    setTimeout(() => {
-      window.location.href = "questions.html";
-    }, 2000);
+    // setTimeout(() => {
+    //   window.location.href = "questions.html";
+    // }, 2000);
   }
 }
 
@@ -78,19 +77,16 @@ function renderQuestion() {
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("questionContent").style.display = "block";
 
-  // Question header
-  document.getElementById("questionTitle").textContent = q.title;
-  document.getElementById("questionTime").textContent =
-    `Asked ${getTimeAgo(new Date(q.createdAt))}`;
-  document.getElementById("questionViews").textContent =
-    `${formatNumber(q.views || 0)} views`;
 
   // Question body
+  document.getElementById("questionTitle").textContent = q.title;
   document.getElementById("questionVotes").textContent = formatNumber(
     q.votes || 0,
   );
   document.getElementById("questionBody").textContent = q.body;
-
+  document.getElementById("questionViews").textContent = formatNumber(
+    q.views || 0,
+  );
   // Tags
   const tagsHtml = (q.tags || [])
     .map((tag) => `<span class="tag">${tag}</span>`)
@@ -98,11 +94,22 @@ function renderQuestion() {
   document.getElementById("questionTags").innerHTML = tagsHtml;
 
   // Author info
-  const author = q.author ? q.author.username : "Anonymous";
-  document.getElementById("authorAvatar").textContent = author
-    .charAt(0)
-    .toUpperCase();
-  document.getElementById("authorName").textContent = author;
+  
+  const author = q.author ;
+  const votebyUser = state.currentUser._id;
+  const userVote = q.votedBy ? q.votedBy.find((v) => v.user.toString() === votebyUser) : null;
+  if (userVote) {
+      document.getElementById("questionVoteUp").classList.remove('voted-up');
+      document.getElementById("questionVoteDown").classList.remove('voted-down');
+    if (userVote.voteType === "up") {
+      document.getElementById("questionVoteUp").classList.add("voted-up");
+    } else if (userVote.voteType === "down") {
+      document.getElementById("questionVoteDown").classList.add("voted-down");
+    }
+  }
+  
+  document.getElementById("authorAvatar").innerHTML = `<img src="${author.profilePicture}" alt="User Avatar">`;
+  document.getElementById("authorName").textContent = author.username || "Anonymous";
   document.getElementById("authorTime").textContent =
     `asked ${getTimeAgo(new Date(q.createdAt))}`;
 
@@ -114,6 +121,7 @@ function renderQuestion() {
   // Answers
   const answers = q.answers || [];
   document.getElementById("answerCount").textContent = answers.length;
+  document.getElementById("answerCount2").textContent = answers.length;
 
   if (answers.length === 0) {
     document.getElementById("answersList").innerHTML =
@@ -127,30 +135,40 @@ function renderQuestion() {
 
 // Render single answer
 function renderAnswer(answer) {
-  const author = answer.author ? answer.author.username : "Anonymous";
+  console.log("Rendering answer:", answer); 
+  const author = answer.author;
+  const votebyUser = state.currentUser._id;
+  const userVote = answer.votedBy ? answer.votedBy.find((v) => v.user.toString() === votebyUser) : null;
+  let voteClass = "";
+  if (userVote) {
+    if (userVote.voteType === "up") {
+      voteClass = "voted-up";
+    } else if (userVote.voteType === "down") {
+      voteClass = "voted-down";
+    }
+  }
+  console.log("Answer author:", author);
   const timeAgo = getTimeAgo(new Date(answer.createdAt));
 
   return `
     <div class="answer-card">
-      <div class="vote-section">
-        <button class="vote-btn" onclick="voteAnswer('${answer._id}', 'up')" title="This answer is useful">
-          <i class="fa-solid fa-chevron-up"></i>
-        </button>
-        <div class="vote-count">${formatNumber(answer.votes || 0)}</div>
-        <button class="vote-btn" onclick="voteAnswer('${answer._id}', 'down')" title="This answer is not useful">
-          <i class="fa-solid fa-chevron-down"></i>
-        </button>
-      </div>
       <div class="answer-content">
         <div class="answer-text">${answer.body}</div>
-        <div class="answer-footer">
-          <div class="author-info">
-            <div class="author-avatar">${author.charAt(0).toUpperCase()}</div>
-            <div>
-              <div class="author-name">${author}</div>
-              <div class="author-time">answered ${timeAgo}</div>
-            </div>
+        <div class="vote-info">
+          ${answer.votes || 0} votes
+        </div>
+        <div class="actions-row" style="position:static;">
+          <span onclick="voteAnswer('${answer._id}', 'up')" class="${voteClass === 'voted-up' ? 'voted-up' : ''}"><i class="fa-regular fa-thumbs-up"></i> Upvote</span>
+          <span onclick="voteAnswer('${answer._id}', 'down')" class="${voteClass === 'voted-down' ? 'voted-down' : ''}"><i class="fa-regular fa-thumbs-down"></i> Downvote</span>
+        </div>
+        <div class="answer-footer">    
+        <div class="user">
+          <div class="avatar"><img src="${author.profilePicture}" alt="User Avatar"></div>
+          <div>
+            <div class="name">${author.username}</div>
+            <div class="time">answered ${timeAgo}</div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -365,7 +383,7 @@ function updateUIForLoggedInUser(user) {
   document.getElementById("loginLink").style.display = "none";
   const userNameDiv = document.getElementById("userName");
   userNameDiv.style.display = "flex";
-  userNameDiv.innerHTML = `<i class="fa-regular fa-user"></i> ${user.username}`;
+  userNameDiv.innerHTML = `<img src="${user.profilePicture}" alt="User Avatar" class="user-avatar"> ${user.username}`;
 }
 
 function updateUIForLoggedOutUser() {
@@ -437,3 +455,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   await checkAuthentication();
   await fetchQuestion();
 });
+
+
+function answerQuestion(){
+  document.getElementById("answerFormSection").scrollIntoView({ behavior: "smooth" });
+}

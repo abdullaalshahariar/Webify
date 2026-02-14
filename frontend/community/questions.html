@@ -20,33 +20,13 @@
 <body>
   <div id="notification-toast" class="notification-toast"></div>
 
-  <aside class="sidebar">
-    <ul>
-      <li title="Home"><i class="fa-solid fa-house">
-          <h4 class="label">Home</h4>
-        </i></li>
-      <li title="Questions"><i class="fa-regular fa-circle-question">
-          <h4 class="label">Questions</h4>
-        </i></li>
-      <li title="Tags"><i class="fa-solid fa-tags">
-          <h4 class="label">Tags</h4>
-        </i></li>
-      <li title="Users"><i class="fa-regular fa-user">
-          <h4 class="label">Users</h4>
-        </i></li>
-      <li title="Notifications"><i class="fa-regular fa-bell">
-          <h4 class="label">Notifications</h4>
-        </i></li>
-    </ul>
-  </aside>
-
   <header class="topbar">
     <div class="brand">
       <span class="logo">WEBIFY</span>
     </div>
     <nav class="primary-nav">
       <a href="../index.html">Home</a>
-      <a href="#">Store</a>
+      <a href="../marketplace/market.html">Store</a>
     </nav>
     <div class="search">
       <i class="fa-solid fa-magnifying-glass"></i>
@@ -55,7 +35,7 @@
     <div class="actions">
       <a class="nav-login" href="../auth/login.html" id="loginLink">LOGIN</a>
       <button id="askBtn" class="btn btn-primary">Ask Question</button>
-      <div id="userName" onclick="openprofile()" style="display: none;">
+      <div id="userName" style="cursor: pointer;" onclick="openprofile()" style="display: none;">
 
       </div>
     </div>
