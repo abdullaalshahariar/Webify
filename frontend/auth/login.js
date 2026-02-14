@@ -173,6 +173,47 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+
+
+
+// Resend verification email function
+async function resendVerificationEmail(email) {
+  try {
+    showNotification("Sending verification email...", "info", "Please wait");
+    
+    const response = await fetch('/api/resend-verification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showNotification(
+        data.message || "Verification email has been sent! Please check your inbox.",
+        "success",
+        "Email Sent! 📧"
+      );
+    } else {
+      showNotification(
+        data.error || "Failed to send verification email. Please try again.",
+        "error",
+        "Send Failed"
+      );
+    }
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    showNotification(
+      "Unable to send email. Please try again later.",
+      "error",
+      "Network Error"
+    );
+  }
+}
+
 // Login Form Submission
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -243,12 +284,35 @@ loginForm.addEventListener("submit", async (e) => {
           window.location.href = "../profile/profile.html";
         }, 1500);
       } else {
-        // Show error from backend
-        showNotification(
-          data.error || "Invalid credentials. Please try again.",
-          "error",
-          "Login Failed"
-        );
+        // Handle different error types
+        if (response.status === 403 && data.emailVerificationRequired) {
+          // Email verification required
+          showNotification(
+            `${data.error}\n\nWould you like us to resend the verification email?`,
+            "warning",
+            "Email Verification Required"
+          );
+          
+          // Show resend verification option
+          setTimeout(() => {
+            const confirmModal = document.getElementById("confirm-modal");
+            confirmModal.classList.remove("hidden");
+            document.getElementById("confirm-yes").onclick = () => {
+              resendVerificationEmail(email);
+              confirmModal.classList.add("hidden");
+            }
+            document.getElementById("confirm-no").onclick = () => {
+              confirmModal.classList.add("hidden");
+            };
+          }, 1000);
+        } else {
+          // Show regular login error
+          showNotification(
+            data.error || "Invalid credentials. Please try again.",
+            "error",
+            "Login Failed"
+          );
+        }
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
       }
@@ -343,9 +407,9 @@ signupForm.addEventListener("submit", async (e) => {
 
       if (response.ok) {
         showNotification(
-          "Account created successfully! Please login with your credentials.",
+          data.message || "Account created successfully! Please check your email and click the verification link before logging in.",
           "success",
-          "Success"
+          "Check Your Email! 📧"
         );
         // Reset form and switch to login tab
         signupForm.reset();
@@ -355,9 +419,9 @@ signupForm.addEventListener("submit", async (e) => {
         // Switch to login tab after short delay
         setTimeout(() => {
           loginTab.click();
-          // Pre-fill username in login form
-          document.getElementById("login-email").value = name;
-        }, 1500);
+          // Pre-fill email in login form
+          document.getElementById("login-email").value = email;
+        }, 2000);
       } else {
         // Show error from backend
         showNotification(

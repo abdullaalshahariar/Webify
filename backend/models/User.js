@@ -52,6 +52,18 @@ const UserSchema = new mongoose.Schema({
     passwordResetExpires: {
         type: Date,
         default: null
+    },
+    emailVerified: {
+        type: Boolean,
+        default: false
+    },
+    emailVerificationToken: {
+        type: String,
+        default: null
+    },
+    emailVerificationExpires: {
+        type: Date,
+        default: null
     }
 });
 
@@ -101,6 +113,32 @@ UserSchema.statics.findByPasswordResetToken = function (token) {
     return this.findOne({
         passwordResetToken: hashedToken,
         passwordResetExpires: { $gt: Date.now() }
+    });
+};
+
+// Method to generate email verification token
+UserSchema.methods.generateEmailVerificationToken = function () {
+    // Generate random token
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    
+    // Hash token and save to database
+    this.emailVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
+    
+    // Set token expiry (24 hours)
+    this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+    
+    // Return unhashed token (this will be sent in email)
+    return verificationToken;
+};
+
+// Static method to find user by valid verification token
+UserSchema.statics.findByEmailVerificationToken = function (token) {
+    // Hash the token to compare with stored hashed version
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    
+    return this.findOne({
+        emailVerificationToken: hashedToken,
+        emailVerificationExpires: { $gt: Date.now() }
     });
 };
 

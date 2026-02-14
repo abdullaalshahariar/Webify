@@ -80,52 +80,80 @@ app.post("/api/signup", async (req, res) => {
     const { username, email, password } = req.body;
 
     // Validation
-    if (!username || !password) {
+    if (!username || !password || !email) {
       return res
         .status(400)
-        .json({ error: "Username and password are required" });
+        .json({ error: "Username, email, and password are required" });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ username });
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Please enter a valid email address" });
+    }
+
+    // Check if user already exists (username or email)
+    const existingUser = await User.findOne({ 
+      $or: [{ username }, { email: email.toLowerCase() }] 
+    });
     if (existingUser) {
-      return res.status(400).json({ error: "Username already exists" });
+      if (existingUser.username === username) {
+        return res.status(400).json({ error: "Username already exists" });
+      } else {
+        return res.status(400).json({ error: "Email already registered" });
+      }
     }
 
-    // Create new user (password will be hashed by the pre-save hook)
-    // Only include defined fields to let defaults work properly
+    // Create new user with email verification required
     const userData = {
       username,
+      email: email.toLowerCase(),
       password,
+      emailVerified: false
     };
-    
-    // Only add email if it's provided
-    if (email) {
-      userData.email = email;
-    }
     
     const newUser = new User(userData);
 
+    // Generate email verification token
+    const verificationToken = newUser.generateEmailVerificationToken();
     await newUser.save();
 
-    // Log the saved user to debug defaults
-    console.log('User created with defaults:', {
-      username: newUser.username,
-      email: newUser.email,
-      profilePicture: newUser.profilePicture,
-      bio: newUser.bio,
-      phoneNumber: newUser.phoneNumber
-    });
+    // Send verification email
+    const verificationURL = `https://webify-kudm.onrender.com/auth/verify-email.html?token=${verificationToken}`;
+    
+    const transporter = createEmailTransporter();
+    
+    const mailOptions = {
+      to: newUser.email,
+      from: process.env.EMAIL_USER || 'noreply@webify.com',
+      subject: 'Verify Your Email - Welcome to Webify!',
+      text: `Welcome to Webify!\n\nPlease verify your email address by clicking the following link:\n\n${verificationURL}\n\nThis verification link will expire in 24 hours.\n\nIf you didn't create an account on Webify, please ignore this email.`,
+      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Welcome to Webify!</h2>
+          <p>Thank you for signing up! Please verify your email address to complete your registration.</p>
+          <p>Click the button below to verify your email:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verificationURL}" style="background-color: #22d3ee; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email Address</a>
+          </div>
+          <p>Or copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; color: #666;">${verificationURL}</p>
+          <p style="color: #888;">This verification link will expire in 24 hours.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="color: #888; font-size: 12px;">If you didn't create an account on Webify, please ignore this email.</p>
+        </div>`
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log("📧 Email verification email sent successfully:", result.messageId);
 
     // Return success without auto-login
     res.json({ 
-      message: "Account created successfully! Please login.",
+      success: true,
+      message: "Account created successfully! Please check your email and click the verification link before logging in.",
       user: {
         username: newUser.username,
         email: newUser.email,
-        profilePicture: newUser.profilePicture,
-        bio: newUser.bio,
-        phoneNumber: newUser.phoneNumber
+        emailVerified: false
       }
     });
   } catch (error) {
@@ -145,6 +173,15 @@ app.post("/api/login", (req, res, next) => {
         .status(401)
         .json({ error: info.message || "Invalid credentials" });
     }
+
+    // Check if email is verified
+    if (!user.emailVerified) {
+      return res.status(403).json({ 
+        error: "Please verify your email address before logging in. Check your inbox for the verification link.",
+        emailVerificationRequired: true 
+      });
+    }
+
     req.login(user, (err) => {
       if (err) {
         return res.status(500).json({ error: "Error creating session" });
@@ -221,7 +258,7 @@ app.post("/api/forgot-password", async (req, res) => {
     await user.save();
 
     // Create reset URL
-    const resetURL = `${req.protocol}://${req.get('host')}/auth/reset-password.html?token=${resetToken}`;
+    const resetURL = `https://webify-kudm.onrender.com/auth/reset-password.html?token=${resetToken}`;
 
     const transporter = createEmailTransporter();
     
@@ -244,7 +281,7 @@ app.post("/api/forgot-password", async (req, res) => {
           <p>Or copy and paste this link into your browser:</p>
           <p style="word-break: break-all; color: #666;">${resetURL}</p>
           <p>If you did not request this, please ignore this email.</p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;"> 
           <p style="color: #888; font-size: 12px;">This is an automated message from Webify.</p>
         </div>`
     };
@@ -308,6 +345,106 @@ app.post("/api/reset-password", async (req, res) => {
   } catch (error) {
     console.error("Reset password error:", error);
     res.status(500).json({ error: "Failed to reset password" });
+  }
+});
+
+// Email Verification Routes
+
+// POST /api/verify-email - Verify email with token
+app.post("/api/verify-email", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ error: "Verification token is required" });
+    }
+
+    // Find user by valid verification token
+    const user = await User.findByEmailVerificationToken(token);
+
+    if (!user) {
+      return res.status(400).json({ error: "Email verification token is invalid or has expired" });
+    }
+
+    // Mark email as verified
+    user.emailVerified = true;
+    user.emailVerificationToken = null;
+    user.emailVerificationExpires = null;
+    
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Your email has been verified successfully! You can now login to your account."
+    });
+
+  } catch (error) {
+    console.error("Email verification error:", error);
+    res.status(500).json({ error: "Failed to verify email" });
+  }
+});
+
+// POST /api/resend-verification - Resend verification email
+app.post("/api/resend-verification", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email: email.toLowerCase() });
+    
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return res.json({
+        success: true,
+        message: "If an account with that email exists and is unverified, a new verification email has been sent."
+      });
+    }
+
+    if (user.emailVerified) {
+      return res.status(400).json({ error: "Email is already verified" });
+    }
+
+    // Generate new verification token
+    const verificationToken = user.generateEmailVerificationToken();
+    await user.save();
+
+    // Send verification email
+    const verificationURL = `https://webify-kudm.onrender.com/auth/verify-email.html?token=${verificationToken}`;
+    
+    const transporter = createEmailTransporter();
+    
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER || 'noreply@webify.com',
+      subject: 'Verify Your Email - Webify',
+      text: `Please verify your email address by clicking the following link:\n\n${verificationURL}\n\nThis verification link will expire in 24 hours.`,
+      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Email Verification</h2>
+          <p>Please verify your email address to complete your Webify account setup.</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verificationURL}" style="background-color: #22d3ee; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email Address</a>
+          </div>
+          <p>Or copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; color: #666;">${verificationURL}</p>
+          <p style="color: #888;">This verification link will expire in 24 hours.</p>
+        </div>`
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log("📧 Email verification resent successfully:", result.messageId);
+
+    res.json({
+      success: true,
+      message: "If an account with that email exists and is unverified, a new verification email has been sent."
+    });
+
+  } catch (error) {
+    console.error("Resend verification error:", error);
+    res.status(500).json({ error: "Failed to resend verification email" });
   }
 });
 
