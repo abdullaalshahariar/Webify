@@ -212,24 +212,8 @@ function handleNavigation(section) {
   // Handle Create button - redirect to builder
   if (section === "create") {
     console.log("Opening website builder...");
-    location.href = "../demo/builder.html";
+    location.href = "https://webify-kudm.onrender.com/builder/";
     return;
-  }
-
-  const container = document.querySelector(".container");
-  const notificationsSection = document.getElementById("notificationsSection");
-
-  console.log("container:", container);
-  console.log("notificationsSection:", notificationsSection);
-
-  if (section === "notification") {
-    container.style.display = "none";
-    notificationsSection.style.display = "block";
-    console.log("Rendering notifications...");
-    renderNotifications();
-  } else {
-    container.style.display = "block";
-    notificationsSection.style.display = "none";
   }
 }
 
@@ -594,47 +578,7 @@ const defaultNotifications = [
   },
 ];
 
-// Render notifications based on current user
-function renderNotifications() {
-  console.log("renderNotifications called");
-  const notificationsList = document.getElementById("notificationsList");
 
-  // Get current user's email
-  const currentUser = localStorage.getItem("currentUser");
-  let userEmail = null;
-  let notifications = defaultNotifications;
-
-  if (currentUser) {
-    const userData = JSON.parse(currentUser);
-    userEmail = userData.email;
-
-    // Get user-specific notifications or use default
-    notifications = userNotifications[userEmail] || defaultNotifications;
-  }
-
-  console.log("notificationsList element:", notificationsList);
-  console.log("User email:", userEmail);
-  console.log("notifications data:", notifications);
-
-  notificationsList.innerHTML = notifications
-    .map(
-      (notif) => `
-    <div class="notification-item">
-      <img src="${notif.userAvatar}" alt="${notif.userName}" class="notification-avatar">
-      <div class="notification-content">
-        <p class="notification-text"><strong>${notif.userName}</strong> ${notif.message}</p>
-        <p class="notification-time">${notif.time}</p>
-      </div>
-    </div>
-  `
-    )
-    .join("");
-
-  console.log(
-    "Notifications rendered. HTML length:",
-    notificationsList.innerHTML.length
-  );
-}
 
 // Handle search
 function handleSearch(query) {
@@ -658,7 +602,7 @@ function createNewProject() {
   console.log("Creating new project...");
   showNotification("Creating a new project. Wait to be redirected...", "success", "New Project");
   setTimeout(() => {
-    location.href = "../demo/builder.html";
+    location.href = "https://webify-kudm.onrender.com/builder/";
   }, 1500); 
 }
 
@@ -691,9 +635,6 @@ function viewTemplate(templateId) {
   // Here you can add logic to show template preview
   // or open it in the editor
 }
-function openBuilder() {
-  location.href = "../demo/builder.html";
-}
 // Profile dropdown menu actions
 function openCommunity() {
   console.log("Opening community...");
@@ -711,14 +652,7 @@ function editProfile() {
 function openMarketplace() {
   window.location.href = "../marketplace/market.html";
 }
-function openNotification() {
-  console.log("Opening notifications...");
-  const container = document.querySelector(".container");
-  const notificationsSection = document.getElementById("notificationsSection");
-  container.style.display = "none";
-  notificationsSection.style.display = "block";
-  renderNotifications();
-}
+
 
 function logout() {
   console.log("Logging out...");

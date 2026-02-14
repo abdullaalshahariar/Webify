@@ -333,8 +333,9 @@ const products = [
 ];
 
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" ? true : false;
-  const currentUser = localStorage.getItem("currentUser");
-  const userData = JSON.parse(currentUser);
+const currentUser = localStorage.getItem("currentUser");
+const userData = currentUser ? JSON.parse(currentUser) : null;
+console.log("isLoggedIn:", currentUser);
 
 function isUserLoggedIn() {
 const userName = userData ? userData.name : ""; // Replace with actual user name
@@ -343,7 +344,7 @@ const userName = userData ? userData.name : ""; // Replace with actual user name
     document.getElementById('loginLink').style.display = 'none';
     const userNameDiv = document.getElementById('userName');
     userNameDiv.style.display = 'flex';
-    userNameDiv.innerHTML = `<img src="${userData.avatar}" alt="User Avatar" /> ${userName}`;
+    userNameDiv.innerHTML = `<img src="${userData.profilePicture}" alt="User Avatar" /> ${userName}`;
     return true;  
     }
   else {
