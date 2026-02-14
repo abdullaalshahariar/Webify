@@ -97,7 +97,7 @@ function loadUserData() {
     ".sidebar-avatar img, .dropdown-user-info img"
   );
   avatarImages.forEach((img) => {
-    img.src = userData.avatar;
+    img.src = userData.profilePicture;
     img.alt = userData.name;
   });
 

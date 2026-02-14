@@ -91,8 +91,23 @@ function questionCard(q) {
     .join("");
 
   const timeAgo = getTimeAgo(new Date(q.createdAt));
-  const author = q.author ? q.author.username : "Anonymous";
+  const author = q.author ;
   const answerCount = q.answers ? q.answers.length : 0;
+  const votebyUser = state.currentUser._id;
+  const userVote = q.votedBy ? q.votedBy.find((v) => v.user.toString() === votebyUser) : null;
+  let voteClass = "";
+  if (userVote) {
+    if (userVote.voteType === "up") {
+      voteClass = "voted-up";
+    } else if (userVote.voteType === "down") {
+      voteClass = "voted-down";
+    }
+  }
+      
+  console.log("User vote on this question:", userVote);
+  console.log("User vote on this question:", votebyUser);
+  console.log("Question data:", q);
+  console.log("Author data:", author);
 
   return `
     <article class="question-card" data-id="${q._id}">
@@ -115,15 +130,15 @@ function questionCard(q) {
         <p class="excerpt">${q.body.substring(0, 200)}${q.body.length > 200 ? "..." : ""}</p>
         <div class="tags">${tags}</div>
         <div class="actions-row">
-          <span onclick="voteQuestion('${q._id}', 'up')"><i class="fa-regular fa-thumbs-up"></i> Upvote</span>
-          <span onclick="voteQuestion('${q._id}', 'down')"><i class="fa-regular fa-thumbs-down"></i> Downvote</span>
+          <span onclick="voteQuestion('${q._id}', 'up')" class="${voteClass === 'voted-up' ? 'voted-up' : ''}"><i class="fa-regular fa-thumbs-up"></i> Upvote</span>
+          <span onclick="voteQuestion('${q._id}', 'down')" class="${voteClass === 'voted-down' ? 'voted-down' : ''}"><i class="fa-regular fa-thumbs-down"></i> Downvote</span>
           <span onclick="viewQuestion('${q._id}')"><i class="fa-regular fa-comment"></i> Answer</span>
         </div>
       </div>
       <div class="user">
-        <div class="avatar">${author.charAt(0).toUpperCase()}</div>
+        <div class="avatar"><img src="${author.profilePicture}" alt="User Avatar"></div>
         <div>
-          <div class="name">${author}</div>
+          <div class="name">${author.username}</div>
           <div class="time">asked ${timeAgo}</div>
         </div>
       </div>
@@ -425,7 +440,7 @@ function updateUIForLoggedInUser(user) {
   document.getElementById("loginLink").style.display = "none";
   const userNameDiv = document.getElementById("userName");
   userNameDiv.style.display = "flex";
-  userNameDiv.innerHTML = `<i class="fa-regular fa-user"></i> ${user.username}`;
+  userNameDiv.innerHTML = `<img src="${user.profilePicture}" alt="User Avatar" class="user-avatar"> ${user.username}`;
 }
 
 function updateUIForLoggedOutUser() {
