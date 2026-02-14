@@ -115,21 +115,8 @@ document.getElementById("profileForm").addEventListener("submit", function (e) {
 
 // Change profile picture
 function changeProfilePic() {
-  document.getElementById("picInput").click();
+  document.getElementById("changePictureModal").style.display = "flex";
 }
-
-document.getElementById("picInput").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      document.getElementById("profilePic").src = e.target.result;
-      showToast("Profile picture updated!", "success");
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
 // Save profile data to MongoDB
 async function saveProfile() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -233,8 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Navigate to profile page with specific section
       if (
-        section === "notification" ||
-        section === "market" ||
         section === "template" ||
         section === "project"
       ) {
