@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 const avatarlinks = [
     'https://api.dicebear.com/9.x/thumbs/svg?seed=Felix',
     'https://api.dicebear.com/9.x/thumbs/svg?seed=Charlie',
@@ -43,6 +44,14 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         default: ''
+    },
+    passwordResetToken: {
+        type: String,
+        default: null
+    },
+    passwordResetExpires: {
+        type: Date,
+        default: null
     }
 });
 
@@ -67,6 +76,32 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
         // Plain text comparison for old passwords
         return this.password === candidatePassword;
     }
+};
+
+// Method to generate password reset token
+UserSchema.methods.generatePasswordResetToken = function () {
+    // Generate random token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    
+    // Hash token and save to database
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    
+    // Set token expiry (10 minutes)
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    
+    // Return unhashed token (this will be sent in email)
+    return resetToken;
+};
+
+// Static method to find user by valid reset token
+UserSchema.statics.findByPasswordResetToken = function (token) {
+    // Hash the token to compare with stored hashed version
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    
+    return this.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    });
 };
 
 // The first argument 'User' is the name of the collection (it will become 'users' in Atlas)

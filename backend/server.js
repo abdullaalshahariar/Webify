@@ -7,6 +7,8 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import "./config/passport.js";
+import nodemailer from "nodemailer";
+import crypto from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, ".env") });
@@ -164,6 +166,148 @@ app.get("/api/check-auth", (req, res) => {
     res.json({ authenticated: true, user: req.user });
   } else {
     res.status(401).json({ authenticated: false });
+  }
+});
+
+// Email transporter configuration
+const createEmailTransporter = () => {
+  if (process.env.EMAIL_SERVICE && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    return nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE, // e.g., 'gmail'
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  }
+  
+  // Fallback to console logging if email not configured
+  return {
+    sendMail: (options) => {
+      console.log("📧 Email would be sent with the following details:");
+      console.log("To:", options.to);
+      console.log("Subject:", options.subject);
+      console.log("Text:", options.text);
+      console.log("HTML:", options.html);
+      return Promise.resolve({ messageId: 'console-log-id' });
+    }
+  };
+};
+
+// Password Reset Routes
+
+// POST /api/forgot-password - Request password reset
+app.post("/api/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email: email.toLowerCase() });
+    
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return res.json({
+        success: true,
+        message: "If an account with that email exists, a password reset link has been sent."
+      });
+    }
+
+    // Generate reset token
+    const resetToken = user.generatePasswordResetToken();
+    await user.save();
+
+    // Create reset URL
+    const resetURL = `${req.protocol}://${req.get('host')}/auth/reset-password.html?token=${resetToken}`;
+
+    const transporter = createEmailTransporter();
+    
+    // Email content
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER || 'noreply@webify.com',
+      subject: 'Password Reset Request - Webify',
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
+            `Please click on the following link, or paste this into your browser to complete the process within 10 minutes:\n\n` +
+            `${resetURL}\n\n` +
+            `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Password Reset Request</h2>
+          <p>You are receiving this because you requested the reset of your Webify account password.</p>
+          <p>Please click the following button to complete the process within 10 minutes:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetURL}" style="background-color: #22d3ee; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+          </div>
+          <p>Or copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; color: #666;">${resetURL}</p>
+          <p>If you did not request this, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="color: #888; font-size: 12px;">This is an automated message from Webify.</p>
+        </div>`
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log("📧 Password reset email sent successfully:", result.messageId);
+
+    res.status(200).json({
+      success: true,
+      message: "If an account with that email exists, a password reset link has been sent."
+    });
+
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    
+    // Provide more specific error messages for debugging
+    if (error.code === 'EAUTH') {
+      console.error("❌ Gmail authentication failed. Check EMAIL_USER and EMAIL_PASS in .env file");
+    } else if (error.code === 'ESOCKET') {
+      console.error("❌ Network error. Check internet connection");
+    } else {
+      console.error("❌ Unexpected error:", error.message);
+    }
+    
+    res.status(500).json({ error: "Failed to send password reset email" });
+  }
+});
+
+// POST /api/reset-password - Reset password with token
+app.post("/api/reset-password", async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ error: "Token and password are required" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    }
+
+    // Find user by valid reset token
+    const user = await User.findByPasswordResetToken(token);
+
+    if (!user) {
+      return res.status(400).json({ error: "Password reset token is invalid or has expired" });
+    }
+
+    // Set new password
+    user.password = password;
+    user.passwordResetToken = null;
+    user.passwordResetExpires = null;
+    
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Your password has been reset successfully! You can now login with your new password."
+    });
+
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ error: "Failed to reset password" });
   }
 });
 
