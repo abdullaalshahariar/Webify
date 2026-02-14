@@ -61,6 +61,14 @@ import User from "./models/User.js";
 // Import Community Routes
 import communityRoutes from "./routes/community.js";
 
+// Authentication middleware for profile routes
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: "You must be logged in to perform this action" });
+};
+
 // Use Community Routes
 app.use("/api", communityRoutes);
 
@@ -156,6 +164,56 @@ app.get("/api/check-auth", (req, res) => {
     res.json({ authenticated: true, user: req.user });
   } else {
     res.status(401).json({ authenticated: false });
+  }
+});
+
+// Update user profile route
+app.put("/api/profile", isAuthenticated, async (req, res) => {
+  try {
+    const { fullName, email, bio, phone, profilePicture } = req.body;
+    const userId = req.user._id;
+
+    // Prepare update data
+    const updateData = {};
+    if (fullName !== undefined) updateData.username = fullName;
+    if (email !== undefined) updateData.email = email;
+    if (bio !== undefined) updateData.bio = bio;
+    if (phone !== undefined) updateData.phoneNumber = phone;
+    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+
+    // Update user in database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Profile update error:", error);
+    res.status(500).json({ error: "Server error during profile update" });
+  }
+});
+
+// Get current user profile
+app.get("/api/profile", isAuthenticated, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ error: "Server error fetching profile" });
   }
 });
 
