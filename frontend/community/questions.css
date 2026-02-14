@@ -73,10 +73,9 @@ body {
 
 .topbar {
     position: fixed;
-    width: calc(100vw - 4rem);
+    width: 100vw;
     height: 68px;
     top: 0;
-    left: 4rem;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -171,7 +170,7 @@ body {
     max-width: 90vw; 
     margin: 24px auto; 
     margin-top: 80px;
-    padding-left: 84px; 
+    padding-left: 20px; 
 }
 
 #searchInput:focus{
@@ -309,6 +308,10 @@ body {
     position: absolute;
     bottom: 10px;
     flex-wrap: wrap;
+    cursor: pointer;
+}
+.actions-row span:hover {
+    color: var(--text);
 }
 .actions-row .icon-btn { 
     display: inline-flex; 

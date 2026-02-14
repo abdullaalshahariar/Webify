@@ -110,13 +110,16 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="editprofile_title">Edit Profile Page</h1>
+        
+        <button type="submit" form="profileForm" class="save_changes_btn">Save</button>
+        <div class="divider">
+            
         <div class="profile_pic">
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User"
                 id="profilePic">
             <button class="change_pic_btn" onclick="changeProfilePic()">Change Profile Picture</button>
             <input type="file" id="picInput" style="display:none" accept="image/*">
         </div>
-        <button type="submit" form="profileForm" class="save_changes_btn">Save</button>
         <div class="edit-info">
             <form id="profileForm" class="profile-form">
                 <div class="form-group">
@@ -142,9 +145,8 @@
             </form>
 
 
-        </div>
-        <div>
-
+        </div> 
+            
         </div>
     </main>
 

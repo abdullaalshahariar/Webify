@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-
+const avatarlinks = [
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Felix',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Charlie',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Max',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Buddy',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Rocky',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Jack',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Sophie',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Luna',
+    'https://api.dicebear.com/9.x/thumbs/svg?seed=Lucy',
+];
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -19,6 +29,20 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    profilePicture: {
+        type: String,
+        default: function() {
+            return avatarlinks[Math.floor(Math.random() * avatarlinks.length)];
+        }
+    },
+    bio: {
+        type: String,
+        default: 'Welcome to Webify! Update your bio in settings.'
+    },
+    phoneNumber: {
+        type: String,
+        default: ''
     }
 });
 

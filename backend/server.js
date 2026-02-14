@@ -12,6 +12,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, ".env") });
 const app = express();
 
+console.log('🚀 Starting Webify server...');
+console.log('📁 __dirname:', __dirname);
+console.log('🔑 SESSION_SECRET exists:', !!process.env.SESSION_SECRET);
+console.log('🗄️ MONGODB_URI exists:', !!process.env.MONGODB_URI);
+
 // 1. Connect to MongoDB Atlas
 connectDB();
 
@@ -78,16 +83,41 @@ app.post("/api/signup", async (req, res) => {
     }
 
     // Create new user (password will be hashed by the pre-save hook)
-    const newUser = new User({
+    // Only include defined fields to let defaults work properly
+    const userData = {
       username,
-      email,
       password,
-    });
+    };
+    
+    // Only add email if it's provided
+    if (email) {
+      userData.email = email;
+    }
+    
+    const newUser = new User(userData);
 
     await newUser.save();
 
+    // Log the saved user to debug defaults
+    console.log('User created with defaults:', {
+      username: newUser.username,
+      email: newUser.email,
+      profilePicture: newUser.profilePicture,
+      bio: newUser.bio,
+      phoneNumber: newUser.phoneNumber
+    });
+
     // Return success without auto-login
-    res.json({ message: "Account created successfully! Please login." });
+    res.json({ 
+      message: "Account created successfully! Please login.",
+      user: {
+        username: newUser.username,
+        email: newUser.email,
+        profilePicture: newUser.profilePicture,
+        bio: newUser.bio,
+        phoneNumber: newUser.phoneNumber
+      }
+    });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ error: "Server error during signup" });
@@ -129,6 +159,15 @@ app.get("/api/check-auth", (req, res) => {
   }
 });
 
+// Test route to verify server is running updated code
+app.get("/api/test", (req, res) => {
+  res.json({ 
+    message: "Server is running updated code!", 
+    timestamp: new Date().toISOString(),
+    version: "v2.0"
+  });
+});
+
 // Builder SPA Routing
 app.get(/^\/builder(\/.*)?$/, (req, res) => {
   res.sendFile(path.join(builderDist, "index.html"));
@@ -141,6 +180,7 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Server running on: http://localhost:${PORT}`),
-);
+app.listen(PORT, () => {
+  console.log(`✅ Server running on: http://localhost:${PORT}`);
+  console.log('🌐 Ready to accept connections!');
+});
