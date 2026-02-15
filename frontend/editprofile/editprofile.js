@@ -61,6 +61,9 @@ async function loadUserData() {
       document.getElementById("email").value = userData.email || "";
       document.getElementById("bio").value = userData.bio || "";
       document.getElementById("phone").value = userData.phoneNumber || "";
+      
+      // Hide loading screen after data is loaded
+      hideLoadingScreen();
     }
   } catch (error) {
     console.error('Error loading user data:', error);
@@ -72,9 +75,24 @@ async function loadUserData() {
       document.getElementById("email").value = userData.email || "";
       document.getElementById("bio").value = userData.bio || "";
       document.getElementById("phone").value = userData.phone || "";
+      
+      // Hide loading screen even on fallback
+      hideLoadingScreen();
     } else {
       window.location.href = "../auth/login.html";
     }
+  }
+}
+
+// Function to hide loading screen
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loadingScreen');
+  if (loadingScreen) {
+    loadingScreen.classList.add('hidden');
+    // Remove from DOM after animation completes
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+    }, 500);
   }
 }
 
