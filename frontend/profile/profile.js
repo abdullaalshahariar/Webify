@@ -507,7 +507,7 @@ function createNewProject() {
   showNotification("Creating a new project. Wait to be redirected...", "success", "New Project");
   setTimeout(() => {
     window.location.href = "../demo/builder.html";
-  }, 1500); 
+  }, 1500);
 }
 
 function uploadFiles() {
@@ -557,7 +557,7 @@ function editProfile() {
 }
 
 function openMarketplace() {
-  window.location.href = "../marketplace/marketplace.html";
+  window.location.href = "../marketplace/market.html";
 }
 function openNotification() {
   console.log("Opening notifications...");
