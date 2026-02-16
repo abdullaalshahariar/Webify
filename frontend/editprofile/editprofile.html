@@ -24,39 +24,24 @@
 
         <!-- Navigation Items -->
         <nav class="sidebar-nav">
-            <button class="nav-item active" data-nav="create">
+            <button class="nav-item active" data-nav="create" onclick="openBuilder()">
                 <div class="nav-icon">
                     <i data-lucide="plus"></i>
                 </div>
                 <span class="nav-label">Create</span>
             </button>
 
-            <button class="nav-item" data-nav="market">
+            <button class="nav-item" data-nav="market" onclick="openMarketplace()">
                 <div class="nav-icon">
                     <i data-lucide="store"></i>
                 </div>
                 <span class="nav-label">Market</span>
             </button>
-
-            <button class="nav-item" data-nav="notification">
-                <div class="nav-icon">
-                    <i data-lucide="bell"></i>
-                </div>
-                <span class="nav-label">Notification</span>
-            </button>
-
-            <button class="nav-item" data-nav="template">
+            <button class="nav-item" data-nav="template" onclick="showtemplate()">
                 <div class="nav-icon">
                     <i data-lucide="layers"></i>
                 </div>
                 <span class="nav-label">Template</span>
-            </button>
-
-            <button class="nav-item" data-nav="project">
-                <div class="nav-icon">
-                    <i data-lucide="folder-kanban"></i>
-                </div>
-                <span class="nav-label">Project</span>
             </button>
         </nav>
 
@@ -110,13 +95,16 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="editprofile_title">Edit Profile Page</h1>
+        
+        <button type="submit" form="profileForm" class="save_changes_btn">Save</button>
+        <div class="divider">
+            
         <div class="profile_pic">
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="User"
                 id="profilePic">
             <button class="change_pic_btn" onclick="changeProfilePic()">Change Profile Picture</button>
             <input type="file" id="picInput" style="display:none" accept="image/*">
         </div>
-        <button type="submit" form="profileForm" class="save_changes_btn">Save</button>
         <div class="edit-info">
             <form id="profileForm" class="profile-form">
                 <div class="form-group">
@@ -142,13 +130,11 @@
             </form>
 
 
-        </div>
-        <div>
-
+        </div> 
+            
         </div>
     </main>
-
-    <script src="../profile/profile.js"></script>
+    
     <script src="editprofile.js"></script>
 </body>
 

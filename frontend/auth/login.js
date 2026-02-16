@@ -1,62 +1,3 @@
-// Demo users for testing - try Tamim/Tamim123, Fahim/Fahim123, Abdullah/Abdullah123, or Erin/Erin123
-const demoUsers = [
-  {
-    username: "Tamim",
-    password: "Tamim123",
-    userData: {
-      name: "Tamim Ahmed",
-      email: "tamim@webify.com",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-      bio: "Full-stack developer passionate about building innovative web solutions.",
-      projects: 15,
-      templates: 8,
-      followers: 234,
-    },
-  },
-  {
-    username: "Fahim",
-    password: "Fahim123",
-    userData: {
-      name: "Fahim Rahman",
-      email: "fahim@webify.com",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-      bio: "UI/UX designer and front-end developer. Love creating beautiful interfaces.",
-      projects: 22,
-      templates: 12,
-      followers: 456,
-    },
-  },
-  {
-    username: "Abdullah",
-    password: "Abdullah123",
-    userData: {
-      name: "Abdullah Khan",
-      email: "abdullah@webify.com",
-      avatar:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop",
-      bio: "Backend specialist with expertise in Node.js and database architecture.",
-      projects: 18,
-      templates: 5,
-      followers: 189,
-    },
-  },
-  {
-    username: "Erin",
-    password: "Erin123",
-    userData: {
-      name: "Erin Mitchell",
-      email: "erin@webify.com",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-      bio: "Creative designer and developer. Specialized in responsive web design.",
-      projects: 28,
-      templates: 16,
-      followers: 672,
-    },
-  },
-];
 
 // Show toast notifications - auto-hides after 5 seconds
 function showNotification(message, type = "success", title = "") {
@@ -232,6 +173,47 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+
+
+
+// Resend verification email function
+async function resendVerificationEmail(email) {
+  try {
+    showNotification("Sending verification email...", "info", "Please wait");
+    
+    const response = await fetch('/api/resend-verification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showNotification(
+        data.message || "Verification email has been sent! Please check your inbox.",
+        "success",
+        "Email Sent! 📧"
+      );
+    } else {
+      showNotification(
+        data.error || "Failed to send verification email. Please try again.",
+        "error",
+        "Send Failed"
+      );
+    }
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    showNotification(
+      "Unable to send email. Please try again later.",
+      "error",
+      "Network Error"
+    );
+  }
+}
+
 // Login Form Submission
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -302,12 +284,35 @@ loginForm.addEventListener("submit", async (e) => {
           window.location.href = "../profile/profile.html";
         }, 1500);
       } else {
-        // Show error from backend
-        showNotification(
-          data.error || "Invalid credentials. Please try again.",
-          "error",
-          "Login Failed"
-        );
+        // Handle different error types
+        if (response.status === 403 && data.emailVerificationRequired) {
+          // Email verification required
+          showNotification(
+            `${data.error}\n\nWould you like us to resend the verification email?`,
+            "warning",
+            "Email Verification Required"
+          );
+          
+          // Show resend verification option
+          setTimeout(() => {
+            const confirmModal = document.getElementById("confirm-modal");
+            confirmModal.classList.remove("hidden");
+            document.getElementById("confirm-yes").onclick = () => {
+              resendVerificationEmail(email);
+              confirmModal.classList.add("hidden");
+            }
+            document.getElementById("confirm-no").onclick = () => {
+              confirmModal.classList.add("hidden");
+            };
+          }, 1000);
+        } else {
+          // Show regular login error
+          showNotification(
+            data.error || "Invalid credentials. Please try again.",
+            "error",
+            "Login Failed"
+          );
+        }
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
       }
@@ -402,11 +407,10 @@ signupForm.addEventListener("submit", async (e) => {
 
       if (response.ok) {
         showNotification(
-          "Account created successfully! Please login with your credentials.",
+          data.message || "Account created successfully! Please check your email and click the verification link before logging in.",
           "success",
-          "Success"
+          "Check Your Email! 📧"
         );
-
         // Reset form and switch to login tab
         signupForm.reset();
         submitBtn.innerHTML = originalText;
@@ -415,9 +419,9 @@ signupForm.addEventListener("submit", async (e) => {
         // Switch to login tab after short delay
         setTimeout(() => {
           loginTab.click();
-          // Pre-fill username in login form
-          document.getElementById("login-email").value = name;
-        }, 1500);
+          // Pre-fill email in login form
+          document.getElementById("login-email").value = email;
+        }, 2000);
       } else {
         // Show error from backend
         showNotification(

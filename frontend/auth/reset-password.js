@@ -1,7 +1,7 @@
 /**
- * Password Recovery - Notification System
- * Enhanced toast notifications for password recovery flow
- * @param {string} message - Recovery status message
+ * Password Reset - Notification System
+ * Enhanced toast notifications for password reset flow
+ * @param {string} message - Reset status message
  * @param {string} type - Notification type
  * @param {string} title - Notification title
  */
@@ -71,74 +71,123 @@ function showError(inputId, message) {
   }, 3000);
 }
 
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+// Toggle password visibility
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const toggle = input.parentElement.querySelector('.password-toggle');
+  const eyeIcon = toggle.querySelector('.eye-icon');
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    eyeIcon.innerHTML = `
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94L6.06 6.06"/>
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19l-6.21-6.21"/>
+      <line x1="1" y1="1" x2="23" y2="23"/>
+    `;
+  } else {
+    input.type = 'password';
+    eyeIcon.innerHTML = `
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    `;
+  }
 }
 
-// Forgot Password Form Submission
-const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+// Get reset token from URL
+function getResetToken() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('token');
+}
 
-forgotPasswordForm.addEventListener("submit", async (e) => {
+// Reset Password Form Submission
+const resetPasswordForm = document.getElementById("resetPasswordForm");
+const resetToken = getResetToken();
+
+// Check if token exists
+if (!resetToken) {
+  showNotification(
+    "Invalid or missing reset token. Please request a new password reset link.",
+    "error",
+    "Invalid Link"
+  );
+  setTimeout(() => {
+    window.location.href = 'forgot-password.html';
+  }, 3000);
+}
+
+resetPasswordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("forgot-email").value;
+  const newPassword = document.getElementById("new-password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
   const submitBtn = document.querySelector(".submit-btn");
 
   let hasError = false;
 
-  if (!email) {
-    showError("forgot-email", "Email is required");
+  if (!newPassword) {
+    showError("new-password", "Password is required");
     hasError = true;
-  } else if (!validateEmail(email)) {
-    showError("forgot-email", "Please enter a valid email address");
+  } else if (newPassword.length < 6) {
+    showError("new-password", "Password must be at least 6 characters long");
     hasError = true;
   }
 
-  if (!hasError) {
+  if (!confirmPassword) {
+    showError("confirm-password", "Please confirm your password");
+    hasError = true;
+  } else if (newPassword !== confirmPassword) {
+    showError("confirm-password", "Passwords do not match");
+    hasError = true;
+  }
+
+  if (!hasError && resetToken) {
     // Add loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
-      <span>Sending...</span>
+      <span>Resetting...</span>
       <svg class="arrow-icon spinning" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12a9 9 0 11-6.219-8.56"/>
       </svg>
     `;
 
     try {
-      const response = await fetch('/api/forgot-password', {
+      const response = await fetch('/api/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ 
+          token: resetToken, 
+          password: newPassword 
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         showNotification(
-          data.message || "Password reset link has been sent to your email. Please check your inbox.",
+          data.message || "Your password has been reset successfully! Redirecting to login...",
           "success",
-          "Email Sent! ✉️"
+          "Password Reset! 🔒"
         );
         
         // Clear form
-        document.getElementById("forgot-email").value = '';
+        document.getElementById("new-password").value = '';
+        document.getElementById("confirm-password").value = '';
         
-        // Optionally redirect after a delay
+        // Redirect to login after success
         setTimeout(() => {
           window.location.href = 'login.html';
         }, 3000);
       } else {
         showNotification(
-          data.error || "Failed to send password reset email. Please try again.",
+          data.error || "Failed to reset password. Please try again.",
           "error",
-          "Error"
+          "Reset Failed"
         );
       }
     } catch (error) {
-      console.error("Password reset request error:", error);
+      console.error("Password reset error:", error);
       showNotification(
         "Network error. Please check your connection and try again.",
         "error",
@@ -148,7 +197,7 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
       // Reset button state
       submitBtn.disabled = false;
       submitBtn.innerHTML = `
-        <span>Send Reset Link</span>
+        <span>Reset Password</span>
         <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
@@ -158,16 +207,26 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Add loading animation to submit button
-document.querySelector(".submit-btn").addEventListener("click", function () {
-  if (this.querySelector(".arrow-icon")) {
-    const arrow = this.querySelector(".arrow-icon");
-    arrow.style.animation = "none";
-    setTimeout(() => {
-      arrow.style.animation = "pulse 0.5s ease-in-out";
-    }, 10);
-  }
-});
+// Add loading animation styles
+const style = document.createElement("style");
+style.textContent = `
+    .spinning {
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    .keyboard-nav *:focus {
+        outline: 2px solid #22d3ee !important;
+        outline-offset: 2px !important;
+    }
+`;
+document.head.appendChild(style);
 
 // Keyboard navigation
 document.addEventListener("keydown", (e) => {
@@ -180,27 +239,6 @@ document.addEventListener("mousedown", () => {
   document.body.classList.remove("keyboard-nav");
 });
 
-// Add focus styles for keyboard navigation
-const style = document.createElement("style");
-style.textContent = `
-    .keyboard-nav *:focus {
-        outline: 2px solid #22d3ee !important;
-        outline-offset: 2px !important;
-    }
-    .spinning {
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .submit-btn:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
-`;
-document.head.appendChild(style);
-
-// Password Recovery System - Developed by Tamim
-console.log("WEBIFY Forgot Password page loaded successfully! 🔒");
-console.log("Password recovery system ready! 📧");
+// Password Reset System - Developed by Tamim for Webify
+console.log("WEBIFY Password Reset page loaded successfully! 🔒");
+console.log("Token present:", !!resetToken);
