@@ -144,6 +144,16 @@
             <section class="section" id="lastSavedSection">
                 <h2 class="section-title">Last Saved</h2>
                 <div class="grid">
+                    <!-- Create New Project — FIRST -->
+                    <div class="create-card" onclick="createNewProject()">
+                        <div class="create-content">
+                            <div class="create-icon">
+                                <i data-lucide="plus"></i>
+                            </div>
+                            <p>Create New project</p>
+                        </div>
+                    </div>
+
                     <!-- Untitled Project -->
                     <div class="project-card" onclick="openProject('untitled')">
                         <div class="card-thumbnail">
@@ -155,27 +165,6 @@
                         </div>
                         <div class="card-content">
                             <h3>Untitled</h3>
-                        </div>
-                    </div>
-
-                    <!-- Create New Project -->
-                    <div class="create-card" onclick="createNewProject()">
-                        <div class="create-content">
-                            <div class="create-icon">
-                                <i data-lucide="plus"></i>
-                            </div>
-                            <p>Create New project</p>
-                        </div>
-                    </div>
-
-                    <!-- Upload Files -->
-                    <div class="upload-card" onclick="uploadFiles()">
-                        <div class="upload-content">
-                            <div class="upload-icon">
-                                <i data-lucide="file-up"></i>
-                            </div>
-                            <button class="choose-files-button">Choose Files</button>
-                            <p class="upload-hint">or drop files here</p>
                         </div>
                     </div>
                 </div>

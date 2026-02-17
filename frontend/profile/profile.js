@@ -187,14 +187,10 @@ function initializeApp() {
 
 // Handle tab switching
 function handleTabSwitch(tab) {
-  // This function can be expanded to show/hide different content
-  // based on the selected tab
   if (tab === "design") {
     console.log("Showing user designs");
-    // Show user's projects
   } else if (tab === "template") {
     console.log("Showing templates");
-    // Show template marketplace
   }
 }
 
@@ -254,6 +250,7 @@ const sampleComponents = [
 ];
 
 let components = sampleComponents; // Initialize with sample components
+
 // User-specific notifications data
 
 // Library state
@@ -366,12 +363,8 @@ function previewComponent(componentId) {
 }
 
 
-
-
 // Handle search
 function handleSearch(query) {
-  // This function can be expanded to filter projects/templates
-  // based on the search query
   if (query.trim() === "") {
     console.log("Search cleared, showing all items");
   } else {
@@ -383,7 +376,6 @@ function handleSearch(query) {
 function openProject(projectId) {
   console.log(`Opening project: ${projectId}`);
   alert(`Opening project: ${projectId}`);
-  // Here you can add logic to open the project editor
 }
 
 function createNewProject() {
@@ -394,35 +386,11 @@ function createNewProject() {
   }, 1500); 
 }
 
-function uploadFiles() {
-  console.log("Upload files dialog");
-  // Create a file input element
-  const input = document.createElement("input");
-  input.type = "file";
-  input.multiple = true;
-  input.accept = ".html,.css,.js,image/*";
-
-  input.addEventListener("change", (e) => {
-    const files = Array.from(e.target.files);
-    console.log(
-      "Files selected:",
-      files.map((f) => f.name)
-    );
-    alert(
-      `Selected ${files.length} file(s): ${files.map((f) => f.name).join(", ")}`
-    );
-    // Here you can add logic to handle file uploads
-  });
-
-  input.click();
-}
-
 function viewTemplate(templateId) {
   console.log(`Viewing template: ${templateId}`);
   alert(`Opening template preview: Template ${templateId}`);
-  // Here you can add logic to show template preview
-  // or open it in the editor
 }
+
 // Profile dropdown menu actions
 function openCommunity() {
   console.log("Opening community...");
@@ -441,63 +409,26 @@ function openMarketplace() {
   window.location.href = "../marketplace/market.html";
 }
 
-
 function logout() {
   console.log("Logging out...");
 
-  // Show beautiful logout message
   showNotification(
     "See you soon! You have been logged out successfully.",
     "success",
     "Goodbye! 👋"
   );
 
-  // Clear user data from localStorage
   localStorage.removeItem("currentUser");
   localStorage.removeItem("isLoggedIn");
   localStorage.clear();
   sessionStorage.clear();
 
-  // Redirect to home page after showing notification
   setTimeout(() => {
     window.location.href = "../index.html";
   }, 2000);
 }
 
-// Add drag and drop functionality for file upload
-const uploadCard = document.querySelector(".upload-card");
-
-if (uploadCard) {
-  uploadCard.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    uploadCard.style.borderColor = "#7c3aed";
-    uploadCard.style.backgroundColor = "#f5f3ff";
-  });
-
-  uploadCard.addEventListener("dragleave", (e) => {
-    e.preventDefault();
-    uploadCard.style.borderColor = "#d1d5db";
-    uploadCard.style.backgroundColor = "white";
-  });
-
-  uploadCard.addEventListener("drop", (e) => {
-    e.preventDefault();
-    uploadCard.style.borderColor = "#d1d5db";
-    uploadCard.style.backgroundColor = "white";
-
-    const files = Array.from(e.dataTransfer.files);
-    console.log(
-      "Files dropped:",
-      files.map((f) => f.name)
-    );
-    alert(
-      `Dropped ${files.length} file(s): ${files.map((f) => f.name).join(", ")}`
-    );
-    // Here you can add logic to handle dropped files
-  });
-}
-
-// Mock data for projects and templates
+// Mock data for projects
 const mockProjects = [
   {
     id: "untitled",
@@ -508,17 +439,9 @@ const mockProjects = [
   },
 ];
 
-
 // Function to dynamically load projects (can be connected to IndexedDB)
 function loadProjects() {
-  // This would connect to IndexedDB in a real implementation
   return mockProjects;
-}
-
-// Function to dynamically load templates
-function loadTemplates() {
-  // This would connect to an API or local storage in a real implementation
-  return mockTemplates;
 }
 
 // Console welcome message
@@ -570,7 +493,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if (userEmail) {
     console.log("User is logged in with email:", userEmail);
-    // Use the email to display user info, load profile data, etc.
   }
 });
 
@@ -584,7 +506,6 @@ function userdetails() {
 }
 
 userdetails();
-
 
 function showtemplate(){
   const templateDiv = document.getElementById("template");
