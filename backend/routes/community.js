@@ -1,5 +1,6 @@
 import express from "express";
 import Question from "../models/Question.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -12,6 +13,24 @@ const isAuthenticated = (req, res, next) => {
     .status(401)
     .json({ error: "You must be logged in to perform this action" });
 };
+
+// GET /api/users/top-three - fetch top 3 users
+router.get("/users/top-three", async (req, res) => {
+  try {
+    const users = await User.find({})
+      .limit(3)
+      .select("username email profilePicture bio phoneNumber createdAt");
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ error: "No users found" });
+    }
+
+    res.json({ success: true, users });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
 
 // GET /api/questions - fetch questions with optional filters
 router.get("/questions", async (req, res) => {
