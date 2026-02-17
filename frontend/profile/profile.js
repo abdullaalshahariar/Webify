@@ -117,6 +117,16 @@ function loadUserData() {
   }
 
   console.log("User data loaded:", userData);
+  hideLoadingScreen();
+}
+
+// Hide loading screen with fade out effect
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loadingScreen');
+  if (loadingScreen) {
+    loadingScreen.classList.add('hidden');
+    loadingScreen.style.display = 'none';
+  }
 }
 
 function initializeApp() {
