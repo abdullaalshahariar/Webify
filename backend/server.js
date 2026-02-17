@@ -9,6 +9,7 @@ import connectDB from "./db.js";
 import "./config/passport.js";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
+import marketplaceRoutes from "./routes/marketplace.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, ".env") });
@@ -70,6 +71,9 @@ const isAuthenticated = (req, res, next) => {
   }
   res.status(401).json({ error: "You must be logged in to perform this action" });
 };
+
+// Marketplace routes (protected)
+app.use("/api/marketplace", isAuthenticated, marketplaceRoutes);
 
 // Use Community Routes
 app.use("/api", communityRoutes);
