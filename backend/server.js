@@ -143,8 +143,14 @@ app.post("/api/signup", async (req, res) => {
         </div>`
     };
 
-    const result = await transporter.sendMail(mailOptions);
-    console.log("📧 Email verification email sent successfully:", result.messageId);
+    try {
+      const result = await transporter.sendMail(mailOptions);
+      console.log("📧 Email verification email sent successfully:", result.messageId);
+    } catch (emailError) {
+      console.error("❌ Email sending failed:", emailError);
+      console.error("Error code:", emailError.code);
+      console.error("Error message:", emailError.message);
+    }
 
     // Return success without auto-login
     res.json({ 
@@ -209,16 +215,27 @@ app.get("/api/check-auth", (req, res) => {
 // Email transporter configuration
 const createEmailTransporter = () => {
   if (process.env.EMAIL_SERVICE && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    return nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE, // e.g., 'gmail'
+    const config = {
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      requireTLS: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-    });
+      logger: true,
+      debug: true,
+    };
+    
+    console.log('🔧 Email transporter configured for Gmail');
+    console.log('📧 Email user:', process.env.EMAIL_USER);
+    
+    return nodemailer.createTransport(config);
   }
   
   // Fallback to console logging if email not configured
+  console.warn('⚠️ Email not configured! EMAIL_SERVICE, EMAIL_USER, or EMAIL_PASS is missing.');
   return {
     sendMail: (options) => {
       console.log("📧 Email would be sent with the following details:");
@@ -286,8 +303,15 @@ app.post("/api/forgot-password", async (req, res) => {
         </div>`
     };
 
-    const result = await transporter.sendMail(mailOptions);
-    console.log("📧 Password reset email sent successfully:", result.messageId);
+    try {
+      const result = await transporter.sendMail(mailOptions);
+      console.log("📧 Password reset email sent successfully:", result.messageId);
+    } catch (emailError) {
+      console.error("❌ Password reset email failed:", emailError);
+      console.error("Error code:", emailError.code);
+      console.error("Error message:", emailError.message);
+      throw emailError;
+    }
 
     res.status(200).json({
       success: true,
@@ -434,8 +458,15 @@ app.post("/api/resend-verification", async (req, res) => {
         </div>`
     };
 
-    const result = await transporter.sendMail(mailOptions);
-    console.log("📧 Email verification resent successfully:", result.messageId);
+    try {
+      const result = await transporter.sendMail(mailOptions);
+      console.log("📧 Email verification resent successfully:", result.messageId);
+    } catch (emailError) {
+      console.error("❌ Verification email resend failed:", emailError);
+      console.error("Error code:", emailError.code);
+      console.error("Error message:", emailError.message);
+      throw emailError;
+    }
 
     res.json({
       success: true,
