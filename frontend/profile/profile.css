@@ -539,14 +539,12 @@ button {
 .create-card:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
-
 }
 
 .create-card:hover .create-icon {
     border-radius: 90px;
     transform: scale(1.5) rotateZ(180deg);
     transition: all 0.3s ease;
-    ;
 }
 
 .create-card:hover .create-content p {
@@ -582,63 +580,6 @@ button {
 .create-content p {
     color: #4b5563;
     font-size: 16px;
-}
-
-/* Upload Card */
-.upload-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 2px dashed #d1d5db;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.upload-card:hover {
-    border-color: #a855f7;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.upload-content {
-    aspect-ratio: 16 / 9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 32px;
-}
-
-.upload-icon {
-    padding: 16px;
-    background: #f3f4f6;
-    border-radius: 12px;
-}
-
-.upload-icon svg {
-    width: 32px;
-    height: 32px;
-    color: #4b5563;
-}
-
-.choose-files-button {
-    padding: 8px 24px;
-    background: white;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #374151;
-    transition: background-color 0.3s ease;
-}
-
-.choose-files-button:hover {
-    background: #f9fafb;
-}
-
-.upload-hint {
-    font-size: 12px;
-    color: #6b7280;
 }
 
 /* Template Card */
