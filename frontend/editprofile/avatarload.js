@@ -29,5 +29,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function closeChangePictureModal(){
     document.getElementById('changePictureModal').style.display = 'none';
-
 }

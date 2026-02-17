@@ -89,10 +89,7 @@ function hideLoadingScreen() {
   const loadingScreen = document.getElementById('loadingScreen');
   if (loadingScreen) {
     loadingScreen.classList.add('hidden');
-    // Remove from DOM after animation completes
-    setTimeout(() => {
-      loadingScreen.style.display = 'none';
-    }, 500);
+    loadingScreen.style.display = 'none';
   }
 }
 
@@ -232,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (section === "create") {
         console.log("Opening website builder...");
         // TODO: Update this URL when builder is ready
-        window.location.href = "https://grapesjs.com/demo.html"; // Placeholder demo builder
+        window.location.href = "https://webify-kudm.onrender.com/builder/"; // Placeholder demo builder
         return;
       }
 
@@ -275,12 +272,23 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeApp();
 });
 
-// Dropdown menu functions
+
+function showtemplate(){
+  window.location.href ="../profile/profile.html?section=template"
+}
+
+function openMarketplace() {
+  window.location.href = "../marketplace/market.html";
+}
+
+function openBuilder() {
+  window.location.href = "https://webify-kudm.onrender.com/builder/";
+}
+
+  // Dropdown menu functions
 function openCommunity() {
   console.log("Opening community...");
-  alert(
-    "Opening WEBIFY Community! Share your templates and connect with other creators."
-  );
+  window.location.href = "../community/questions.html";
 }
 
 function openHelp() {
@@ -298,7 +306,6 @@ function logout() {
   // Clear user data from localStorage
   localStorage.removeItem("currentUser");
   localStorage.removeItem("isLoggedIn");
-  localStorage.clear();
   sessionStorage.clear();
 
   showToast("Logged out successfully!", "success");
