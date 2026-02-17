@@ -2,6 +2,7 @@ import { initEditor } from "./editor/config";
 import { onMount, onCleanup, createSignal } from "solid-js";
 import "./AnotherApp.css";
 import export_icon from './assets/icons/export_icon.svg';
+import upload_icon from './assets/icons/upload_icon.svg';
 
 const App = () => {
   let editorRef;
@@ -151,7 +152,30 @@ const App = () => {
   };
 
 
+  // helper function for uploading code
+  // this function saves data into local storage
+  const saveToLocalStorage = () => {
+    if (!editorInstance) return;
 
+    const data = {
+      html: editorInstance.getHtml(),
+      css: editorInstance.getCss(),
+      timeStamp: new Date().getTime(),
+      title: "My Webify Project"
+    }
+
+    try {
+      localStorage.setItem('webify-project', JSON.stringify(data));
+
+      //opening a new window
+      window.open('/marketplace/upload_to_marketplace.html', '_blank');
+    }
+    catch (e) {
+      console.error("Save failed. The site might be too large for LocalStorage.", e);
+      alert("Project too large for temporary storage.");
+    }
+
+  }
 
   //trying to make it look like canva
   // three column layout, left , center, right
@@ -264,6 +288,10 @@ const App = () => {
               <button class="btn-icon" onClick={openCodeImportModal} title="Import Code">
                 {/* Code Icon */}
                 &lt;/&gt;
+              </button>
+
+              <button class="btn-icon" onClick={saveToLocalStorage} title="Upload Code">
+                <img src={upload_icon} alt="Upload" />
               </button>
 
 
