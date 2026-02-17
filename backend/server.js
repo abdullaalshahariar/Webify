@@ -93,8 +93,8 @@ app.post("/api/signup", async (req, res) => {
     }
 
     // Check if user already exists (username or email)
-    const existingUser = await User.findOne({ 
-      $or: [{ username }, { email: email.toLowerCase() }] 
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email: email.toLowerCase() }]
     });
     if (existingUser) {
       if (existingUser.username === username) {
@@ -111,7 +111,7 @@ app.post("/api/signup", async (req, res) => {
       password,
       emailVerified: false
     };
-    
+
     const newUser = new User(userData);
 
     // Generate email verification token
@@ -120,9 +120,9 @@ app.post("/api/signup", async (req, res) => {
 
     // Send verification email
     const verificationURL = `https://webify-kudm.onrender.com/auth/verify-email.html?token=${verificationToken}`;
-    
+
     const transporter = createEmailTransporter();
-    
+
     const mailOptions = {
       to: newUser.email,
       from: process.env.EMAIL_USER || 'noreply@webify.com',
@@ -153,7 +153,7 @@ app.post("/api/signup", async (req, res) => {
     }
 
     // Return success without auto-login
-    res.json({ 
+    res.json({
       success: true,
       message: "Account created successfully! Please check your email and click the verification link before logging in.",
       user: {
@@ -182,9 +182,9 @@ app.post("/api/login", (req, res, next) => {
 
     // Check if email is verified
     if (!user.emailVerified) {
-      return res.status(403).json({ 
+      return res.status(403).json({
         error: "Please verify your email address before logging in. Check your inbox for the verification link.",
-        emailVerificationRequired: true 
+        emailVerificationRequired: true
       });
     }
 
@@ -217,9 +217,9 @@ const createEmailTransporter = () => {
   if (process.env.EMAIL_SERVICE && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
     const config = {
       host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      requireTLS: true,
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      // requireTLS: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -227,13 +227,13 @@ const createEmailTransporter = () => {
       logger: true,
       debug: true,
     };
-    
+
     console.log('🔧 Email transporter configured for Gmail');
     console.log('📧 Email user:', process.env.EMAIL_USER);
-    
+
     return nodemailer.createTransport(config);
   }
-  
+
   // Fallback to console logging if email not configured
   console.warn('⚠️ Email not configured! EMAIL_SERVICE, EMAIL_USER, or EMAIL_PASS is missing.');
   return {
@@ -261,7 +261,7 @@ app.post("/api/forgot-password", async (req, res) => {
 
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase() });
-    
+
     if (!user) {
       // Don't reveal if user exists or not for security
       return res.json({
@@ -278,16 +278,16 @@ app.post("/api/forgot-password", async (req, res) => {
     const resetURL = `https://webify-kudm.onrender.com/auth/reset-password.html?token=${resetToken}`;
 
     const transporter = createEmailTransporter();
-    
+
     // Email content
     const mailOptions = {
       to: user.email,
       from: process.env.EMAIL_USER || 'noreply@webify.com',
       subject: 'Password Reset Request - Webify',
       text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-            `Please click on the following link, or paste this into your browser to complete the process within 10 minutes:\n\n` +
-            `${resetURL}\n\n` +
-            `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        `Please click on the following link, or paste this into your browser to complete the process within 10 minutes:\n\n` +
+        `${resetURL}\n\n` +
+        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
       html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333;">Password Reset Request</h2>
           <p>You are receiving this because you requested the reset of your Webify account password.</p>
@@ -320,7 +320,7 @@ app.post("/api/forgot-password", async (req, res) => {
 
   } catch (error) {
     console.error("Forgot password error:", error);
-    
+
     // Provide more specific error messages for debugging
     if (error.code === 'EAUTH') {
       console.error("❌ Gmail authentication failed. Check EMAIL_USER and EMAIL_PASS in .env file");
@@ -329,7 +329,7 @@ app.post("/api/forgot-password", async (req, res) => {
     } else {
       console.error("❌ Unexpected error:", error.message);
     }
-    
+
     res.status(500).json({ error: "Failed to send password reset email" });
   }
 });
@@ -358,7 +358,7 @@ app.post("/api/reset-password", async (req, res) => {
     user.password = password;
     user.passwordResetToken = null;
     user.passwordResetExpires = null;
-    
+
     await user.save();
 
     res.json({
@@ -394,7 +394,7 @@ app.post("/api/verify-email", async (req, res) => {
     user.emailVerified = true;
     user.emailVerificationToken = null;
     user.emailVerificationExpires = null;
-    
+
     await user.save();
 
     res.json({
@@ -419,7 +419,7 @@ app.post("/api/resend-verification", async (req, res) => {
 
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase() });
-    
+
     if (!user) {
       // Don't reveal if user exists or not for security
       return res.json({
@@ -438,9 +438,9 @@ app.post("/api/resend-verification", async (req, res) => {
 
     // Send verification email
     const verificationURL = `https://webify-kudm.onrender.com/auth/verify-email.html?token=${verificationToken}`;
-    
+
     const transporter = createEmailTransporter();
-    
+
     const mailOptions = {
       to: user.email,
       from: process.env.EMAIL_USER || 'noreply@webify.com',
@@ -531,8 +531,8 @@ app.get("/api/profile", isAuthenticated, async (req, res) => {
 
 // Test route to verify server is running updated code
 app.get("/api/test", (req, res) => {
-  res.json({ 
-    message: "Server is running updated code!", 
+  res.json({
+    message: "Server is running updated code!",
     timestamp: new Date().toISOString(),
     version: "v2.0"
   });
